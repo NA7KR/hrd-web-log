@@ -1,1 +1,1 @@
-log.php
+/var/www/log.php
