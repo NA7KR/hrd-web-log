@@ -230,7 +230,6 @@ function fbutton($button)
 	include 'config.php';
 	$link = "";
 	$select = "";
-
 	$link = mysql_connect($dbhost, $dbuname, $dbpass) or die ('Cannot connect to the database: ' . mysql_error());
 	mysql_select_db($dbnameHRD) or die ('Cannot connect to the database: ' . mysql_error());
 
