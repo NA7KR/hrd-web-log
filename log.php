@@ -65,7 +65,7 @@ include "config.php";
 
 		elseif ($BAND != "%" ||  $MODE != "%")
 		{
-			if ($LOG == "towork")
+			if ($LOG == "towork" and $MODE <> "SSB")
 			{
 				if ($debug == "true")
 				{
@@ -83,6 +83,24 @@ include "config.php";
 				$query = "(SELECT `col_mode` as 'Mode', `col_band` as 'Band', `zones` as 'Zones' \n"
 				. "FROM `zone_to_work` WHERE `col_mode` like '$MODE' AND `col_band` like '$BAND') ";
 			}
+			elseif ($MODE == "SSB")
+			{
+				if ($debug == "true")
+					{
+						Echo "<BR>6<BR>" . $LOG . "<BR><BR>";
+					}
+				$query = "SELECT $dbnameWEB.Bands_lookup.Col_Band as 'Band', $dbnameWEB.Bands_lookup.SSB_Mode as 'Mode', \n"
+				. " $dbnameHRD.towork.STATE as 'State', $dbnameHRD.towork.Country as 'Country' \n"
+				. " FROM $dbnameHRD.towork RIGHT JOIN $dbnameWEB.Bands_lookup ON $dbnameHRD.towork.col_band = $dbnameWEB.Bands_lookup.Col_Band \n"
+				. " WHERE $dbnameHRD.towork.STATE IS NOT NULL and $dbnameHRD.towork.col_mode = $dbnameWEB.Bands_lookup.SSB_Mode and \n"
+				. " $dbnameHRD.towork.Col_Band like '_Band_' and sCOUNTRY like '_Country_'"; 
+					$query1 = mysql_query($sql);
+				while($info = mysql_fetch_array( $query1 ))
+				{
+			 		$query = $info[1];
+				}
+
+			}
 			else
 			{
 				if ($debug == "true")
@@ -97,6 +115,7 @@ include "config.php";
 			}
 			}
 		}
+	
 		else
 		{
 			if ($debug == "true")
@@ -110,7 +129,7 @@ include "config.php";
 		 		$query = $info[1];
 			}
 		}
-		$MODE = str_replace( "SSB", "USB", $MODE);
+		//$query = str_replace( "SSB", "USB or ", $query);
 		$query = str_replace( "_Band_", $BAND, $query);
 		$query = str_replace( "_Mode_", $MODE, $query);
 		$query = str_replace( "_DB_",$dbnameHRD, $query);
@@ -183,10 +202,12 @@ function MakeViews()
 	$sql = "create or replace view  $dbnameHRD.bands  as select  col_band from $dbnameHRD.$tbHRD group by 1";
 
 	mysql_query($sql);
-	$sql = "create or replace view $dbnameHRD.modes as select  replace(replace(col_mode,'LSB','SSB'),'USB','SSB') as col_mode from $dbnameHRD.$tbHRD group by 1";
+//	$sql = "create or replace view $dbnameHRD.modes as select  replace(replace(col_mode,'LSB','SSB'),'USB','SSB') as col_mode from $dbnameHRD.$tbHRD group by 1";
+	$sql = "create or replace view $dbnameHRD.modes as select   col_mode from $dbnameHRD.$tbHRD group by 1";
+
 	mysql_query($sql);
 	$sql = "create or replace view $dbnameHRD.towork as  \n"
-	. "select  replace(replace(col_mode,'LSB','SSB'),'USB','SSB') as col_mode, col_band, STATE, COUNTRY, sCOUNTRY  \n"
+	. "select col_mode, col_band, STATE, COUNTRY, sCOUNTRY  \n"
 	. "FROM $dbnameWEB.$tbStates, $dbnameHRD.modes, $dbnameHRD.bands  \n"
 	. "WHERE concat( col_mode,'-', col_band,'-', ST,'-', COUNTRY ) NOT IN ( \n"
 	. "SELECT concat( COL_MODE,'-', COL_BAND,'-', COL_STATE,'-', COL_COUNTRY )AS the_key  \n" 

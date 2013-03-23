@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- Generation Time: Mar 22, 2013 at 04:24 PM
+-- Generation Time: Mar 22, 2013 at 09:30 PM
 -- Server version: 5.5.29
 -- PHP Version: 5.4.6-1ubuntu1.2
 
@@ -19,6 +19,37 @@ SET time_zone = "+00:00";
 --
 -- Database: `HRD_Web`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Bands_lookup`
+--
+
+CREATE TABLE IF NOT EXISTS `Bands_lookup` (
+  `key` int(11) NOT NULL AUTO_INCREMENT,
+  `Col_Band` varchar(6) NOT NULL,
+  `SSB_Mode` varchar(3) NOT NULL,
+  PRIMARY KEY (`key`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+
+--
+-- Dumping data for table `Bands_lookup`
+--
+
+INSERT INTO `Bands_lookup` (`key`, `Col_Band`, `SSB_Mode`) VALUES
+(1, '160m', 'LSB'),
+(2, '80m', 'LSB'),
+(3, '60m', 'LSB'),
+(4, '40m', 'LSB'),
+(5, '30m', 'USB'),
+(6, '20m', 'USB'),
+(7, '17m', 'USB'),
+(8, '15m', 'USB'),
+(9, '12m', 'USB'),
+(10, '10m', 'USB'),
+(11, '6m', 'USB'),
+(12, '2m', 'USB');
 
 -- --------------------------------------------------------
 
