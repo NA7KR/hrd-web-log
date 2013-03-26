@@ -41,6 +41,7 @@ include "config.php";
 		$BAND = safe($_POST['Band']);
 		$MODE = safe($_POST['Mode']);
 		$COUNTRY = safe($_POST['Country']);
+		$CALL_SEARCH = safe($_POST['Call_Search']);
 		if ($BAND == "_Any_Band_")
 		{
 				$BAND ="%";
@@ -129,6 +130,18 @@ include "config.php";
 		 		$query = $info[1];
 			}
 		}
+		If ($LOG === "callsign_lookup")
+			{
+				if ($CALL_SEARCH <> "")
+				{
+						$sql = "(SELECT Select_Name,Select_Query FROM $dbnameWEB.tb_Select where Select_Name = '$LOG')";
+					$query1 = mysql_query($sql);
+					while($info = mysql_fetch_array( $query1 ))
+					{
+						$query = $info[1];
+					}
+				}
+			}
 		//$query = str_replace( "SSB", "USB or ", $query);
 		$query = str_replace( "_Band_", $BAND, $query);
 		$query = str_replace( "_Mode_", $MODE, $query);
@@ -138,7 +151,7 @@ include "config.php";
 		$query = str_replace( "_tbSL_", $tbSelect, $query);
 		$query = str_replace( "_tbHRD_", $tbHRD, $query);
 		$query = str_replace( "_Country_", $COUNTRY, $query);
-
+		$query = str_replace( "_CALL_SEARCH_", $CALL_SEARCH, $query);
 		MakeViews();
 		buildData($query);
 	}
@@ -323,6 +336,8 @@ function fbutton($button)
 		}
 	}
 	$select .='</select><br>';
+	$select .='If you select Callsign Lookup enter Callsign in the box';
+	$select .='<br><input type="text" name="Call_Search"><br>';
 	$select .='<div><P style="text-align: center"><Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div></FORM><BR>' ;
 	mysql_close($link);
 	echo $select;
