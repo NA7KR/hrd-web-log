@@ -130,18 +130,7 @@ include "config.php";
 		 		$query = $info[1];
 			}
 		}
-		If ($LOG === "callsign_lookup")
-			{
-				if ($CALL_SEARCH <> "")
-				{
-						$sql = "(SELECT Select_Name,Select_Query FROM $dbnameWEB.tb_Select where Select_Name = '$LOG')";
-					$query1 = mysql_query($sql);
-					while($info = mysql_fetch_array( $query1 ))
-					{
-						$query = $info[1];
-					}
-				}
-			}
+		
 		//$query = str_replace( "SSB", "USB or ", $query);
 		$query = str_replace( "_Band_", $BAND, $query);
 		$query = str_replace( "_Mode_", $MODE, $query);
@@ -189,13 +178,20 @@ include "config.php";
 	{
         $x = 0;//
         $style = grid_style($i);
-        echo "";
-
         while ($x < mysql_num_fields($result)) {
             $data = $row[$x];
 			$data = str_replace( "USB", "SSB", $data);
 			$data = str_replace( "LSB", "SSB", $data);
-            echo '<td>' . $data . '</td>';
+			$file_ID = $row["$tbHRD.COL_PRIMARY_KEY"];
+			If ($row["COL_File_Path_F"] === NULL)
+			{
+				$fileName = "kg5rj.jpg";
+				$file_ID = $row["COL_File_Path_F"];
+				$fileNamePath ="<img src='cards/0-999/" . $file_ID . "-" . $fileName . "' />";
+				$data = str_replace( "$fileName", "$fileNamePath", $data);
+
+			}
+            	echo '<td>' . $data . '</td>';
             $x++;
         }//end nested while
 		echo '</tr>';
