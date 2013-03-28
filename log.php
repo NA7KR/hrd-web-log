@@ -94,7 +94,7 @@ include "config.php";
 				. " $dbnameHRD.towork.STATE as 'State', $dbnameHRD.towork.Country as 'Country' \n"
 				. " FROM $dbnameHRD.towork RIGHT JOIN $dbnameWEB.Bands_lookup ON $dbnameHRD.towork.col_band = $dbnameWEB.Bands_lookup.Col_Band \n"
 				. " WHERE $dbnameHRD.towork.STATE IS NOT NULL and $dbnameHRD.towork.col_mode = $dbnameWEB.Bands_lookup.SSB_Mode and \n"
-				. " $dbnameHRD.towork.Col_Band like '_Band_' and sCOUNTRY like '_Country_'"; 
+				. " $dbnameHRD.towork.Col_Band like '_Band_' and sCOUNTRY like '_Country_'";
 					$query1 = mysql_query($sql);
 				while($info = mysql_fetch_array( $query1 ))
 				{
@@ -116,7 +116,7 @@ include "config.php";
 			}
 			}
 		}
-	
+
 		else
 		{
 			if ($debug == "true")
@@ -130,7 +130,7 @@ include "config.php";
 		 		$query = $info[1];
 			}
 		}
-		
+
 		//$query = str_replace( "SSB", "USB or ", $query);
 		$query = str_replace( "_Band_", $BAND, $query);
 		$query = str_replace( "_Mode_", $MODE, $query);
@@ -182,16 +182,29 @@ include "config.php";
             $data = $row[$x];
 			$data = str_replace( "USB", "SSB", $data);
 			$data = str_replace( "LSB", "SSB", $data);
-			$file_ID = $row["$tbHRD.COL_PRIMARY_KEY"];
-			If ($row["COL_File_Path_F"] === NULL)
+			$filePath ="cards/0-999";
+			If ($row[8] <> NULL)
 			{
-				$fileName = "kg5rj.jpg";
-				$file_ID = $row["COL_File_Path_F"];
-				$fileNamePath ="<img src='cards/0-999/" . $file_ID . "-" . $fileName . "' />";
-				$data = str_replace( "$fileName", "$fileNamePath", $data);
+				$fileName = $row[8];
+				$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
+				$data = str_replace( "$fileName", "$jpgfile", $data);
+
+			}  
+			If ($row[9] <> NULL)
+			{
+					$fileName = $row[9];
+					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
+					$data = str_replace( "$fileName", "$jpgfile", $data);
 
 			}
-            	echo '<td>' . $data . '</td>';
+			If ($row[10] <> NULL)
+			{
+					$fileName = $row[10];
+					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
+					$data = str_replace( "$fileName", "$jpgfile", $data);
+
+			}
+			echo '<td>' . $data . '</td>';
             $x++;
         }//end nested while
 		echo '</tr>';
@@ -219,7 +232,7 @@ function MakeViews()
 	. "select col_mode, col_band, STATE, COUNTRY, sCOUNTRY  \n"
 	. "FROM $dbnameWEB.$tbStates, $dbnameHRD.modes, $dbnameHRD.bands  \n"
 	. "WHERE concat( col_mode,'-', col_band,'-', ST,'-', COUNTRY ) NOT IN ( \n"
-	. "SELECT concat( COL_MODE,'-', COL_BAND,'-', COL_STATE,'-', COL_COUNTRY )AS the_key  \n" 
+	. "SELECT concat( COL_MODE,'-', COL_BAND,'-', COL_STATE,'-', COL_COUNTRY )AS the_key  \n"
 	. "FROM  $dbnameHRD.$tbHRD   \n"
 	. "where COL_STATE is not null)  \n";
 	mysql_query($sql);
