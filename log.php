@@ -150,9 +150,14 @@ include "config.php";
  	}
 	echo fbutton($button);
 
-	function  buildData($query)
+function  buildData($query)
 {
+    include 'config.php';
     $result = mysql_query($query);
+     if ($debug == "true")
+        {
+                echo "<BR><BR>". $query . "<BR><BR>";
+        }
 
     //return error message if query could not be made
     if (!$result)
