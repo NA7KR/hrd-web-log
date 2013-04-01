@@ -188,23 +188,23 @@ function  buildData($query)
 			$data = str_replace( "USB", "SSB", $data);
 			$data = str_replace( "LSB", "SSB", $data);
 			$filePath ="cards/0-999";
-			If ($row[8] <> NULL)
+			If ($row[10] <> NULL)
 			{
-				$fileName = $row[8];
+				$fileName = $row[10];
 				$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
 				$data = str_replace( "$fileName", "$jpgfile", $data);
 
 			}  
-			If ($row[9] <> NULL)
+			If ($row[11] <> NULL)
 			{
-					$fileName = $row[9];
+					$fileName = $row[11];
 					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
 					$data = str_replace( "$fileName", "$jpgfile", $data);
 
 			}
-			If ($row[10] <> NULL)
+			If ($row[12] <> NULL)
 			{
-					$fileName = $row[10];
+					$fileName = $row[12];
 					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
 					$data = str_replace( "$fileName", "$jpgfile", $data);
 
