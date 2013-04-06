@@ -189,6 +189,19 @@ function  buildData($query)
 			$data = str_replace( "USB", "SSB", $data);
 			$data = str_replace( "LSB", "SSB", $data);
 			$filePath ="cards/0-999";
+			If ($row[1] <> NULL)
+			{
+				$fileName = $row[1];
+				$pos =strpos($fileName,$find);
+                if ($pos !== false)
+                    {
+						$filePath ="/Awards";
+						$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
+						$data = str_replace( "$fileName", "$jpgfile", $data);
+					}
+				$filePath ="cards/0-999";
+
+			}
 			If ($row[10] <> NULL)
 			{
 					$fileName = $row[10];
