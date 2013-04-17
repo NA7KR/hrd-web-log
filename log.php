@@ -193,47 +193,66 @@ function  buildData($query)
 			{
 				$fileName = $row[1];
 				$pos =strpos($fileName,$find);
-                if ($pos !== false)
-                    {
+		                if ($pos !== false)
+                   		{
 						$filePath ="/Awards";
 						$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
 						$data = str_replace( "$fileName", "$jpgfile", $data);
-					}
+				}
 				$filePath ="cards/0-999";
 
 			}
+			If ($row[2] <> NULL)
+			{
+				$fileName = $row[2];
+				$pos =strpos($fileName,$find);
+				if ($pos !== false)
+				{
+								$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
+								$data = str_replace( "$fileName", "$jpgfile", $data);
+				}
+
+			}
+			If ($row[3] <> NULL)
+			{
+				$fileName = $row[3];
+				$pos =strpos($fileName,$find);
+				if ($pos !== false)
+				{
+								$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
+								$data = str_replace( "$fileName", "$jpgfile", $data);
+				}
+			}
+
 			If ($row[10] <> NULL)
 			{
-					$fileName = $row[10];
-					$pos =strpos($fileName,$find);
-                                	if ($pos !== false)
-                                        {
-						$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
-						$data = str_replace( "$fileName", "$jpgfile", $data);
-					}
-
+				$fileName = $row[10];
+				$pos =strpos($fileName,$find);
+								if ($pos !== false)
+									{
+					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
+					$data = str_replace( "$fileName", "$jpgfile", $data);
+				}
 			}  
 			If ($row[11] <> NULL)
 			{
-					$fileName = $row[11];
-					 $pos =strpos($fileName,$find);
-                                        if ($pos !== false)
-                                        {
-						$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
-						$data = str_replace( "$fileName", "$jpgfile", $data);
-					}
-
+				$fileName = $row[11];
+				 $pos =strpos($fileName,$find);
+									if ($pos !== false)
+									{
+					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
+					$data = str_replace( "$fileName", "$jpgfile", $data);
+				}
 			}
 			If ($row[12] <> NULL)
 			{
-					$fileName = $row[12];
-					$pos =strpos($fileName,$find);
-					if ($pos !== false)
-					{
-						$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
-						$data = str_replace( "$fileName", "$jpgfile", $data);
-					}	
-
+				$fileName = $row[12];
+				$pos =strpos($fileName,$find);
+				if ($pos !== false)
+				{
+					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
+					$data = str_replace( "$fileName", "$jpgfile", $data);
+				}	
 			}
 			echo '<td>' . $data . '</td>';
             $x++;
