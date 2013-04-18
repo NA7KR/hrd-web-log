@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- Generation Time: Apr 17, 2013 at 07:19 AM
+-- Generation Time: Apr 17, 2013 at 07:08 PM
 -- Server version: 5.5.29
 -- PHP Version: 5.4.6-1ubuntu1.2
 
@@ -123,8 +123,8 @@ INSERT INTO `tb_Select` (`index`, `Select_TXT`, `Select_Name`, `Select_Query`) V
 (5, 'No LOTW ', 'nocardLOTW', 'SELECT _dbWEB_._tbST_.State as `State`, _dbWEB_._tbST_.ST as `State` FROM _dbWEB_._tbST_ left outer join _DB_._tbHRD_ on _dbWEB_._tbST_.Country = _DB_._tbHRD_.COL_COUNTRY AND\r\n _dbWEB_._tbST_.ST = _DB_._tbHRD_.COL_STATE where \r\n ( _dbWEB_._tbST_.sCountry  = "_Country_" ) \r\n and col_state is not null and COL_LOTW_QSL_RCVD not in ( ''Y'' ) and col_state not in (select col_state from _DB_._tbHRD_ where col_state is not null and \r\n COL_LOTW_QSL_RCVD <> ''N'' and COL_LOTW_QSL_RCVD <> ''R''and COL_BAND LIKE "_Band_" and COL_MODE LIKE "_Mode_") group by 1,2'),
 (6, 'ITU Zones', 'zones', 'SELECT _dbWEB_.tb_zones.zones as `ITU Zone to Work`  \r\nFROM _dbWEB_.tb_zones left outer join \r\n_DB_._tbHRD_ on _dbWEB_.tb_zones.zones  = \r\n_DB_._tbHRD_.COL_ITUZ  \r\nwhere COL_ITUZ is null'),
 (7, 'Callsign Lookup', 'callsign_lookup', 'SELECT\r\nCOL_CALL AS `Call`,\r\nCOL_BAND AS Band,\r\nCOL_State AS State,\r\nCOL_Country AS Country,\r\n_DB_._tbHRD_.COL_PRIMARY_KEY AS ID,\r\nCOL_TIME_OFF AS Date,\r\n\r\nCASE COL_EQSL_QSL_RCVD \r\n	When "Y" Then "Yes"\r\nend AS EQSL,\r\n\r\nCASE COL_LOTW_QSL_RCVD \r\n                When "V" Then "Yes"\r\nend AS LOTW,\r\n\r\nCASE COL_QSL_RCVD \r\nWhen "Y" Then "Yes"\r\nend AS QSL,\r\n\r\nCOL_MODE AS `Mode`,\r\nHRD_Web.tb_Cards.COL_File_Path_E AS ''E QSL'',\r\nHRD_Web.tb_Cards.COL_File_Path_F AS File,\r\nHRD_Web.tb_Cards.COL_File_Path_B AS ''File Back''\r\nFROM\r\n_DB_._tbHRD_\r\nLEFT OUTER JOIN HRD_Web.tb_Cards ON _DB_._tbHRD_.COL_PRIMARY_KEY = HRD_Web.tb_Cards.COL_PRIMARY_KEY\r\nwhere COL_CALL like ''%_CALL_SEARCH_%'''),
-(8, 'Paper Card', 'paper_card', 'SELECT\r\n  tb_Cards.COL_PRIMARY_KEY as ''Log ID'',\r\n  TABLE_HRD_CONTACTS_V01.COL_CALL as ''Call'',\r\n  tb_Cards.COL_File_Path_F as ''Card'',\r\n  tb_Cards.COL_File_Path_B as ''Back''\r\nFROM HRD_Web.tb_Cards\r\n  INNER JOIN NA7KR.TABLE_HRD_CONTACTS_V01\r\n    ON tb_Cards.COL_PRIMARY_KEY = TABLE_HRD_CONTACTS_V01.COL_PRIMARY_KEY\r\nWHERE tb_Cards.COL_File_Path_F <> ""'),
-(9, 'Received EQSL', 'eqsl_received', 'SELECT\r\n  tb_Cards.COL_PRIMARY_KEY as ''Log ID'',\r\n  TABLE_HRD_CONTACTS_V01.COL_CALL as ''Call'',\r\n  tb_Cards.COL_File_Path_E as ''Cards''\r\nFROM HRD_Web.tb_Cards\r\n  INNER JOIN NA7KR.TABLE_HRD_CONTACTS_V01\r\n    ON tb_Cards.COL_PRIMARY_KEY = TABLE_HRD_CONTACTS_V01.COL_PRIMARY_KEY\r\nWHERE tb_Cards.COL_File_Path_E <> ""	\r\n	'),
+(8, 'Paper Card', 'paper_card', 'SELECT\r\n  tb_Cards.COL_PRIMARY_KEY as ''Log ID'',\r\n  _tbHRD_.COL_CALL as ''Call'',\r\n  tb_Cards.COL_File_Path_F as ''Card'',\r\n  tb_Cards.COL_File_Path_B as ''Back''\r\nFROM HRD_Web.tb_Cards\r\n  INNER JOIN _DB_._tbHRD_\r\n    ON tb_Cards.COL_PRIMARY_KEY = _tbHRD_.COL_PRIMARY_KEY\r\nWHERE tb_Cards.COL_File_Path_F <> ""'),
+(9, 'Received EQSL', 'eqsl_received', 'SELECT\r\n  tb_Cards.COL_PRIMARY_KEY as ''Log ID'',\r\n  _tbHRD_.COL_CALL as ''Call'',\r\n  tb_Cards.COL_File_Path_E as ''Cards''\r\nFROM HRD_Web.tb_Cards\r\n  INNER JOIN _DB_._tbHRD_\r\n    ON tb_Cards.COL_PRIMARY_KEY = _tbHRD_.COL_PRIMARY_KEY\r\nWHERE tb_Cards.COL_File_Path_E <> ""'),
 (10, 'Received LOTW', 'received_lotw', 'SELECT \r\n`COL_CALL` as ''Call'',\r\n`COL_LOTW_QSL_RCVD` as ''Confirmed''\r\n FROM _tbHRD_  \r\nWhere `COL_LOTW_QSL_RCVD` = ''V'''),
 (11, 'Countrys Worked', 'Countrys_Worked', 'SELECT \r\nCOL_COUNTRY as ''Countrys Worked'' \r\nFROM _tbHRD_ \r\nWHERE 1 and COL_BAND LIKE "_Band_" and COL_MODE LIKE "_Mode_"  \r\ngroup by 1\r\n'),
 (12, 'Awards', 'awards', 'SELECT COL_Award as ''Award'', COL_File as "File" FROM _dbWEB_.tb_awards WHERE 1');

@@ -183,6 +183,7 @@ function  buildData($query)
 	{
         $x = 0;//
 	$find = '.';
+	$find2 = 'j';
         $style = grid_style($i);
         while ($x < mysql_num_fields($result)) {
             $data = $row[$x];
@@ -193,12 +194,12 @@ function  buildData($query)
 			{
 				$fileName = $row[1];
 				$pos =strpos($fileName,$find);
-		                if ($pos !== false)
-                   		{
+		        if ($pos !== false)
+                   	{
 						$filePath ="/Awards";
 						$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
 						$data = str_replace( "$fileName", "$jpgfile", $data);
-				}
+					}
 				$filePath ="cards/0-999";
 
 			}
@@ -208,8 +209,12 @@ function  buildData($query)
 				$pos =strpos($fileName,$find);
 				if ($pos !== false)
 				{
-								$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
-								$data = str_replace( "$fileName", "$jpgfile", $data);
+					$pos =strpos($fileName,$find2);
+					if ( $pos !== false);
+					{
+						$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
+						$data = str_replace( "$fileName", "$jpgfile", $data);
+					}
 				}
 
 			}
@@ -219,8 +224,12 @@ function  buildData($query)
 				$pos =strpos($fileName,$find);
 				if ($pos !== false)
 				{
-								$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
-								$data = str_replace( "$fileName", "$jpgfile", $data);
+					$pos =strpos($fileName,$find2);
+					if ( $pos !== false)
+					{				
+						$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
+						$data = str_replace( "$fileName", "$jpgfile", $data);
+					}
 				}
 			}
 
@@ -228,18 +237,18 @@ function  buildData($query)
 			{
 				$fileName = $row[10];
 				$pos =strpos($fileName,$find);
-								if ($pos !== false)
-									{
+				if ($pos !== false)
+				{
 					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
 					$data = str_replace( "$fileName", "$jpgfile", $data);
 				}
-			}  
+			}
 			If ($row[11] <> NULL)
 			{
 				$fileName = $row[11];
-				 $pos =strpos($fileName,$find);
-									if ($pos !== false)
-									{
+				$pos =strpos($fileName,$find);
+				if ($pos !== false)
+				{
 					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
 					$data = str_replace( "$fileName", "$jpgfile", $data);
 				}
@@ -252,7 +261,7 @@ function  buildData($query)
 				{
 					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
 					$data = str_replace( "$fileName", "$jpgfile", $data);
-				}	
+				}
 			}
 			echo '<td>' . $data . '</td>';
             $x++;
