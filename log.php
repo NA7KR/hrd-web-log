@@ -90,10 +90,10 @@ include "config.php";
 					{
 						Echo "<BR>6<BR>" . $LOG . "<BR><BR>";
 					}
-				$query = "SELECT $dbnameWEB.Bands_lookup.Col_Band as 'Band', $dbnameWEB.Bands_lookup.SSB_Mode as 'Mode', \n"
+				$query = "SELECT $dbnameWEB.tb_Bands_lookup.Col_Band as 'Band', $dbnameWEB.tb_Bands_lookup.SSB_Mode as 'Mode', \n"
 				. " $dbnameHRD.towork.STATE as 'State', $dbnameHRD.towork.Country as 'Country' \n"
-				. " FROM $dbnameHRD.towork RIGHT JOIN $dbnameWEB.Bands_lookup ON $dbnameHRD.towork.col_band = $dbnameWEB.Bands_lookup.Col_Band \n"
-				. " WHERE $dbnameHRD.towork.STATE IS NOT NULL and $dbnameHRD.towork.col_mode = $dbnameWEB.Bands_lookup.SSB_Mode and \n"
+				. " FROM $dbnameHRD.towork RIGHT JOIN $dbnameWEB.tb_Bands_lookup ON $dbnameHRD.towork.col_band = $dbnameWEB.tb_Bands_lookup.Col_Band \n"
+				. " WHERE $dbnameHRD.towork.STATE IS NOT NULL and $dbnameHRD.towork.col_mode = $dbnameWEB.tb_Bands_lookup.SSB_Mode and \n"
 				. " $dbnameHRD.towork.Col_Band like '_Band_' and sCOUNTRY like '_Country_'";
 					$query1 = mysql_query($sql);
 				while($info = mysql_fetch_array( $query1 ))
