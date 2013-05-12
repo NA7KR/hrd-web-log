@@ -226,7 +226,7 @@ function  buildData($query)
 				{
 					$pos =strpos($fileName,$find2);
 					if ( $pos !== false)
-					{				
+					{
 						$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
 						$data = str_replace( "$fileName", "$jpgfile", $data);
 					}
