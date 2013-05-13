@@ -373,6 +373,7 @@ CREATE TABLE IF NOT EXISTS `visit` (
   `browser` char(200) NOT NULL,
   `version` char(200) NOT NULL,
   `os` char(200) NOT NULL,
+  `osversion` char(200) NOT NULL,
   PRIMARY KEY (`visitorID`),
   UNIQUE KEY `visitorID` (`visitorID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=35 ;
