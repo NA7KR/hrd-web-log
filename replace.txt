@@ -1,0 +1,9 @@
+$query = str_replace( "_Band_", $BAND, $query);
+$query = str_replace( "_Mode_", $MODE, $query);
+$query = str_replace( "_DB_",$dbnameHRD, $query);
+$query = str_replace( "_dbWEB_", $dbnameWEB, $query);
+$query = str_replace( "_tbST_", $tbStates, $query);
+$query = str_replace( "_tbSL_", $tbSelect, $query);
+$query = str_replace( "_tbHRD_", $tbHRD, $query);
+$query = str_replace( "_Country_", $COUNTRY, $query);
+$query = str_replace( "_CALL_SEARCH_", $CALL_SEARCH, $query);
