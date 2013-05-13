@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.11.1deb1
+-- version 3.5.8.1deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- Generation Time: Apr 17, 2013 at 07:08 PM
--- Server version: 5.5.29
--- PHP Version: 5.4.6-1ubuntu1.2
+-- Generation Time: May 12, 2013 at 07:16 PM
+-- Server version: 5.5.31-0ubuntu0.13.04.1
+-- PHP Version: 5.4.9-4ubuntu2
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -358,6 +358,30 @@ INSERT INTO `tb_zones` (`key`, `zones`) VALUES
 (38, 38),
 (39, 39),
 (40, 40);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `visit`
+--
+
+CREATE TABLE IF NOT EXISTS `visit` (
+  `visitorID` int(10) NOT NULL AUTO_INCREMENT,
+  `visitorIP` char(200) NOT NULL,
+  `visitDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `visitURL` varchar(200) NOT NULL,
+  `browser` char(200) NOT NULL,
+  `version` char(200) NOT NULL,
+  `os` char(200) NOT NULL,
+  PRIMARY KEY (`visitorID`),
+  UNIQUE KEY `visitorID` (`visitorID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=35 ;
+
+--
+-- Dumping data for table `visit`
+--
+
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
