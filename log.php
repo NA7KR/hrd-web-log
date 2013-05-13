@@ -21,6 +21,7 @@
 <Title></Title>
 <?php
 include "config.php";
+include "counter.php";
 ?>
 <body style="color: #FFFFFF; background-color: #0000FF">
     <div class="auto-style1"> Hello welcome my log book at reads from Ham Radio Deluxe log. <span class="auto-style3"><br>
