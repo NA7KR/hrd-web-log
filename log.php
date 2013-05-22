@@ -24,6 +24,7 @@ include "config.php";
 include "counter.php";
 ?>
 <body style="color: #FFFFFF; background-color: #0000FF">
+<?php include_once("analyticstracking.php") ?>
     <div class="auto-style1"> Hello welcome my log book at reads from Ham Radio Deluxe log. <span class="auto-style3"><br>
         </span><span class="auto-style4">My Call is <?php echo $myCall ?></span><br>
     </div>
