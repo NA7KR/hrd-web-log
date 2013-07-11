@@ -172,8 +172,7 @@ $version = $obj->showInfo('version');
 // get Operating system
 $os =  $obj->showInfo('os');
 
-
 $SQL = " INSERT INTO `visit` (`visitorIP`  ,`visitURL`, `browser`  ,`version`,`os`, `osversion`) VALUES ( '$ipAddress'  , '$visitURL', '$browser', '$version', '$os','$user_os' )";
 
-$exec = mysql_query($SQL) or die(mysql_error()); 
+$exec = mysql_query($SQL) or die(mysql_error());
 ?>
