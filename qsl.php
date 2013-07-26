@@ -52,8 +52,7 @@ This is a command line PHP script with one option.
 		{
 			mkdir('$filePath', 0777, true);
 		}
-	
-	
+		
 	$FileName= "$filePath/E-$Key-$Call.jpg";
 	if (file_exists($FileName)) {
 		echo "The file $FileName exists \n";
