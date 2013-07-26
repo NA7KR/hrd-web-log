@@ -193,12 +193,6 @@ function  buildData($query)
             $data = $row[$x];
 			$data = str_replace( "USB", "SSB", $data);
 			$data = str_replace( "LSB", "SSB", $data);
-			//$sql = "SELECT `COL_PRIMARY_KEY` AS Count from `TABLE_HRD_CONTACTS_V01` Order by `COL_PRIMARY_KEY` DESC limit 1";
-			//$FileNo = (mysql_fetch_row ($sql));
-			//$sql2 = mysql_query( $sql );
-			//$File = mysql_fetch_assoc( $sql2 );
-			//$FileNo = $File ['Count'];
-			//echo $FileNo;
 
 			if ($FileNo = 0 or $FileNo = 999)
 			{
@@ -248,15 +242,19 @@ function  buildData($query)
 				}
 			}
 
-                        $FileNoGroup = (($row[4]/$fileMutiply) % $fileMutiply * $fileMutiply);
-                        $fileNoGroupHigh = $FileNoGroup + ($fileMutiply-1);
-                        $filePath="cards/". $FileNoGroup ."-".$fileNoGroupHigh;
-                        //echo $FileNoGroup . "=$row[4]" . " " ;
+            		$FileNoGroup = (($row[4]/$fileMutiply) % $fileMutiply * $fileMutiply);
+            		$fileNoGroupHigh = $FileNoGroup + ($fileMutiply-1);
+            		$filePath="cards/". $FileNoGroup ."-".$fileNoGroupHigh;
+            		//echo $filePath ;
+			if (!file_exists($filePath)) 
+			{
+				mkdir($filePath, 0777, true);
+			}
 
 			If ($row[10] <> NULL)
 			{
 				$fileName = $row[10];
-                        	$pos =strpos($fileName,$find);
+                $pos =strpos($fileName,$find);
 
 				if ($pos !== false)
 				{

@@ -13,6 +13,7 @@ This is a command line PHP script with one option.
   or -? options, you can get this help.
 
 <?php
+
 } else 
 {
 	include "/var/www/config.php";
@@ -42,8 +43,18 @@ This is a command line PHP script with one option.
 		$Call = $value['Call'];
 	}
 	mysql_close($link);
-
-	$FileName= "/srv/cards/0-999/E-$Key-$Call.jpg";
+	$fileMutiply = 1000;
+	$FileNoGroup = (($Key/$fileMutiply) % $fileMutiply * $fileMutiply);
+    $fileNoGroupHigh = $FileNoGroup + ($fileMutiply-1);
+    $filePath="/srv/cards/". $FileNoGroup ."-".$fileNoGroupHigh;
+    //echo $FileNoGroup . "=$row[4]" . " " ;
+	if (!file_exists('$filePath')) 
+		{
+			mkdir('$filePath', 0777, true);
+		}
+	
+	
+	$FileName= "$filePath/E-$Key-$Call.jpg";
 	if (file_exists($FileName)) {
 		echo "The file $FileName exists \n";
 	} else {
@@ -58,9 +69,9 @@ This is a command line PHP script with one option.
 		$FileName= "E-$Key-$Call.jpg";
 		
 		// open the directory
-		$pathToImages = "/srv/cards/0-999/";
-		$dir = opendir( $pathToImages );
-		$pathToThumbs = "/srv/cards/0-999/thumbs/";
+		//$pathToImages = "/srv/cards/0-999/";
+		$dir = opendir( $filePath );
+		$pathToThumbs = $filePath ."thumbs/";
 
 		// load image and get image size
 		$img = imagecreatefromjpeg( "{$pathToImages}{$FileName}" );
