@@ -184,20 +184,33 @@ function  buildData($query)
     while ($row = mysql_fetch_array($result, MYSQL_NUM))
 	{
         $x = 0;//
+	$FileNoGroup =0;
 	$find = '.';
 	$find2 = 'j';
+	$fileMutiply = 1000;
         $style = grid_style($i);
         while ($x < mysql_num_fields($result)) {
             $data = $row[$x];
 			$data = str_replace( "USB", "SSB", $data);
 			$data = str_replace( "LSB", "SSB", $data);
-			$filePath ="cards/0-999";
+			//$sql = "SELECT `COL_PRIMARY_KEY` AS Count from `TABLE_HRD_CONTACTS_V01` Order by `COL_PRIMARY_KEY` DESC limit 1";
+			//$FileNo = (mysql_fetch_row ($sql));
+			//$sql2 = mysql_query( $sql );
+			//$File = mysql_fetch_assoc( $sql2 );
+			//$FileNo = $File ['Count'];
+			//echo $FileNo;
+
+			if ($FileNo = 0 or $FileNo = 999)
+			{
+				$filePath ="cards/0-999";
+			}
+
 			If ($row[1] <> NULL)
 			{
 				$fileName = $row[1];
 				$pos =strpos($fileName,$find);
-		        if ($pos !== false)
-                   	{
+				if ($pos !== false)
+                   		{
 						$filePath ="/Awards";
 						$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
 						$data = str_replace( "$fileName", "$jpgfile", $data);
@@ -235,10 +248,16 @@ function  buildData($query)
 				}
 			}
 
+                        $FileNoGroup = (($row[4]/$fileMutiply) % $fileMutiply * $fileMutiply);
+                        $fileNoGroupHigh = $FileNoGroup + ($fileMutiply-1);
+                        $filePath="cards/". $FileNoGroup ."-".$fileNoGroupHigh;
+                        //echo $FileNoGroup . "=$row[4]" . " " ;
+
 			If ($row[10] <> NULL)
 			{
 				$fileName = $row[10];
-				$pos =strpos($fileName,$find);
+                        	$pos =strpos($fileName,$find);
+
 				if ($pos !== false)
 				{
 					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
