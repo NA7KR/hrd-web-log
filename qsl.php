@@ -69,11 +69,12 @@ This is a command line PHP script with one option.
 		
 		// open the directory
 		//$pathToImages = "/srv/cards/0-999/";
-		$dir = opendir( $filePath );
-		$pathToThumbs = $filePath ."thumbs/";
+		//$dir = opendir( $filePath );
+		$pathToThumbs = $filePath ."/thumbs/";
+		$dir = opendir( $pathToThumbs );
 
 		// load image and get image size
-		$img = imagecreatefromjpeg( "{$pathToImages}{$FileName}" );
+		$img = imagecreatefromjpeg( "{$filePath}/{$FileName}" );
 		$width = imagesx( $img );
 		$height = imagesy( $img );
 
