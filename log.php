@@ -25,7 +25,7 @@ include "counter.php";
 ?>
 <body style="color: #FFFFFF; background-color: #0000FF">
 <?php include_once("analyticstracking.php") ?>
-    <div class="auto-style1"> Hello welcome my log book at reads from Ham Radio Deluxe log. <span class="auto-style3"><br>
+    <div class="auto-style1"> Hello welcome my log book at reads from Ham Radio Deluxe log.. <span class="auto-style3"><br>
         </span><span class="auto-style4">My Call is <?php echo $myCall ?></span><br>
     </div>
 <?php
@@ -185,7 +185,7 @@ function  buildData($query)
 	{
         $x = 0;//
 	$FileNoGroup =0;
-	$find = '.';
+	$find = '.jpg';
 	$find2 = 'j';
 	$fileMutiply = 1000;
         $style = grid_style($i);
