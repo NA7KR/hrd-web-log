@@ -25,7 +25,7 @@ include "counter.php";
 ?>
 <body style="color: #FFFFFF; background-color: #0000FF">
 <?php include_once("analyticstracking.php") ?>
-    <div class="auto-style1"> Hello welcome my log book at reads from Ham Radio Deluxe log.. <span class="auto-style3"><br>
+    <div class="auto-style1"> Hello welcome my log book at reads from Ham Radio Deluxe log. <span class="auto-style3"><br>
         </span><span class="auto-style4">My Call is <?php echo $myCall ?></span><br>
     </div>
 <?php
@@ -65,7 +65,6 @@ include "counter.php";
 			 		$query = $info[1];
 				}
 			}
-
 		elseif ($BAND != "%" ||  $MODE != "%")
 		{
 			if ($LOG == "towork" and $MODE <> "SSB")
@@ -118,7 +117,6 @@ include "counter.php";
 			}
 			}
 		}
-
 		else
 		{
 			if ($debug == "true")
@@ -132,8 +130,6 @@ include "counter.php";
 		 		$query = $info[1];
 			}
 		}
-
-		//$query = str_replace( "SSB", "USB or ", $query);
 		$query = str_replace( "_Band_", $BAND, $query);
 		$query = str_replace( "_Mode_", $MODE, $query);
 		$query = str_replace( "_DB_",$dbnameHRD, $query);
@@ -186,7 +182,6 @@ function  buildData($query)
         $x = 0;//
 	$FileNoGroup =0;
 	$find = '.jpg';
-	$find2 = 'j';
 	$fileMutiply = 1000;
         $style = grid_style($i);
         while ($x < mysql_num_fields($result)) {
@@ -204,12 +199,11 @@ function  buildData($query)
 				$fileName = $row[1];
 				$pos =strpos($fileName,$find);
 				if ($pos !== false)
-                   		{
+                   	{
 						$filePath ="/Awards";
 						$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
 						$data = str_replace( "$fileName", "$jpgfile", $data);
 					}
-				$filePath ="cards/0-999";
 
 			}
 			If ($row[2] <> NULL)
@@ -218,12 +212,8 @@ function  buildData($query)
 				$pos =strpos($fileName,$find);
 				if ($pos !== false)
 				{
-					$pos =strpos($fileName,$find2);
-					if ( $pos !== false);
-					{
-						$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
-						$data = str_replace( "$fileName", "$jpgfile", $data);
-					}
+					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
+					$data = str_replace( "$fileName", "$jpgfile", $data);
 				}
 
 			}
@@ -233,19 +223,14 @@ function  buildData($query)
 				$pos =strpos($fileName,$find);
 				if ($pos !== false)
 				{
-					$pos =strpos($fileName,$find2);
-					if ( $pos !== false)
-					{
-						$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
-						$data = str_replace( "$fileName", "$jpgfile", $data);
-					}
+					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
+					$data = str_replace( "$fileName", "$jpgfile", $data);
 				}
 			}
 
             		$FileNoGroup = (($row[4]/$fileMutiply) % $fileMutiply * $fileMutiply);
             		$fileNoGroupHigh = $FileNoGroup + ($fileMutiply-1);
             		$filePath="cards/". $FileNoGroup ."-".$fileNoGroupHigh;
-            		//echo $filePath ;
 			if (!file_exists($filePath)) 
 			{
 				mkdir($filePath, 0777, true);
@@ -289,7 +274,6 @@ function  buildData($query)
 		$i++;
 		$counter++;
     }
-
     echo '</tbody></table>';//close table
     echo '<BR> Counter ' . $counter . '<BR>';
 
@@ -302,7 +286,6 @@ function MakeViews()
 	$sql = "create or replace view  $dbnameHRD.bands  as select  col_band from $dbnameHRD.$tbHRD group by 1";
 
 	mysql_query($sql);
-//	$sql = "create or replace view $dbnameHRD.modes as select  replace(replace(col_mode,'LSB','SSB'),'USB','SSB') as col_mode from $dbnameHRD.$tbHRD group by 1";
 	$sql = "create or replace view $dbnameHRD.modes as select   col_mode from $dbnameHRD.$tbHRD group by 1";
 
 	mysql_query($sql);
@@ -430,7 +413,7 @@ function fbutton($button)
 	echo $select;
 
  }
- ?>
+?>
 <div><p style="text-align: center"> Only band and modes in your log shows</p>
      <p style="text-align: center"> This is a addon and not any way a part of HRD.</p>
      <p style="text-align: center"> Please contact <a href="mailto:support@na7kr.us"><span class="auto-style2">support@na7kr.us</span></a> and not HRD.</p></div>
@@ -438,5 +421,5 @@ function fbutton($button)
 	<p>
     <P style="text-align: center"><a href="http://validator.w3.org/check?uri=referer">
 	<img  src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional" height="31" width="88"></a>
-  </p>
+  	</p>
 </html>

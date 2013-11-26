@@ -47,7 +47,7 @@ This is a command line PHP script with one option.
 	$FileNoGroup = (($Key/$fileMutiply) % $fileMutiply * $fileMutiply);
     $fileNoGroupHigh = $FileNoGroup + ($fileMutiply-1);
     $filePath="/srv/cards/". $FileNoGroup ."-".$fileNoGroupHigh;
-    //echo $FileNoGroup . "=$row[4]" . " " ;
+   
 	if (!file_exists('$filePath')) 
 		{
 			mkdir('$filePath', 0777, true);
@@ -68,8 +68,6 @@ This is a command line PHP script with one option.
 		$FileName= "E-$Key-$Call.jpg";
 		
 		// open the directory
-		//$pathToImages = "/srv/cards/0-999/";
-		//$dir = opendir( $filePath );
 		$pathToThumbs = $filePath ."/thumbs/";
 		$dir = opendir( $pathToThumbs );
 
