@@ -157,12 +157,28 @@
 				{
 					Echo "<BR>5<BR>" . $LOG . "<BR>";
 				}
-			$sql = "(SELECT Select_Name,Select_Query FROM $dbnameWEB.tb_Select where Select_Name = '$LOG')";
-			$query1 = mysql_query($sql);
-			while($info = mysql_fetch_array( $query1 ))
+			if ($LOG == "callsign_lookup")
 			{
-		 		$query = $info[1];
+				$sql = "(SELECT Select_Name,Select_Query FROM $dbnameWEB.tb_Select where Select_Name = '$LOG')";
+				$query1 = mysql_query($sql);
+				while($info = mysql_fetch_array( $query1 ))
+				{
+					$query = $info[1];
+				}
+				$query = str_replace( "DESC", "DESC Limit 50 ", $query);
+				
 			}
+			Else
+			{
+				$sql = "(SELECT Select_Name,Select_Query FROM $dbnameWEB.tb_Select where Select_Name = '$LOG')";
+				$query1 = mysql_query($sql);
+				while($info = mysql_fetch_array( $query1 ))
+				{
+					$query = $info[1];
+				}
+			}
+			
+			
 		}
 		$query = str_replace( "_Band_", $BAND, $query);
 		$query = str_replace( "_Mode_", $MODE, $query);
