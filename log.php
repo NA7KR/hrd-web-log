@@ -1,31 +1,65 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
-    <style type="text/css">
-        .auto-style1 {
-            text-align: center;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: large;
-        }
-        .auto-style2 {
-            color: #FFFFFF;
-        }
-        .auto-style3 {
-            font-size: xx-small;
-        }
-        .auto-style4 {
-            font-size: larger;
-        }
-    </style>
-<Title></Title>
-<?php
-include "config.php";
-include "counter.php";
-?>
-<body style="color: #FFFFFF; background-color: #0000FF">
+<script type="text/javascript">
+	function makeDisable()
+	{
+		var x=document.getElementById("mySelect")
+		x.disabled=true
+		var x=document.getElementById("mySelect2")
+		x.disabled=true
+		var x=document.getElementById("mySelect3")
+		x.disabled=true
+	}
+	function makeEnable()
+	{
+		var x=document.getElementById("mySelect")
+		x.disabled=false
+		var x=document.getElementById("mySelect2")
+		x.disabled=false
+		var x=document.getElementById("mySelect3")
+		x.disabled=false
+	}
+	function onLoad()
+	{
+		makeDisable();
+	}
+</script>
+<style type="text/css">
+	.auto-style1 
+	{
+		text-align: center;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: large;
+	}
+	.auto-style2 
+	{
+		color: #FFFFFF;
+	}
+	.auto-style3 
+	{
+		font-size: xx-small;
+	}
+	.auto-style4 
+	{
+		font-size: larger;
+	}
+</style>
+	<?php
+		include "config.php";
+		include "counter.php";
+	?>
+	<title><?php echo $myCall ?> Ham Radio LogBook</title> 
+	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+	<meta name="description" content="<?php echo $myCall ?> Ham Radio LogBook"> 
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8"> 
+	<meta name="revisit-after" content="1 days">
+	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+</head>
+
+<body onload="onLoad();" style="color: #FFFFFF; background-color: #0000FF">
 <?php include_once("analyticstracking.php") ?>
-    <div class="auto-style1"> Hello welcome my log book at reads from Ham Radio Deluxe log. <span class="auto-style3"><br>
+    <div class="auto-style1"> Hello welcome my log book at reads from Ham Radio Deluxe log.. <span class="auto-style3"><br>
         </span><span class="auto-style4">My Call is <?php echo $myCall ?></span><br>
     </div>
 <?php
@@ -379,13 +413,20 @@ function fbutton($button)
 	{
 		while($rs=mysql_fetch_array($sql))
 		{
-			$select .='<input type="radio" value=' . $rs[1] . ' checked name="Log">' . $rs[0] ;
+			if ($rs[1] == "callsign_lookup")
+			{
+				$select .='<input type="radio" value=' . $rs[1] . ' name="Log" onclick="makeEnable()" > ' . $rs[0] ;
+			}
+			else
+			{
+				$select .='<input type="radio" value=' . $rs[1] . ' name="Log" onclick="makeDisable()" > ' . $rs[0] ;
+			}
 		}
 	}
 	$result =  count($CountrysArray);
 	if ($result >= 2)
 	{
-		$select .="<BR><select name='Country'>";
+		$select .="<BR><select id='mySelect' name='Country'>";
 		foreach ($CountrysArray as $CountryArray)
 		{
 				if (isset($user_input))
@@ -407,8 +448,10 @@ function fbutton($button)
 	}
 	$select .='</select><br>';
 	$select .='If you select Callsign Lookup enter Callsign in the box';
-	$select .='<br><input type="text" name="Call_Search"><br>';
-	$select .='<div><P style="text-align: center"><Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div></FORM><BR>' ;
+	$select .='<br><input id="mySelect2" type="text" name="Call_Search"><br>';
+	$select .='Select from drop down the amount of QLS would like to return';
+	$select .='<br><select id="mySelect3"><option>50</option><option>100</option><option>All</option></select>';
+	$select .='<br><div><P style="text-align: center"><Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div></FORM><BR>' ;
 	mysql_close($link);
 	echo $select;
 
@@ -421,5 +464,6 @@ function fbutton($button)
 	<p>
     <P style="text-align: center"><a href="http://validator.w3.org/check?uri=referer">
 	<img  src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional" height="31" width="88"></a>
+	<div style="display:none;">NA7KR</div>
   	</p>
 </html>
