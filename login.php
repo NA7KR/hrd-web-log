@@ -9,8 +9,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 {
 // username and password sent from form 
 
-	$myusername=addslashes($_POST['username']); 
-	$mypassword=addslashes($_POST['password']); 
+	//$myusername=addslashes($_POST['username']); 
+	//$mypassword=addslashes($_POST['password']); 
+	
+	$myusername = mysql_real_escape_string($_POST['username']);
+	$mypassword = mysql_real_escape_string($_POST['password']);
 	
 	
 	$sql="SELECT id FROM admin WHERE username='$myusername' and passcode='$mypassword'";
