@@ -77,6 +77,7 @@
 		$BAND = safe($_POST['Band']);
 		$MODE = safe($_POST['Mode']);
 		$COUNTRY = safe($_POST['Country']);
+		$QTY = safe($_POST['Qty']);
 		$CALL_SEARCH = safe($_POST['Call_Search']);
 		if ($BAND == "_Any_Band_")
 		{
@@ -165,8 +166,14 @@
 				{
 					$query = $info[1];
 				}
-				$query = str_replace( "DESC", "DESC Limit 50 ", $query);
-				
+				if ($QTY == "All")
+					{
+						;// do no-think
+					}
+				else
+				{
+					$query = str_replace( "DESC", "DESC Limit $QTY ", $query);
+				}
 			}
 			Else
 			{
@@ -196,6 +203,18 @@
 	{
 		echo "<BR><BR>". $query . "<BR><BR>";
  	}
+	$sql = mysql_query("SELECT DISTINCT `COL_CALL` FROM `TABLE_HRD_CONTACTS_V01` WHERE 1");
+	if(mysql_num_rows($sql))
+	{
+		while($rs=mysql_fetch_array($sql))
+		{
+			$QSLWORKED .=$rs[0] . ',' ;
+		}
+		if ($debug == "true")
+		{
+			Echo  $QSLWORKED;
+		}
+	}
 	echo fbutton($button);
 
 function  buildData($query)
@@ -424,7 +443,6 @@ function fbutton($button)
 	$select .='<BR>';
 
 	$sql=mysql_query("SELECT Select_TXT, Select_Name FROM $dbnameWEB.$tbSelect ORDER BY `Select_TXT` ");
-
 	if(mysql_num_rows($sql))
 	{
 		while($rs=mysql_fetch_array($sql))
@@ -466,7 +484,7 @@ function fbutton($button)
 	$select .='If you select Callsign Lookup enter Callsign in the box';
 	$select .='<br><input id="mySelect2" type="text" name="Call_Search"><br>';
 	$select .='Select from drop down the amount of QLS would like to return';
-	$select .='<br><select id="mySelect3"><option>50</option><option>100</option><option>All</option></select>';
+	$select .='<br><select id="mySelect3" name="Qty"><option>50</option><option>100</option><option>All</option></select>';
 	$select .='<br><div><P style="text-align: center"><Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div></FORM><BR>' ;
 	mysql_close($link);
 	echo $select;
@@ -480,6 +498,6 @@ function fbutton($button)
 	<p>
     <P style="text-align: center"><a href="http://validator.w3.org/check?uri=referer">
 	<img  src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional" height="31" width="88"></a>
-	<div style="display:none;">NA7KR</div>
+	<div style="display:none;"><?php echo $QSLWORKED ; ?></div>
   	</p>
 </html>
