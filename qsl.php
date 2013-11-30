@@ -59,7 +59,7 @@ This is a command line PHP script with one option.
 	} else {
 		echo "The file $FileName does not exist \n";
 
-		$str = file_get_contents("http://www.eqsl.cc/qslcard/GeteQSL.cfm?UserName=$myCall&Password=$dbpass&CallsignFrom=$Call&QSOBand=$Band&QSOMode=$Mode&QSOYear=$Year&QSOMonth=$Month&QSODay=$Day&QSOHour=$Hour&QSOMinute=$Minute");
+		$str = file_get_contents("http://www.eqsl.cc/qslcard/GeteQSL.cfm?UserName=$myCall&Password=$EQSL&CallsignFrom=$Call&QSOBand=$Band&QSOMode=$Mode&QSOYear=$Year&QSOMonth=$Month&QSODay=$Day&QSOHour=$Hour&QSOMinute=$Minute");
 		$start1 = '<img src=';
 		$end1 = ' alt="" />';
 		$pic =  getTexts($str, $start1, $end1);

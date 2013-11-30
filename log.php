@@ -69,6 +69,7 @@
 	$post = "";
 	$button = "";
 	$counter = 0;
+	$QSLWORKED = 0;
 	$link = mysql_connect($dbhost, $dbuname, $dbpass) or die ('Cannot connect to the database: ' . mysql_error());
 	mysql_select_db($dbnameHRD) or die ('Cannot connect to the database: ' . mysql_error());
 	if (isset($_POST['Submit1']))
@@ -403,6 +404,8 @@ function fbutton($button)
 	include 'config.php';
 	$link = "";
 	$select = "";
+	$CountryArray = "";
+	$selected = "";
 	$link = mysql_connect($dbhost, $dbuname, $dbpass) or die ('Cannot connect to the database: ' . mysql_error());
 	mysql_select_db($dbnameHRD) or die ('Cannot connect to the database: ' . mysql_error());
 
