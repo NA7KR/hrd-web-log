@@ -1,5 +1,5 @@
 <?php
-include "config.php";
+include_once "config.php";
 
 $link = mysql_connect($dbhost, $dbuname, $dbpass) or die ('Cannot connect to the database: ' . mysql_error());
 mysql_select_db($dbnameWEB) or die ('Cannot connect to the database: ' . mysql_error());

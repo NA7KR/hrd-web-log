@@ -27,7 +27,7 @@
 </script>
 
 	<?php
-		include "config.php";
+		include_once "config.php";
 		include "counter.php";
 	?>
 	<title><?php echo $myCall ?> Ham Radio LogBook</title> 
@@ -38,7 +38,7 @@
 	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
 </head>
 
-<body onload="onLoad();" style="color: #FFFFFF; background-color: #0000FF">
+<body onload="onLoad();" span class="background1">
 <?php include_once("analyticstracking.php") ?>
     <div class="auto-style1"> Hello welcome my log book at reads from Ham Radio Deluxe log.. <span class="auto-style3"><br>
         </span><span class="auto-style4">My Call is <?php echo $myCall ?></span><br>
@@ -201,7 +201,7 @@
 
 function  buildData($query)
 {
-    include 'config.php';
+    include "config.php";
     $result = mysql_query($query);
      if ($debug == "true")
         {
@@ -333,7 +333,7 @@ function  buildData($query)
 
 function MakeViews()
 {
-	include 'config.php';
+	include "config.php";
 	$sql = "create or replace view  $dbnameHRD.bands  as select  col_band from $dbnameHRD.$tbHRD group by 1";
 
 	mysql_query($sql);
@@ -382,7 +382,7 @@ function safe($value)
 
 function fbutton($button)
 {
-	include 'config.php';
+	include "config.php";
 	$link = "";
 	$select = "";
 	$CountryArray = "";
