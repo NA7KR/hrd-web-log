@@ -25,26 +25,7 @@
 		makeDisable();
 	}
 </script>
-<style type="text/css">
-	.auto-style1 
-	{
-		text-align: center;
-		font-family: Arial, Helvetica, sans-serif;
-		font-size: large;
-	}
-	.auto-style2 
-	{
-		color: #FFFFFF;
-	}
-	.auto-style3 
-	{
-		font-size: xx-small;
-	}
-	.auto-style4 
-	{
-		font-size: larger;
-	}
-</style>
+
 	<?php
 		include "config.php";
 		include "counter.php";

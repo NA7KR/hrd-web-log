@@ -1,5 +1,4 @@
 <?php
-
 include("config.php");
 $bd = mysql_connect($dbhost, $dbuname, $dbpass) or die("Opps some thing went wrong");
 mysql_select_db($dbnameWEB, $bd) or die("Opps some thing went wrong");
@@ -8,21 +7,14 @@ session_start();
 if($_SERVER["REQUEST_METHOD"] == "POST")
 {
 // username and password sent from form 
-
-	//$myusername=addslashes($_POST['username']); 
-	//$mypassword=addslashes($_POST['password']); 
-	
 	$myusername = mysql_real_escape_string($_POST['username']);
 	$mypassword = mysql_real_escape_string($_POST['password']);
-	
 	
 	$sql="SELECT id FROM admin WHERE username='$myusername' and passcode='$mypassword'";
 	$result=mysql_query($sql);
 	$row=mysql_fetch_array($result);
 	$active=$row['active'];
-
 	$count=mysql_num_rows($result);
-
 
 	// If result matched $myusername and $mypassword, table row must be 1 row
 	if($count==1)
@@ -38,29 +30,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	}
 }
 ?>
-
-
-<style type="text/css">
-	.auto-style1 
-	{
-		text-align: center;
-		font-family: Arial, Helvetica, sans-serif;
-		font-size: large;
-	}
-	.auto-style2 
-	{
-		color: #FFFFFF;
-	}
-	.auto-style3 
-	{
-		font-size: xx-small;
-	}
-	.auto-style4 
-	{
-		font-size: larger;
-	}
-	body
-</style>
 	<?php
 		include "config.php";
 		include "counter.php";
@@ -74,28 +43,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 </head>
 
 <body  style="color: #FFFFFF; background-color: #0000FF">
-
-
 <body bgcolor="#FFFFFF">
-
-
 <div align="center">
 <div style="width:300px; border: solid 1px #333333; " align="left">
-<div style="background-color:#333333; color:#FFFF00; padding:3px;"><b>Login</b></div>
-
-
+<div style="background-color:#333333; "> <div class="auto-style1"> <b>Login</b></div>
 <div style="margin:30px">
-
 <form action="" method="post">
-<label><font color="yellow">UserName  :</label><input type="text" name="username" class="box"/><br /><br />
+<label></span><span class="auto-style4">UserName  :</label><input type="text" name="username" class="box"/><br /><br />
 <label>Password  :</label><input type="password" name="password" class="box" /><br/><br />
-<input type="submit" value=" Submit "/><br />
-
+<div align="center"><input type="submit" value=" Submit "/><br />
 </form>
 <div style="font-size:11px; color:#cc0000; margin-top:10px"><?php echo $error; ?></div>
 </div>
 </div>
 </div>
-
 </body>
 </html>
