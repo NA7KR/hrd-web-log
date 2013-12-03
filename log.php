@@ -162,8 +162,7 @@
 					$query = $info[1];
 				}
 			}
-			
-			
+						
 		}
 		$query = str_replace( "_Band_", $BAND, $query);
 		$query = str_replace( "_Mode_", $MODE, $query);
