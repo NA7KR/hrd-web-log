@@ -4,8 +4,6 @@
 <script type="text/javascript">
 	function makeDisable()
 	{
-		var x=document.getElementById("mySelect")
-		x.disabled=true
 		var x=document.getElementById("mySelect2")
 		x.disabled=true
 		var x=document.getElementById("mySelect3")
@@ -13,8 +11,6 @@
 	}
 	function makeEnable()
 	{
-		var x=document.getElementById("mySelect")
-		x.disabled=false
 		var x=document.getElementById("mySelect2")
 		x.disabled=false
 		var x=document.getElementById("mySelect3")
@@ -335,11 +331,11 @@ function MakeViews()
 {
 	include "config.php";
 	$sql = "create or replace view  $dbnameHRD.bands  as select  col_band from $dbnameHRD.$tbHRD group by 1";
-
 	mysql_query($sql);
+	
 	$sql = "create or replace view $dbnameHRD.modes as select   col_mode from $dbnameHRD.$tbHRD group by 1";
-
 	mysql_query($sql);
+	
 	$sql = "create or replace view $dbnameHRD.towork as  \n"
 	. "select col_mode, col_band, STATE, COUNTRY, sCOUNTRY  \n"
 	. "FROM $dbnameWEB.$tbStates, $dbnameHRD.modes, $dbnameHRD.bands  \n"
@@ -347,6 +343,7 @@ function MakeViews()
 	. "SELECT concat( COL_MODE,'-', COL_BAND,'-', COL_STATE,'-', COL_COUNTRY )AS the_key  \n"
 	. "FROM  $dbnameHRD.$tbHRD   \n"
 	. "where COL_STATE is not null)  \n";
+	mysql_query($sql);
 	mysql_query($sql);
 
 	$sql = "create or replace view $dbnameHRD.zone_to_work as  \n"
