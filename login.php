@@ -1,4 +1,4 @@
-<!DOCTYPE HTML 4.01 Transitional>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -41,7 +41,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 
 </head>
 	<body class="background1">
-	<div class="c3 c1 c1">
+	<div class="center">
 	<div class="auto-style1"><strong>Login.</strong></div>
 	<div class="c2">
 	<form action="login.php" method="post"><label>UserName :</label> <input type="text" name="username" class="box"><br>
@@ -53,6 +53,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	</form>
 	</div>
 	</div>
-	<div class="c1"><span class="auto-style5"><a href="http://jigsaw.w3.org/css-validator/check/referer"><img class="c4" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!"></a></span></div>
+	<div class="c1"><span class="auto-style5"><a href="http://jigsaw.w3.org/css-validator/check/referer"><img class="c4" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!"></a></span></div><br><br>
+	<div class="c1"><span class="auto-style5"><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional" height="31" width="88"></a></span></div>
 	</body>
 </html>

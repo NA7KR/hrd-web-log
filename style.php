@@ -24,4 +24,9 @@
 	div.c3 {background-color: #333333; border: solid 1px #333333; text-align: left; width: 300px}
 	div.c2 {margin:30px}
 	div.c1 {text-align: center}
+	.center
+	{
+		margin:auto;
+		width:20%;
+	}
 </style>
