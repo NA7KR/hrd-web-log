@@ -24,6 +24,7 @@
 
 	<?php
 		include_once "config.php";
+		include_once("style.php");
 		include "counter.php";
 	?>
 	<title><?php echo $myCall ?> Ham Radio LogBook</title> 
@@ -34,7 +35,7 @@
 	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
 </head>
 
-<body onload="onLoad();" span class="background1">
+<body onload="onLoad();" class="background1">
 <?php include_once("analyticstracking.php") ?>
     <div class="auto-style1"> Hello welcome my log book at reads from Ham Radio Deluxe log.. <span class="auto-style3"><br>
         </span><span class="auto-style4">My Call is <?php echo $myCall ?></span><br>
@@ -162,7 +163,8 @@
 					$query = $info[1];
 				}
 			}
-						
+			
+			
 		}
 		$query = str_replace( "_Band_", $BAND, $query);
 		$query = str_replace( "_Mode_", $MODE, $query);
@@ -479,5 +481,4 @@ function fbutton($button)
     <P style="text-align: center"><a href="http://validator.w3.org/check?uri=referer">
 	<img  src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional" height="31" width="88"></a>
 	<div style="display:none;"><?php echo $QSLWORKED ; ?></div>
-  	</p>
 </html>

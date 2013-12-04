@@ -1,5 +1,14 @@
+<!DOCTYPE HTML 4.01 Transitional>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="description" content="<?php echo $myCall ?> Ham Radio LogBook">
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="revisit-after" content="30 days">
+	<meta name="ROBOTS" content="INDEX, FOLLOW">
 <?php
 include_once("config.php");
+include_once("style.php");
 $bd = mysql_connect($dbhost, $dbuname, $dbpass) or die("Opps some thing went wrong");
 mysql_select_db($dbnameWEB, $bd) or die("Opps some thing went wrong");
 session_start();
@@ -27,32 +36,23 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	}
 }
 
-?>
-	<title><?php echo $myCall ?> Ham Radio LogBook Admin</title> 
-	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
-	<meta name="description" content="<?php echo $myCall ?> Ham Radio LogBook"> 
-	<meta http-equiv="content-type" content="text/html;charset=UTF-8"> 
-	<meta name="revisit-after" content="30 days">
-	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+?>	
+<title><?php echo $myCall ?> Ham Radio LogBook Admin</title>	
+
 </head>
-
-<body span class="background1">
-<body bgcolor="#FFFFFF">
-<div align="center">
-<div style="width:300px; border: solid 1px #333333; " align="left">
-<div style="background-color:#333333; "> <div class="auto-style1"> <b>Login</b></div>
-<div style="margin:30px">
-<form action="" method="post">
-<label><span class="auto-style5">UserName  :</label>
-<input type="text" name="username" class="box"><br><br>
-<label><span class="auto-style5">Password  :</label>
-<input type="password" name="password" class="box" ><br><br>
-<div align="center"><input type="submit" value=" Submit "/><br>
-</form>
-
-<?php echo "<div class='error'>" . $error; ?></div>
-</div>
-</div>
-</div>
-</body>
+	<body class="background1">
+	<div class="c3 c1 c1">
+	<div class="auto-style1"><strong>Login.</strong></div>
+	<div class="c2">
+	<form action="login.php" method="post"><label>UserName :</label> <input type="text" name="username" class="box"><br>
+	<br>
+	<label>Password :</label> <input type="password" name="password" class="box"><br>
+	<br>
+	<div class="c1"><input type="submit" value=" Submit "><br></div>
+	<div class='error'></div>
+	</form>
+	</div>
+	</div>
+	<div class="c1"><span class="auto-style5"><a href="http://jigsaw.w3.org/css-validator/check/referer"><img class="c4" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!"></a></span></div>
+	</body>
 </html>
