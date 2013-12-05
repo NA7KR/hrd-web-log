@@ -29,4 +29,10 @@
 		margin:auto;
 		width:20%;
 	}
+	.box
+	{
+		width: 150px; 
+		height: 15px
+	}
+	
 </style>

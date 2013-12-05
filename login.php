@@ -44,7 +44,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	<body class="background1">
 	<div class="center">
 	<form action="login.php" method="post">
-		<table width="100%" border="1" cellpadding="2" cellspacing="2" >
+		<table width="100%" border="1" cellpadding="2" cellspacing="2" bgcolor="#333333" >
 			<tr valign="top">
 				<td colspan=2 style="border-width : 0px;"><div class="auto-style1"><strong>Login.</strong></div><br></td>
 			</tr>
@@ -60,10 +60,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 				<td colspan=2 style="border-width : 0px;"><div class="c1"><input type="submit" value=" Submit "></div><br></td>
 			</tr>
 			<tr valign="top">
-			<td colspan=2 style="border-width : 0px;"><div class='error'></div><br></td></tr>
+			<td colspan=2 style="border-width : 0px;"><div class='error'><?php echo $error; ?></div><br></td></tr>
 		</table>
 	</form>
 	</div>
+	<br>
 	<br>
 	<div class="c1"><span class="auto-style5"><a href="http://jigsaw.w3.org/css-validator/check/referer"><img class="c4" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!"></a></span></div><br><br>
 	<div class="c1"><span class="auto-style5"><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional" height="31" width="88"></a></span></div>

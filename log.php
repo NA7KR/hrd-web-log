@@ -479,7 +479,22 @@ function fbutton($button)
      <p style="text-align: center"> Please contact <a href="mailto:support@na7kr.us"><span class="auto-style2">support@na7kr.us</span></a> and not HRD.</p></div>
     <div><P style="text-align: center"><img  alt="HRD" src="HRD_logo.jpg"></p></div>
 	<p>
-    <P style="text-align: center"><a href="http://validator.w3.org/check?uri=referer">
-	<img  src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional" height="31" width="88"></a>
+    <div class="c1">
+		<span class="auto-style5">
+			<a href="http://validator.w3.org/check?uri=referer">
+				<img class="c4"  src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional" height="31" width="88">
+			</a>
+		</span>
+	</div>
+	<br><br>
+	<div class="c1">
+		<span class="auto-style5">
+			<a href="http://jigsaw.w3.org/css-validator/check/referer">
+				<img class="c4" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!">
+			</a>
+		</span>
+	</div>
+	<br><br>
+	
 	<div style="display:none;"><?php echo $QSLWORKED ; ?></div>
 </html>
