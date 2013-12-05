@@ -28,6 +28,7 @@
 		include "counter.php";
 	?>
 	<title><?php echo $myCall ?> Ham Radio LogBook</title> 
+	<meta name="keywords" content="Ham Radio NA7KR">
 	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
 	<meta name="description" content="<?php echo $myCall ?> Ham Radio LogBook"> 
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8"> 

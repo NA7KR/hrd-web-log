@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+	<meta name="keywords" content="Ham Radio NA7KR">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="description" content="<?php echo $myCall ?> Ham Radio LogBook">
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -42,17 +43,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 </head>
 	<body class="background1">
 	<div class="center">
-	<div class="auto-style1"><strong>Login.</strong></div>
-	<div class="c2">
-	<form action="login.php" method="post"><label>UserName :</label> <input type="text" name="username" class="box"><br>
-	<br>
-	<label>Password :</label> <input type="password" name="password" class="box"><br>
-	<br>
-	<div class="c1"><input type="submit" value=" Submit "><br></div>
-	<div class='error'></div>
+	<form action="login.php" method="post">
+		<table width="100%" border="1" cellpadding="2" cellspacing="2" >
+			<tr valign="top">
+				<td colspan=2 style="border-width : 0px;"><div class="auto-style1"><strong>Login.</strong></div><br></td>
+			</tr>
+			<tr valign="top">
+				<td style="border-width : 0px;"><label>UserName :</label></td>
+				<td style="border-width : 0px;"><input type="text" name="username" class="box"></td>
+			</tr>
+			<tr valign="top">
+				<td style="border-width : 0px;"><label>Password :</label></td>
+				<td style="border-width : 0px;"><input type="password" name="password" class="box"></td>
+			</tr>
+			<tr valign="top">
+				<td colspan=2 style="border-width : 0px;"><div class="c1"><input type="submit" value=" Submit "></div><br></td>
+			</tr>
+			<tr valign="top">
+			<td colspan=2 style="border-width : 0px;"><div class='error'></div><br></td></tr>
+		</table>
 	</form>
 	</div>
-	</div>
+	<br>
 	<div class="c1"><span class="auto-style5"><a href="http://jigsaw.w3.org/css-validator/check/referer"><img class="c4" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!"></a></span></div><br><br>
 	<div class="c1"><span class="auto-style5"><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional" height="31" width="88"></a></span></div>
 	</body>

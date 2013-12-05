@@ -1,22 +1,19 @@
-<?php 
-{
-	include('lock.php');
-	include_once('config.php');
-}
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<?php
-		include_once "config.php";
-		include "counter.php";
-	?>
-	<title><?php echo $myCall ?> Ham Radio LogBook Upload / config</title> 
+	<meta name="keywords" content="Ham Radio NA7KR">
 	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
 	<meta name="description" content="<?php echo $myCall ?> Ham Radio LogBook"> 
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8"> 
 	<meta name="revisit-after" content="30 days">
 	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+	<?php
+		include_once "config.php";
+		include "counter.php";
+		include('lock.php');
+		include('style.php');
+	?>
+	<title><?php echo $myCall ?> Ham Radio LogBook Upload / config</title> 
 </head>
 
 <body onload="onLoad();" span class="background1">

@@ -22,7 +22,7 @@
 	a:active {color:#0000FF;}  /* selected link */
 	img.c4 {border:0;width:88px;height:31px}
 	div.c3 {background-color: #333333; border: solid 1px #333333; text-align: left; width: 300px}
-	div.c2 {margin:30px}
+	div.c2 {margin:40px}
 	div.c1 {text-align: center}
 	.center
 	{
