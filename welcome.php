@@ -50,6 +50,8 @@
 		include "counter.php";
 		include('lock.php');
 		include('style.php');
+		$link = mysql_connect($dbhost, $dbuname, $dbpass) or die ('Cannot connect to the database: ' . mysql_error());
+		mysql_select_db($dbnameHRD) or die ('Cannot connect to the database: ' . mysql_error());
 	?>
 <title><?php echo $myCall ?> Ham Radio LogBook Upload / config</title> 
 </head>
@@ -146,6 +148,23 @@
 			echo "<div class='error'>Invalid file</div>";
 		}
 	}
+	
+
+	$LOG = $_POST['Log'];
+	$callsign = $_POST['callsign'];
+	echo "<br>";
+	if ($LOG == 4)
+		{
+			$sql = "SELECT `COL_CALL` , `COL_BAND`,`COL_TIME_OFF`,`COL_PRIMARY_KEY`FROM `TABLE_HRD_CONTACTS_V01` WHERE `COL_CALL` ='$callsign'" ;
+			$query1 = mysql_query($sql);
+			while($info = mysql_fetch_array( $query1 ))
+				{
+					$QSLWORKED  .=$info[0] . ' Was worked on the '  .$info[1] . ' Band on ' . date("jS M Y",strtotime($info[2])) . ' Contact number is: '.$info[3] . '<br>';
+				}
+		}
+		echo $QSLWORKED  ;
+		
+	
 ?>
 </body>
 </html>

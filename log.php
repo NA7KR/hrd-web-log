@@ -111,11 +111,11 @@
 				. " FROM $dbnameHRD.towork RIGHT JOIN $dbnameWEB.tb_Bands_lookup ON $dbnameHRD.towork.col_band = $dbnameWEB.tb_Bands_lookup.Col_Band \n"
 				. " WHERE $dbnameHRD.towork.STATE IS NOT NULL and $dbnameHRD.towork.col_mode = $dbnameWEB.tb_Bands_lookup.SSB_Mode and \n"
 				. " $dbnameHRD.towork.Col_Band like '_Band_' and sCOUNTRY like '_Country_'";
-					$query1 = mysql_query($sql);
-				while($info = mysql_fetch_array( $query1 ))
-				{
-			 		$query = $info[1];
-				}
+				//	$query1 = mysql_query($sql);
+				//while($info = mysql_fetch_array( $query1 ))
+				//{
+			 	//	$query = $info[1];
+				//}
 
 			}
 			else
