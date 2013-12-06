@@ -2,41 +2,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <script type="text/javascript">
-	function makeEnable1()
-	{	
-		var x=document.getElementById("mySelect1")
-		x.disabled=false
-		var x=document.getElementById("mySelect2")
-		x.disabled=true
-		var x=document.getElementById("mySelect3")
-		x.disabled=true
-	}
-	function makeEnable2()
-	{	
-		var x=document.getElementById("mySelect1")
-		x.disabled=false
-		var x=document.getElementById("mySelect2")
-		x.disabled=false
-		var x=document.getElementById("mySelect3")
-		x.disabled=true
-	}
-	function makeEnable3()
+
+	function lookup(visiState)
 	{
-		var x=document.getElementById("mySelect1")
-		x.disabled=true
-		var x=document.getElementById("mySelect2")
-		x.disabled=true
-		var x=document.getElementById("mySelect3")
-		x.disabled=false
+		document.getElementById('lookup').style.visibility = visiState;
+		document.getElementById('lookup1').style.visibility = visiState;
 	}
-	function onLoad()
+	function qsl(visiState)
 	{
-		var x=document.getElementById("mySelect1")
-		x.disabled=true
-		var x=document.getElementById("mySelect2")
-		x.disabled=true
-		var x=document.getElementById("mySelect3")
-		x.disabled=true
+		document.getElementById('qsl').style.visibility = visiState;
+		document.getElementById('qsl1').style.visibility = visiState;
+	}
+	function awards(visiState)
+	{
+		document.getElementById('awards').style.visibility = visiState;
+		document.getElementById('awards1').style.visibility = visiState;
 	}
 </script>
 	<meta name="keywords" content="Ham Radio NA7KR">
@@ -56,7 +36,7 @@
 <title><?php echo $myCall ?> Ham Radio LogBook Upload / config</title> 
 </head>
 
-<body onload="onLoad();" span class="background1">
+<body onload= "lookup('hidden'); qsl('hidden'); awards('hidden')" span class="background1">
     <div class="auto-style1"> Hello welcome Admin Page..... 
 		<span class="auto-style3"><br></span>
 		<span class="auto-style4">My Call is <?php echo $myCall ?></span><br>
@@ -67,32 +47,35 @@
 	
 	<br><br>
     <form enctype="multipart/form-data" class="Txt_upload" method='POST'  action='welcome.php'>
-			<input type="radio" value='1' name="Log" onclick="makeEnable1()" > Upload Awards
-			<input type="radio" value='2' name="Log" onclick="makeEnable2()" > Upload Paper
-			<input type="radio" value='3' name="Log" onclick="makeEnable2()" > Upload Paper Back
-			<input type="radio" value='4' name="Log" onclick="makeEnable3()" > Look contact number
+			<input type="radio" value='1' name="Log"  onclick="lookup('hidden'); qsl('hidden'); awards('visible')" > Upload Awards
+			<input type="radio" value='2' name="Log"  onclick="lookup('hidden'); qsl('visible'); awards('visible')" > Upload Paper
+			<input type="radio" value='3' name="Log"  onclick="lookup('hidden'); qsl('visible'); awards('visible')" > Upload Paper Back
+			<input type="radio" value='4' name="Log"  onclick="lookup('visible'); qsl('hidden'); awards('hidden')"  > Look contact number
 			<br>
 			<table width="30%" border="0" cellpadding="0" cellspacing="0"  >
 				<tr valign="top">
-					<td style="border-width : 0px;"><label>Enter Contact Number :</label></td>
-					<td style="border-width : 0px;"><input type="text"  id='mySelect2' name="contactno" ></td>
+					<td style="border-width : 0px;"><span id="qsl" style="visibility:hidden"><label>Enter Contact Number :</label></span></td>
+					<td style="border-width : 0px;"><span id="qsl1" style="visibility:hidden"><input type="text"   name="contactno" ></span></td>
 				</tr>
+				
 				<tr valign="top">
-					<td style="border-width : 0px;"><label>Enter Callsign :</label></td>
-					<td style="border-width : 0px;"><input type="text"  id='mySelect3' name="callsign" ></td>
+					<td style="border-width : 0px;"><span id="lookup" style="visibility:hidden"><label>Enter Callsign :</label></span></td>
+					<td style="border-width : 0px;"><span id="lookup1" style="visibility:hidden"><input type="text"   name="callsign" ></span></td>
 				</tr>
+				
 				<tr valign="top">
-					<td style="border-width : 0px;"><label>Select file :</label></td>
-					<td style="border-width : 0px;"><input type='file' id='mySelect1' name='file' /></td>
+					<td style="border-width : 0px;"><span id="awards" style="visibility:hidden"><label>Select file :</label></span></td>
+					<td style="border-width : 0px;"><span id="awards1" style="visibility:hidden"><input type='file'  name='file' ></span></td>
 				</tr>
 			</table>
 			<br>
-            <input type='submit' name='submit' value="upload here"/>
+            <input type='submit' name='submit' value="upload here">
         </form>
     </body>
 </html>
 
 <?php
+	$side = "X";
 	if ($debug == "true")
 		{
 			echo "<pre>";
@@ -109,43 +92,82 @@
 		{
 			$target_path = "Awards/";
 		}
-		else
+		elseif (($LOG == 2) || ($LOG == 3))
 		{
-			$target_path = "cards/0-999/";
+			$Key =  $_POST['contactno'];
+			$i = intval($Key);
+			   if ("$i" == "$Key") 
+			   {
+					$fileMutiply = 1000;
+					$FileNoGroup = (($Key/$fileMutiply) % $fileMutiply * $fileMutiply);
+					$fileNoGroupHigh = $FileNoGroup + ($fileMutiply-1);
+					$target_path="/srv/cards/". $FileNoGroup ."-".$fileNoGroupHigh ."/";
+					if (!file_exists('$target_path')) 
+					{
+						mkdir('$target_path', 0777, true);
+					}
+					$sql = "SELECT `COL_CALL` FROM `TABLE_HRD_CONTACTS_V01` where `COL_PRIMARY_KEY` ='$Key'";
+					$query1 = mysql_query($sql);
+					while($info = mysql_fetch_array( $query1 ))
+					{
+						$FileName  .=$info[0] ;
+					}
+			   } 
+			   else
+			   {
+					echo "<div class='error'> Please Enter Number </div>";
+			   }
 		}
-		
-		$upload_exts = "";
-		$file_exts = array("jpg", "bmp", "jpeg", "gif", "png");
-		$upload_exts = end(explode(".", $_FILES["file"]["name"]));
-		if ((($_FILES["file"]["type"] == "image/gif")
-			|| ($_FILES["file"]["type"] == "image/jpeg")
-			|| ($_FILES["file"]["type"] == "image/png")
-			|| ($_FILES["file"]["type"] == "image/pjpeg"))
-			&& ($_FILES["file"]["size"] < 2000000)
-			&& in_array($upload_exts, $file_exts))
+		if (($LOG == 1) ||($LOG == 2) || ($LOG == 3))
 		{
-			if ($_FILES["file"]["error"] > 0)
+			$upload_exts = "";
+			$file_exts = array("jpg", "bmp", "jpeg", "gif", "png");
+			$upload_exts = end(explode(".", $_FILES["file"]["name"]));
+			if ((($_FILES["file"]["type"] == "image/gif")
+				|| ($_FILES["file"]["type"] == "image/jpeg")
+				|| ($_FILES["file"]["type"] == "image/png")
+				|| ($_FILES["file"]["type"] == "image/pjpeg"))
+				&& ($_FILES["file"]["size"] < 2000000)
+				&& in_array($upload_exts, $file_exts))
 			{
-				echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
+				if ($_FILES["file"]["error"] > 0)
+				{
+					echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
+				}
+				else
+				{
+					if ($LOG == 1)
+					{
+						echo "Upload: " . $_FILES["file"]["name"] . "<br>";
+						if (file_exists($target_path . $_FILES["file"]["name"]))
+						{
+							echo "<div class='error'>"."(" . $target_path . $_FILES["file"]["name"].")". " already exists. "."</div>";
+						}
+						else 
+						{
+						move_uploaded_file($_FILES["file"]["tmp_name"], $target_path . $_FILES["file"]["name"]);
+						echo "<div class='sucess'>"."Stored in: " . $target_path . $_FILES["file"]["name"]."</div>";
+						}
+					}
+					else
+					{
+						echo "Upload: " . $side . "-" . $Key . "-" . $FileName . "jpg" . "<br>";
+						if (file_exists($target_path . $side . "-" . $Key . "-" . $FileName . ".jpg" ))				
+						{
+							echo "<div class='error'>". $target_path . $side . "-" . $Key . "-" . $FileName . ".jpg". " already exists. "."</div>";
+						}
+						else
+						{
+							move_uploaded_file($_FILES["file"]["tmp_name"], $target_path . $side . "-" . $Key . "-" . $FileName . ".jpg" );
+							echo "<div class='sucess'>"."Stored in: " . $target_path . $side . "-" . $Key . "-" . $FileName . ".jpg" . "</div>";
+						}
+					}	
+				}
 			}
 			else
 			{
-				echo "Upload: " . $_FILES["file"]["name"] . "<br>";
-				// Enter your path to upload file here
-				if (file_exists($target_path . $_FILES["file"]["name"]))
-			{
-				echo "<div class='error'>"."(".$_FILES["file"]["name"].")". " already exists. "."</div>";
+				echo "<div class='error'>Invalid file</div>";
 			}
-			else
-			{
-				move_uploaded_file($_FILES["file"]["tmp_name"], $target_path . $_FILES["file"]["name"]);
-				echo "<div class='sucess'>"."Stored in: " . $target_path . $_FILES["file"]["name"]."</div>";	
-			}
-		}
-		}
-		else
-		{
-			echo "<div class='error'>Invalid file</div>";
 		}
 	}
 	
