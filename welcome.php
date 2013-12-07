@@ -18,6 +18,11 @@
 		document.getElementById('awards').style.visibility = visiState;
 		document.getElementById('awards1').style.visibility = visiState;
 	}
+	function desawards(visiState)
+	{
+		document.getElementById('desawards').style.visibility = visiState;
+		document.getElementById('desawards1').style.visibility = visiState;	
+	}
 </script>
 	<meta name="keywords" content="Ham Radio NA7KR">
 	<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
@@ -36,7 +41,7 @@
 <title><?php echo $myCall ?> Ham Radio LogBook Upload / config</title> 
 </head>
 
-<body onload= "lookup('hidden'); qsl('hidden'); awards('hidden')" span class="background1">
+<body onload= "lookup('hidden'); qsl('hidden'); awards('hidden'); desawards('hidden')" span class="background1">
     <div class="auto-style1"> Hello welcome Admin Page..... 
 		<span class="auto-style3"><br></span>
 		<span class="auto-style4">My Call is <?php echo $myCall ?></span><br>
@@ -47,10 +52,10 @@
 	
 	<br><br>
     <form enctype="multipart/form-data" class="Txt_upload" method='POST'  action='welcome.php'>
-			<input type="radio" value='1' name="Log"  onclick="lookup('hidden'); qsl('hidden'); awards('visible')" > Upload Awards
-			<input type="radio" value='2' name="Log"  onclick="lookup('hidden'); qsl('visible'); awards('visible')" > Upload Paper
-			<input type="radio" value='3' name="Log"  onclick="lookup('hidden'); qsl('visible'); awards('visible')" > Upload Paper Back
-			<input type="radio" value='4' name="Log"  onclick="lookup('visible'); qsl('hidden'); awards('hidden')"  > Look contact number
+			<input type="radio" value='1' name="Log"  onclick="lookup('hidden'); qsl('hidden'); awards('visible'); desawards('visible')" > Upload Awards
+			<input type="radio" value='2' name="Log"  onclick="lookup('hidden'); qsl('visible'); awards('visible'); desawards('hidden')" > Upload Paper
+			<input type="radio" value='3' name="Log"  onclick="lookup('hidden'); qsl('visible'); awards('visible'); desawards('hidden')" > Upload Paper Back
+			<input type="radio" value='4' name="Log"  onclick="lookup('visible'); qsl('hidden'); awards('hidden'); desawards('hidden')"  > Look contact number
 			<br>
 			<table width="30%" border="0" cellpadding="0" cellspacing="0"  >
 				<tr valign="top">
@@ -61,6 +66,11 @@
 				<tr valign="top">
 					<td style="border-width : 0px;"><span id="lookup" style="visibility:hidden"><label>Enter Callsign :</label></span></td>
 					<td style="border-width : 0px;"><span id="lookup1" style="visibility:hidden"><input type="text"   name="callsign" ></span></td>
+				</tr>
+				
+				<tr valign="top">
+					<td style="border-width : 0px;"><span id="desawards" style="visibility:hidden"><label>Enter Description :</label></span></td>
+					<td style="border-width : 0px;"><span id="desawards1" style="visibility:hidden"><input type="text"   name="awardsdes" ></span></td>
 				</tr>
 				
 				<tr valign="top">
@@ -75,7 +85,7 @@
 </html>
 
 <?php
-	$side = "X";
+
 	if ($debug == "true")
 		{
 			echo "<pre>";
@@ -90,28 +100,41 @@
 		$LOG = $_POST['Log'];
 		if ($LOG == 1)
 		{
-			$target_path = "Awards/";
+			$filePath = "Awards/";
+			$FileName = $_FILES["file"]["name"];
 		}
-		elseif (($LOG == 2) || ($LOG == 3))
+		elseif ($LOG == 2)
+		{
+			$side = "F";
+			$tbside = "COL_File_Path_F";
+		}
+		elseif ($LOG == 3)
+		{
+			$side = "B";
+			$tbside = "COL_File_Path_B";
+		}
+		if (($LOG == 2) || ($LOG == 3))
 		{
 			$Key =  $_POST['contactno'];
+			$AwardsDes =  $_POST['awardsdes'];
 			$i = intval($Key);
 			   if ("$i" == "$Key") 
 			   {
 					$fileMutiply = 1000;
 					$FileNoGroup = (($Key/$fileMutiply) % $fileMutiply * $fileMutiply);
 					$fileNoGroupHigh = $FileNoGroup + ($fileMutiply-1);
-					$target_path="/srv/cards/". $FileNoGroup ."-".$fileNoGroupHigh ."/";
-					if (!file_exists('$target_path')) 
+					$filePath="/srv/cards/". $FileNoGroup ."-".$fileNoGroupHigh ."/";
+					if (!file_exists('$filePath')) 
 					{
-						mkdir('$target_path', 0777, true);
+						mkdir('$filePath', 0777, true);
 					}
 					$sql = "SELECT `COL_CALL` FROM `TABLE_HRD_CONTACTS_V01` where `COL_PRIMARY_KEY` ='$Key'";
 					$query1 = mysql_query($sql);
 					while($info = mysql_fetch_array( $query1 ))
 					{
-						$FileName  .=$info[0] ;
+						$CallSign  .=$info[0] ;
 					}
+					$FileName = $side . "-" . $Key . "-" . $CallSign . ".jpg";
 			   } 
 			   else
 			   {
@@ -129,44 +152,78 @@
 				|| ($_FILES["file"]["type"] == "image/pjpeg"))
 				&& ($_FILES["file"]["size"] < 2000000)
 				&& in_array($upload_exts, $file_exts))
-			{
-				if ($_FILES["file"]["error"] > 0)
 				{
-					echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
-				}
-				else
-				{
-					if ($LOG == 1)
+					if ($_FILES["file"]["error"] > 0)
 					{
-						echo "Upload: " . $_FILES["file"]["name"] . "<br>";
-						if (file_exists($target_path . $_FILES["file"]["name"]))
-						{
-							echo "<div class='error'>"."(" . $target_path . $_FILES["file"]["name"].")". " already exists. "."</div>";
-						}
-						else 
-						{
-						move_uploaded_file($_FILES["file"]["tmp_name"], $target_path . $_FILES["file"]["name"]);
-						echo "<div class='sucess'>"."Stored in: " . $target_path . $_FILES["file"]["name"]."</div>";
-						}
+						echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
 					}
 					else
 					{
-						echo "Upload: " . $side . "-" . $Key . "-" . $FileName . "jpg" . "<br>";
-						if (file_exists($target_path . $side . "-" . $Key . "-" . $FileName . ".jpg" ))				
+						echo "Upload: " . $FileName . "<br>";
+						if (file_exists($filePath . $FileName ))				
 						{
-							echo "<div class='error'>". $target_path . $side . "-" . $Key . "-" . $FileName . ".jpg". " already exists. "."</div>";
+							echo "<div class='error'>". $filePath . $FileName . " already exists. "."</div>";
 						}
 						else
 						{
-							move_uploaded_file($_FILES["file"]["tmp_name"], $target_path . $side . "-" . $Key . "-" . $FileName . ".jpg" );
-							echo "<div class='sucess'>"."Stored in: " . $target_path . $side . "-" . $Key . "-" . $FileName . ".jpg" . "</div>";
-						}
-					}	
+							move_uploaded_file($_FILES["file"]["tmp_name"], $filePath . $FileName );
+							echo "<div class='sucess'>"."Stored in: " . $filePath . $FileName . "</div>";
+							// open the directory
+							$pathToThumbs = $filePath ."/thumbs/";
+							$dir = opendir( $pathToThumbs );
+
+							// load image and get image size
+							$img = imagecreatefromjpeg( "{$filePath}/{$FileName}" );
+							$width = imagesx( $img );
+							$height = imagesy( $img );
+
+							// calculate thumbnail size
+							$thumbWidth = 100;
+							$new_height = floor( $height * ( $thumbWidth / $width ) );
+
+							// create a new temporary image
+							$tmp_img = imagecreatetruecolor( $thumbWidth, $new_height );
+
+							// copy and resize old image into new image
+							imagecopyresized( $tmp_img, $img, 0, 0, 0, 0, $thumbWidth, $new_height, $width, $height );
+
+							// save thumbnail into a file
+							imagejpeg( $tmp_img, "{$pathToThumbs}{$FileName}" );
+							chmod("{$pathToThumbs}{$FileName}", 0644);
+							// close the directory
+							closedir( $dir );
+							$con=mysqli_connect($dbhost,$dbuname,$dbpass,$dbnameWEB);
+							// Check connection
+							if (mysqli_connect_errno())
+							{
+							   echo "Failed to connect to MySQL: " . mysqli_connect_error();
+							}
+							if  ($LOG == 1)
+							{
+								Echo "SQL";
+								$sql = "INSERT INTO `HRD_Web`.`tb_awards` (`COL_PRIMARY_KEY`, `COL_Award`, `COL_File`) VALUES ('NULL', '$AwardsDes', '$FileName');";
+								mysqli_query($con,$sql);
+								mysqli_close($con);
+							}
+							elseif (($LOG == 2) || ($LOG == 3))
+							{
+								$sql = "UPDATE `HRD_Web`.`tb_Cards` SET  `$tbside` = '$FileName' WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key;";
+								if ($debug == "false")
+								{
+									Echo "2 or 3 SQL<br>";
+									echo $sql;
+								}
+								
+								mysqli_query($con,$sql);
+								mysqli_close($con);
+							}
+							Echo "Done";
+						}	
+					}
 				}
-			}
 			else
 			{
-				echo "<div class='error'>Invalid file</div>";
+				echo "<div class='error'>Invalid file $FileName</div>";
 			}
 		}
 	}
