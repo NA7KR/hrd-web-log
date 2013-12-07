@@ -102,6 +102,7 @@
 		{
 			$filePath = "Awards/";
 			$FileName = $_FILES["file"]["name"];
+			$AwardsDes =  $_POST['awardsdes'];
 		}
 		elseif ($LOG == 2)
 		{
@@ -116,7 +117,6 @@
 		if (($LOG == 2) || ($LOG == 3))
 		{
 			$Key =  $_POST['contactno'];
-			$AwardsDes =  $_POST['awardsdes'];
 			$i = intval($Key);
 			   if ("$i" == "$Key") 
 			   {
@@ -208,16 +208,30 @@
 							elseif (($LOG == 2) || ($LOG == 3))
 							{
 								$sql = "UPDATE `HRD_Web`.`tb_Cards` SET  `$tbside` = '$FileName' WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key;";
+								$result = mysql_query("SELECT * FROM `HRD_Web`.`tb_Cards` WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key ");
+								if( mysql_num_rows($result) > 0) 
+								{
+									mysql_query($sql);
+								}
+								else
+								{
+									$sql = "INSERT INTO `HRD_Web`.`tb_Cards` (`COL_PRIMARY_KEY`, `$tbside`) VALUES ( $Key, $FileName);";
+									mysql_query($sql);
+								}
 								if ($debug == "false")
 								{
 									Echo "2 or 3 SQL<br>";
 									echo $sql;
 								}
 								
+								
+								
+								
 								mysqli_query($con,$sql);
 								mysqli_close($con);
+								Echo "Done";
 							}
-							Echo "Done";
+							
 						}	
 					}
 				}
