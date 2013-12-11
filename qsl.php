@@ -13,7 +13,6 @@ This is a command line PHP script with one option.
   or -? options, you can get this help.
 
 <?php
-
 } else 
 {
 	include "/var/www/config.php";
