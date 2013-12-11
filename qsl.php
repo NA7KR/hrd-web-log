@@ -50,7 +50,7 @@ This is a command line PHP script with one option.
    
 	if (!file_exists('$filePath')) 
 		{
-			mkdir('$filePath', 0777, true);
+			mkdir($filePath, 0777, true);
 		}
 		
 	$FileName= "$filePath/E-$Key-$Call.jpg";
