@@ -14,6 +14,12 @@ $bd = mysql_connect($dbhost, $dbuname, $dbpass) or die("Opps some thing went wro
 mysql_select_db($dbnameWEB, $bd) or die("Opps some thing went wrong");
 session_start();
 include "counter.php";
+if (!isset($_SERVER['HTTPS']) || !$_SERVER['HTTPS']) { // if request is not secure, redirect to secure url
+    $url = 'https://' . $_SERVER['HTTP_HOST']
+                      . $_SERVER['REQUEST_URI'];
+
+    header('Location: ' . $url);
+}
 if($_SERVER["REQUEST_METHOD"] == "POST")
 {
 	$myusername = mysql_real_escape_string($_POST['username']); // username and password sent from form 

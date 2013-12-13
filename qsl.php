@@ -13,6 +13,7 @@ This is a command line PHP script with one option.
   or -? options, you can get this help.
 
 <?php
+
 } else 
 {
 	include "/var/www/config.php";
@@ -45,11 +46,13 @@ This is a command line PHP script with one option.
 	$fileMutiply = 1000;
 	$FileNoGroup = (($Key/$fileMutiply) % $fileMutiply * $fileMutiply);
     $fileNoGroupHigh = $FileNoGroup + ($fileMutiply-1);
-    $filePath="/srv/cards/". $FileNoGroup ."-".$fileNoGroupHigh;
+    $filePath = "/srv/cards/". $FileNoGroup ."-".$fileNoGroupHigh;
+	$pathToThumbs = $filePath ."/thumbs/";
    
 	if (!file_exists('$filePath')) 
 		{
 			mkdir($filePath, 0777, true);
+			mkdir($pathToThumbs, 0777, true);
 		}
 		
 	$FileName= "$filePath/E-$Key-$Call.jpg";
@@ -61,35 +64,82 @@ This is a command line PHP script with one option.
 		$str = file_get_contents("http://www.eqsl.cc/qslcard/GeteQSL.cfm?UserName=$myCall&Password=$EQSL&CallsignFrom=$Call&QSOBand=$Band&QSOMode=$Mode&QSOYear=$Year&QSOMonth=$Month&QSODay=$Day&QSOHour=$Hour&QSOMinute=$Minute");
 		$start1 = '<img src=';
 		$end1 = ' alt="" />';
-		$pic =  getTexts($str, $start1, $end1);
-		file_put_contents($FileName, file_get_contents("http://www.eqsl.cc/$pic"));
-		chmod("$FileName", 0644);
-		$FileName= "E-$Key-$Call.jpg";
 		
-		// open the directory
-		$pathToThumbs = $filePath ."/thumbs/";
-		$dir = opendir( $pathToThumbs );
+		
+		$error1 = "Error: You must specify the QSO Date/Time as QSOYear, QSOMonth, QSODay, QSOHour, and QSOMinute";
+		$error2 = "Error: No match on Username/Password for that QSO Date/Time";
+		$error3 = "Error: (n) overlapping accounts for that QSO Date/Time. User needs to correct that immediately";
+		$error4 = "Error: I cannot find that log entry";
+		$error5 = "Error: That QSO has been Rejected by (username)";
+	  
+	 
+		if (strpos($str,$error1) !== false) 
+		{
+			$file = '/srv/cards/errot.txt';// Open the file to get existing content
+			$errormsg = file_get_contents($file);// Write the contents back to the file
+			$errormsg .= $FileName . " " . $error1 ."\r\n"; 
+			file_put_contents($file  , $errormsg);
+		}
+		elseif (strpos($str,$error2) !== false) 
+		{
+			$file = '/srv/cards/errot.txt';// Open the file to get existing content
+			$errormsg = file_get_contents($file);// Write the contents back to the file
+			$errormsg .= $FileName . " " . $error2  ."\r\n"; 
+			file_put_contents($file  , $errormsg);
+		}	
+		elseif (strpos($str,$error3) !== false) 
+		{
+			$file = '/srv/cards/errot.txt';// Open the file to get existing content
+			$errormsg = file_get_contents($file);// Write the contents back to the file
+			$errormsg .= $FileName . " " . $error3  ."\r\n"; 
+			file_put_contents($file  , $errormsg);
+		}	
+		elseif (strpos($str,$error4) !== false) 
+		{
+			$file = '/srv/cards/errot.txt';// Open the file to get existing content
+			$errormsg = file_get_contents($file);// Write the contents back to the file
+			$errormsg .=  $FileName . " " . $error4  ."\r\n"; 
+			file_put_contents($file  , $errormsg);
+		}
+		elseif (strpos($str,$error5) !== false) 
+		{
+			$file = '/srv/cards/errot.txt';// Open the file to get existing content
+			$errormsg = file_get_contents($file);// Write the contents back to the file
+			$errormsg .= $FileName . " " . $error5  ."\r\n"; 
+			file_put_contents($file  , $errormsg);
+		}
+		else
+		{
+			$pic =  getTexts($str, $start1, $end1);
+			file_put_contents($FileName, file_get_contents("http://www.eqsl.cc/$pic"));
+			chmod("$FileName", 0644);
+			$FileName= "E-$Key-$Call.jpg";
+			
+			// open the directory
+			
+			$dir = opendir( $pathToThumbs );
 
-		// load image and get image size
-		$img = imagecreatefromjpeg( "{$filePath}/{$FileName}" );
-		$width = imagesx( $img );
-		$height = imagesy( $img );
+			// load image and get image size
+			$img = imagecreatefromjpeg( "{$filePath}/{$FileName}" );
+			$width = imagesx( $img );
+			$height = imagesy( $img );
 
-		// calculate thumbnail size
-		$thumbWidth = 100;
-		$new_height = floor( $height * ( $thumbWidth / $width ) );
+			// calculate thumbnail size
+			$thumbWidth = 100;
+			$new_height = floor( $height * ( $thumbWidth / $width ) );
 
-		// create a new temporary image
-		$tmp_img = imagecreatetruecolor( $thumbWidth, $new_height );
+			// create a new temporary image
+			$tmp_img = imagecreatetruecolor( $thumbWidth, $new_height );
 
-		// copy and resize old image into new image
-		imagecopyresized( $tmp_img, $img, 0, 0, 0, 0, $thumbWidth, $new_height, $width, $height );
+			// copy and resize old image into new image
+			imagecopyresized( $tmp_img, $img, 0, 0, 0, 0, $thumbWidth, $new_height, $width, $height );
 
-		// save thumbnail into a file
-		imagejpeg( $tmp_img, "{$pathToThumbs}{$FileName}" );
-		chmod("{$pathToThumbs}{$FileName}", 0644);
-		// close the directory
-		closedir( $dir );
+			// save thumbnail into a file
+			imagejpeg( $tmp_img, "{$pathToThumbs}{$FileName}" );
+			chmod("{$pathToThumbs}{$FileName}", 0644);
+			// close the directory
+			closedir( $dir );
+		}
 	}
 }
 function getTexts($string, $start, $end)

@@ -37,6 +37,14 @@
 		include('style.php');
 		$link = mysql_connect($dbhost, $dbuname, $dbpass) or die ('Cannot connect to the database: ' . mysql_error());
 		mysql_select_db($dbnameHRD) or die ('Cannot connect to the database: ' . mysql_error());
+		if (!isset($_SERVER['HTTPS']) || !$_SERVER['HTTPS']) 
+		{ // if request is not secure, redirect to secure url
+			$url = 'https://' . $_SERVER['HTTP_HOST']
+                      . $_SERVER['REQUEST_URI'];
+
+			header('Location: ' . $url);
+			exit;
+		}
 	?>
 <title><?php echo $myCall ?> Ham Radio LogBook Upload / config</title> 
 </head>
@@ -126,7 +134,7 @@
 					$filePath="/srv/cards/". $FileNoGroup ."-".$fileNoGroupHigh ."/";
 					if (!file_exists('$filePath')) 
 					{
-						mkdir('$filePath', 0777, true);
+						mkdir($filePath, 0777, true);
 					}
 					$sql = "SELECT `COL_CALL` FROM `TABLE_HRD_CONTACTS_V01` where `COL_PRIMARY_KEY` ='$Key'";
 					$query1 = mysql_query($sql);
@@ -223,10 +231,7 @@
 									Echo "2 or 3 SQL<br>";
 									echo $sql;
 								}
-								
-								
-								
-								
+
 								mysqli_query($con,$sql);
 								mysqli_close($con);
 								Echo "Done";
