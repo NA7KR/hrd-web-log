@@ -51,7 +51,7 @@ This is a command line PHP script with one option.
     $filePath = "/srv/cards/". $FileNoGroup ."-".$fileNoGroupHigh;
 	$pathToThumbs = $filePath ."/thumbs/";
    
-	if (!file_exists('$filePath')) 
+	if (!file_exists($filePath)) 
 		{
 			mkdir($filePath, 0777, true);
 			mkdir($pathToThumbs, 0777, true);
@@ -67,71 +67,47 @@ This is a command line PHP script with one option.
 		$start1 = '<img src=';
 		$end1 = ' alt="" />';
 		
+		$arr = array(
+			"Error: You must specify the QSO Date/Time as QSOYear, QSOMonth, QSODay, QSOHour, and QSOMinute",
+			"Error: No match on Username/Password for that QSO Date/Time",
+			"Error: (n) overlapping accounts for that QSO Date/Time. User needs to correct that immediately",
+			"Error: I cannot find that log entry",
+			"Error: That QSO has been Rejected by (username)"
+		);
+		reset($arr);
+		$error1 = 0;
+		while (list(, $value) = each($arr)) 
+		{
+			if (strpos($str,$value) !== false)
+			{
+				$file = '/srv/error.txt';// Open the file to get existing content 
+				$errormsg = file_get_contents($file);// Write the contents back to the file
+				$errormsg .= $FileName . " Error: " . $value  . " Connection: " . $eqsl ."\r\n"; 
+				file_put_contents($file  , $errormsg);
+				echo $value . "\n";
+				$error1 = 1;
+			}
+		}
 		
-		$error1 = "Error: You must specify the QSO Date/Time as QSOYear, QSOMonth, QSODay, QSOHour, and QSOMinute";
-		$error2 = "Error: No match on Username/Password for that QSO Date/Time";
-		$error3 = "Error: (n) overlapping accounts for that QSO Date/Time. User needs to correct that immediately";
-		$error4 = "Error: I cannot find that log entry";
-		$error5 = "Error: That QSO has been Rejected by (username)";
-	  
-		$file = '/srv/error.txt';// Open the file to get existing content 
-        
-		if (strpos($str,$error1) !== false) 
-		{
-			$errormsg = file_get_contents($file);// Write the contents back to the file
-			$errormsg .= $FileName . " Error: " . $error1  . " Connection: " . $eqsl ."\r\n"; 
-			file_put_contents($file  , $errormsg);
-		}
-		elseif (strpos($str,$error2) !== false) 
-		{
-			$errormsg = file_get_contents($file);// Write the contents back to the file
-			$errormsg .= $FileName . " Error: " . $error2  . " Connection: " . $eqsl ."\r\n"; 
-			file_put_contents($file  , $errormsg);
-		}	
-		elseif (strpos($str,$error3) !== false) 
-		{
-			$errormsg = file_get_contents($file);// Write the contents back to the file
-			$errormsg .= $FileName . " Error: " . $error3  . " Connection: " . $eqsl ."\r\n"; 
-			file_put_contents($file  , $errormsg);
-		}	
-		elseif (strpos($str,$error4) !== false) 
-		{
-			$errormsg = file_get_contents($file);// Write the contents back to the file
-			$errormsg .= $FileName . " Error: " . $error4  . " Connection: " . $eqsl ."\r\n"; 
-			file_put_contents($file  , $errormsg);
-		}
-		elseif (strpos($str,$error5) !== false) 
-		{
-			$errormsg = file_get_contents($file);// Write the contents back to the file
-			$errormsg .= $FileName . " Error: " . $error5  . " Connection: " . $eqsl ."\r\n"; 
-			file_put_contents($file  , $errormsg);
-		}
-		else
+		if ($error1 == 0 )
 		{
 			$pic =  getTexts($str, $start1, $end1);
 			file_put_contents($FileName, file_get_contents("http://www.eqsl.cc/$pic"));
 			chmod("$FileName", 0644);
 			$FileName= "E-$Key-$Call.jpg";
-			
 			// open the directory
-			
 			$dir = opendir( $pathToThumbs );
-
 			// load image and get image size
 			$img = imagecreatefromjpeg( "{$filePath}/{$FileName}" );
 			$width = imagesx( $img );
 			$height = imagesy( $img );
-
 			// calculate thumbnail size
 			$thumbWidth = 100;
 			$new_height = floor( $height * ( $thumbWidth / $width ) );
-
 			// create a new temporary image
 			$tmp_img = imagecreatetruecolor( $thumbWidth, $new_height );
-
 			// copy and resize old image into new image
 			imagecopyresized( $tmp_img, $img, 0, 0, 0, 0, $thumbWidth, $new_height, $width, $height );
-
 			// save thumbnail into a file
 			imagejpeg( $tmp_img, "{$pathToThumbs}{$FileName}" );
 			chmod("{$pathToThumbs}{$FileName}", 0644);
