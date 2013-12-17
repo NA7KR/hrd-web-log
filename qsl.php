@@ -48,13 +48,20 @@ This is a command line PHP script with one option.
 	$fileMutiply = 1000;
 	$FileNoGroup = (($Key/$fileMutiply) % $fileMutiply * $fileMutiply);
     $fileNoGroupHigh = $FileNoGroup + ($fileMutiply-1);
-    $filePath = "/srv/cards/". $FileNoGroup ."-".$fileNoGroupHigh;
-	$pathToThumbs = $filePath ."/thumbs/";
-   
+	$base = '/srv/cards/';
+    $filePath = $base . $FileNoGroup ."-".$fileNoGroupHigh;
+	$pathToThumbs = $filePath . '/thumbs/';
+	$Index =  'index.php';
+	$HTaccess = '.htaccess';
 	if (!file_exists($filePath)) 
 		{
 			mkdir($filePath, 0777, true);
+			symlink($base . $Index, $filePath . "/" . $Index);
+			symlink($base . $HTaccess, $filePath . "/" . $HTaccess );
+			
 			mkdir($pathToThumbs, 0777, true);
+			symlink($base . $Index, $pathToThumbs . "/" . $Index);
+			symlink($base . $HTaccess, $pathToThumbs . "/" . $HTaccess );
 		}
 		
 	$FileName= "$filePath/E-$Key-$Call.jpg";
@@ -82,7 +89,8 @@ This is a command line PHP script with one option.
 			{
 				$file = '/srv/error.txt';// Open the file to get existing content 
 				$errormsg = file_get_contents($file);// Write the contents back to the file
-				$errormsg .= $FileName . " Error: " . $value  . " Connection: " . $eqsl ."\r\n"; 
+				$eqslp = str_replace( "Password=$EQSL", "Password=PASSWORD", $eqsl);
+				$errormsg .= $FileName . " Error: " . $value  . " Connection: " . $eqslp ."\r\n"; 
 				file_put_contents($file  , $errormsg);
 				echo $value . "\n";
 				$error1 = 1;

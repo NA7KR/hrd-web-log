@@ -39,7 +39,7 @@
 <body onload="onLoad();" class="background1">
 <?php include_once("analyticstracking.php") ?>
     <div class="auto-style1"> Hello welcome my log book at reads from Ham Radio Deluxe log.. <span class="auto-style3"><br>
-        </span><span class="auto-style4">My Call is <?php echo $myCall ?></span><br>
+        </span><span class="auto-style4">My Call is <?php echo  qrzcom_interface($myCall) ?></span><br>
     </div>
 <?php
     $i = 0;//style counter
@@ -73,7 +73,7 @@
 				{
 					Echo "<BR>1<BR>" . $LOG . "<BR><BR>";
 				}
-				$sql = "(SELECT Select_Name,Select_Query FROM $dbnameWEB.tb_Select where Select_Name = '$LOG')";
+			    $sql = "SELECT `COL_CALL` , `COL_BAND`,`COL_TIME_OFF`,`COL_PRIMARY_KEY`FROM `TABLE_HRD_CONTACTS_V01` WHERE `COL_CALL` = \"KV4PY\"";
 				$query1 = mysql_query($sql);
 				while($info = mysql_fetch_array( $query1 ))
 				{
@@ -164,8 +164,6 @@
 					$query = $info[1];
 				}
 			}
-			
-			
 		}
 		$query = str_replace( "_Band_", $BAND, $query);
 		$query = str_replace( "_Mode_", $MODE, $query);
@@ -200,6 +198,7 @@
 function  buildData($query)
 {
     include "config.php";
+	$SetCall = 0;
     $result = mysql_query($query);
      if ($debug == "true")
         {
@@ -220,6 +219,11 @@ function  buildData($query)
 	{
         $meta = mysql_fetch_field($result, $x);
         $col_name = $meta->name;
+		
+		if ($x ==0 && $col_name =="Call")
+		{
+			$SetCall = 1;
+		}
         echo '<td>' . $col_name . '</td>';
         $x++;
     }
@@ -238,11 +242,34 @@ function  buildData($query)
 			$data = str_replace( "USB", "SSB", $data);
 			$data = str_replace( "LSB", "SSB", $data);
 
-			if ($FileNo = 0 or $FileNo = 999)
+			$FileNoGroup = (($row[4]/$fileMutiply) % $fileMutiply * $fileMutiply);
+            $fileNoGroupHigh = $FileNoGroup + ($fileMutiply-1);
+            $filePath="cards/". $FileNoGroup ."-".$fileNoGroupHigh;
+			$pathToThumbs = $filePath . '/thumbs/';
+			$Index =  'index.php';
+			$HTaccess = '.htaccess';
+			$base = '/srv/cards/';
+			if (!file_exists($filePath)) 
 			{
-				$filePath ="cards/0-999";
+				mkdir($filePath, 0777, true);
+				symlink($base . $Index, $filePath . "/" . $Index);
+				symlink($base . $HTaccess, $filePath . "/" . $HTaccess );
+	
+				mkdir($pathToThumbs, 0777, true);
+				symlink($base . $Index, $pathToThumbs . "/" . $Index);
+				symlink($base . $HTaccess, $pathToThumbs . "/" . $HTaccess );
 			}
-
+			
+			If ($row[0] <> NULL)
+			{
+				if ($SetCall == 1)
+				{
+					$fileName = $row[0];
+					$data = str_replace( stristr("$fileName", $data),  qrzcom_interface($fileName), $data);
+					$SetCall == 0;
+				}
+			}
+			
 			If ($row[1] <> NULL)
 			{
 				$fileName = $row[1];
@@ -275,14 +302,6 @@ function  buildData($query)
 					$jpgfile = "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>";
 					$data = str_replace( "$fileName", "$jpgfile", $data);
 				}
-			}
-
-            		$FileNoGroup = (($row[4]/$fileMutiply) % $fileMutiply * $fileMutiply);
-            		$fileNoGroupHigh = $FileNoGroup + ($fileMutiply-1);
-            		$filePath="cards/". $FileNoGroup ."-".$fileNoGroupHigh;
-			if (!file_exists($filePath)) 
-			{
-				mkdir($filePath, 0777, true);
 			}
 
 			If ($row[10] <> NULL)
@@ -328,7 +347,17 @@ function  buildData($query)
 
     mysql_close($link);
 }
-
+#################################################
+# QRZ.com callsign lookup 
+#################################################
+function qrzcom_interface($callsign) 
+{
+  $lookup =  "<a href='http://www.qrz.com/db/$callsign'>$callsign</a></td>";
+  return ($lookup); 
+}
+#################################################
+# Make Views
+#################################################
 function MakeViews()
 {
 	include "config.php";

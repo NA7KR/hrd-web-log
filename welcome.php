@@ -88,6 +88,25 @@
 			</table>
 			<br>
             <input type='submit' name='submit' value="upload here">
+			<br>
+			<br>
+			<?php
+			{
+				$handle = fopen("/srv/error.txt", "r");
+				if ($handle) 
+				{
+					while (($line = fgets($handle)) !== false) 
+					{
+						echo "<div class='error'>Error: <br>";
+						// process the line read.
+						echo $line . "</div>";
+					}
+				} else 
+				{
+					// error opening the file.
+				}
+			}
+			?>
         </form>
     </body>
 </html>
