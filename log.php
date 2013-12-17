@@ -1,6 +1,20 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<?php
+/***************************************************************************
+*			NA7KR Log Program 
+ ***************************************************************************/
+
+/***************************************************************************
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ ***************************************************************************/
+ ?>
 <script type="text/javascript">
 	function makeDisable()
 	{
@@ -352,7 +366,7 @@ function  buildData($query)
 #################################################
 function qrzcom_interface($callsign) 
 {
-  $lookup =  "<a href='http://www.qrz.com/db/$callsign'>$callsign</a></td>";
+  $lookup =  "<a href='http://www.qrz.com/db/$callsign'>$callsign</a>";
   return ($lookup); 
 }
 #################################################
@@ -386,7 +400,10 @@ function MakeViews()
 	. "where COL_ITUZ is not null) \n";
 	mysql_query($sql);
 }
-//$i mod 2 is checking to see if the row number is odd or even odd rows are colored differently than even rows to create a datagrid look and feel
+#################################################
+# Make Grid
+# $i mod 2 is checking to see if the row number is odd or even odd rows are colored differently than even rows to create a datagrid look and feel
+#################################################
 function grid_style($i)
 {
     if (($i % 2) != 0)
@@ -402,12 +419,17 @@ function grid_style($i)
         return $style;
     }
 }
-
+#################################################
+# SQL safe
+#################################################
 function safe($value)
 {
 	return mysql_real_escape_string($value);
 }
 
+#################################################
+# Button
+#################################################
 function fbutton($button)
 {
 	include "config.php";

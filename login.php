@@ -8,6 +8,18 @@
 	<meta name="revisit-after" content="30 days">
 	<meta name="ROBOTS" content="INDEX, FOLLOW">
 <?php
+/***************************************************************************
+*			NA7KR Log Program 
+ ***************************************************************************/
+
+/***************************************************************************
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ ***************************************************************************/
 include_once("config.php");
 include_once("style.php");
 $bd = mysql_connect($dbhost, $dbuname, $dbpass) or die("Opps some thing went wrong");
