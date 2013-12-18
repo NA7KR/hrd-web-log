@@ -11,7 +11,7 @@
  *   (at your option) any later version.
  *
  ***************************************************************************/
-include_once "config.php";
+include_once "/var/www/config.php";
 
 $link = mysql_connect($dbhost, $dbuname, $dbpass) or die ('Cannot connect to the database: ' . mysql_error());
 mysql_select_db($dbnameWEB) or die ('Cannot connect to the database: ' . mysql_error());

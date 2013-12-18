@@ -45,10 +45,10 @@
 	<meta name="revisit-after" content="30 days">
 	<META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
 	<?php
-		include_once "config.php";
-		include "counter.php";
-		include('lock.php');
-		include('style.php');
+		include_once "/var/www/config.php";
+		include "/var/www/counter.php";
+		include "lock.php";
+		include "/var/www/style.php";
 		$link = mysql_connect($dbhost, $dbuname, $dbpass) or die ('Cannot connect to the database: ' . mysql_error());
 		mysql_select_db($dbnameHRD) or die ('Cannot connect to the database: ' . mysql_error());
 		if (!isset($_SERVER['HTTPS']) || !$_SERVER['HTTPS']) 

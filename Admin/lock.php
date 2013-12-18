@@ -11,7 +11,7 @@
  *   (at your option) any later version.
  *
  ***************************************************************************/
-include('config.php');
+include "/var/www/config.php";
 $bd = mysql_connect($dbhost, $dbuname, $dbpass) or die("Opps some thing went wrong");
 mysql_select_db($dbnameWEB, $bd) or die("Opps some thing went wrong");
 session_start();

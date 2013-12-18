@@ -20,12 +20,12 @@
  *   (at your option) any later version.
  *
  ***************************************************************************/
-include_once("config.php");
-include_once("style.php");
+include_once "/var/www/config.php";
+include_once "/var/www/style.php";
 $bd = mysql_connect($dbhost, $dbuname, $dbpass) or die("Opps some thing went wrong");
 mysql_select_db($dbnameWEB, $bd) or die("Opps some thing went wrong");
 session_start();
-include "counter.php";
+include "/var/www/counter.php";
 if (!isset($_SERVER['HTTPS']) || !$_SERVER['HTTPS']) { // if request is not secure, redirect to secure url
     $url = 'https://' . $_SERVER['HTTP_HOST']
                       . $_SERVER['REQUEST_URI'];
