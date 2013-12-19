@@ -84,7 +84,5 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 	</div>
 	<br>
 	<br>
-	<div class="c1"><span class="auto-style5"><a href="http://jigsaw.w3.org/css-validator/check/referer"><img class="c4" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!"></a></span></div><br><br>
-	<div class="c1"><span class="auto-style5"><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional" height="31" width="88"></a></span></div>
 	</body>
 </html>
