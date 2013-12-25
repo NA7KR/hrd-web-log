@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<link type="text/css" rel="stylesheet" href="Admin/css/style.css" />
 <?php
 /***************************************************************************
 *			NA7KR Log Program 
@@ -38,7 +39,6 @@
 
 	<?php
 		include_once "config.php";
-		include_once("style.php");
 		include "counter.php";
 	?>
 	<title><?php echo $myCall ?> Ham Radio LogBook</title> 
@@ -516,7 +516,7 @@ function fbutton($button)
 	}
 	$select .='</select><br>';
 	$select .='If you select Callsign Lookup enter Callsign in the box';
-	$select .='<br><input id="mySelect2" type="text" name="Call_Search"><br>';
+	$select .='<br><input id="mySelect2" type="lookup" name="Call_Search"><br>';
 	$select .='Select from drop down the amount of QLS would like to return';
 	$select .='<br><select id="mySelect3" name="Qty"><option>50</option><option>100</option><option>All</option></select>';
 	$select .='<br><div><P style="text-align: center"><Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div></FORM><BR>' ;

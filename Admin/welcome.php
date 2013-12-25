@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <?php
 /***************************************************************************
 *			NA7KR Log Program 
@@ -12,9 +12,16 @@
  *   (at your option) any later version.
  *
  ***************************************************************************/
+require("common.php"); 
+if(empty($_SESSION['user'])) 
+    { 
+        header("Location: login.php"); 
+        die("Redirecting to login.php"); 
+    }
  ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<link type="text/css" rel="stylesheet" href="css/style.css" />
 <script type="text/javascript">
 
 	function lookup(visiState)
@@ -48,7 +55,6 @@
 		include_once "/var/www/config.php";
 		include "/var/www/counter.php";
 		include "lock.php";
-		include "/var/www/style.php";
 		$link = mysql_connect($dbhost, $dbuname, $dbpass) or die ('Cannot connect to the database: ' . mysql_error());
 		mysql_select_db($dbnameHRD) or die ('Cannot connect to the database: ' . mysql_error());
 		if (!isset($_SERVER['HTTPS']) || !$_SERVER['HTTPS']) 
@@ -69,7 +75,6 @@
 		<span class="auto-style4">My Call is <?php echo $myCall ?></span><br>
     </div>	
 <html> 
-	<h1>Welcome Admin <?php echo $login_session; ?></h1> 
 	<h2><a href="logout.php">Sign Out</a></h2>
 	
 	<br><br>
@@ -294,8 +299,9 @@
 				}
 		}
 		echo $QSLWORKED  ;
-		
 	
 ?>
+<a href="memberlist.php">Memberlist</a><br> 
+<a href="edit_account.php">Edit Account</a><br> 
 </body>
 </html>
