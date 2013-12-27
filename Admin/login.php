@@ -83,8 +83,11 @@ $query = "SELECT * FROM `users` ";
 			<form action="login.php" method="post">
 				<div id="formHeader">Website Login.</div>
 				<div id="formBody">
+					<br>
 					<div class="formField"><input type="call" name="username" required placeholder="Call" /></div>
+					<br>
 					<div class="formField"><input type="password" name="password" required placeholder="Password" /></div>
+					<br><br>
 					<div><input type="submit" value="Login" class="customButton" /></div>
 				</div>
 				<div id='userNotes'>

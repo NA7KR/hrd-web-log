@@ -1,4 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>Edit Account</title>
+		<link type="text/css" rel="stylesheet" href="css/style.css" />
+	</head>
+<body " class="background1">
+<div id="loginForm">
 <?php 
 /***************************************************************************
 *			NA7KR Log Program 
@@ -87,7 +93,7 @@
 <h1>Edit Account</h1> 
 <form action="edit_account.php" method="post"> 
     Username:<br> <b><?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?></b> <br><br> 
-    E-Mail Address:<br> <input type="text" name="email" value="<?php echo htmlentities($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8'); ?>" >  <br><br> 
+    E-Mail Address:<br> <input type="email" name="email" value="<?php echo htmlentities($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8'); ?>" >  <br><br> 
     Password:<br>  <input type="password" name="password" value="" ><br> 
     <i>(leave blank if you do not want to change your password)</i> <br><br> 
     <input type="submit" value="Update Account" /> 

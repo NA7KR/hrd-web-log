@@ -38,20 +38,20 @@ div.c1 {text-align: center}
 }
 
 body{
-	font: 20px "Lucida Grande", Tahoma, Verdana, sans-serif;
+	font: 15px "Lucida Grande", Tahoma, Verdana, sans-serif;
 	color: #404040;
 }
 
 input[type=call],
 input[type=password],
 input[type=email]{
-	padding:10px;
-	width:100%;
+	padding:5px;
+	width:80%;
 }
 
 input[type=lookup]{
 	padding:5px;
-	width:100px;
+	width:80px;
 }
 
 #userNotes{
@@ -98,9 +98,10 @@ input[type=lookup]{
 }
 
 #formHeader{
-	border-bottom:thin solid gray;
 	padding:10px;
-	background:#0000FF;
+	background:Orange;
+	color:Red;
+	font-size:20px;
 }
 
 #loginForm{
@@ -109,7 +110,7 @@ input[type=lookup]{
 
 .customButton {
 	padding:5px;
-	width:100%;
+	width:80%;
 	-moz-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
 	box-shadow:inset 0px 1px 0px 0px #bbdaf7;
