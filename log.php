@@ -36,7 +36,6 @@
 		makeDisable();
 	}
 </script>
-
 	<?php
 		include_once "/var/www/config.php";
 		include "counter.php";
