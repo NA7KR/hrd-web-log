@@ -36,9 +36,8 @@
 		makeDisable();
 	}
 </script>
-
 	<?php
-		include_once "config.php";
+		include_once "/var/www/config.php";
 		include "counter.php";
 	?>
 	<title><?php echo $myCall ?> Ham Radio LogBook</title> 
@@ -211,7 +210,7 @@
 
 function  buildData($query)
 {
-    include "config.php";
+    include "/var/www/config.php";
 	$SetCall = 0;
     $result = mysql_query($query);
      if ($debug == "true")
@@ -374,7 +373,7 @@ function qrzcom_interface($callsign)
 #################################################
 function MakeViews()
 {
-	include "config.php";
+	include "/var/www/config.php";
 	$sql = "create or replace view  $dbnameHRD.bands  as select  col_band from $dbnameHRD.$tbHRD group by 1";
 	mysql_query($sql);
 	
@@ -432,7 +431,7 @@ function safe($value)
 #################################################
 function fbutton($button)
 {
-	include "config.php";
+	include "/var/www/config.php";
 	$link = "";
 	$select = "";
 	$CountryArray = "";
