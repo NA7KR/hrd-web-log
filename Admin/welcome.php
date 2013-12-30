@@ -174,12 +174,23 @@ if(empty($_SESSION['user']))
 					{
 						mkdir($filePath, 0777, true);
 					}
-					$sql = "SELECT `COL_CALL` FROM `TABLE_HRD_CONTACTS_V01` where `COL_PRIMARY_KEY` ='$Key'";
-					$query1 = mysql_query($sql);
-					while($info = mysql_fetch_array( $query1 ))
-					{
-						$CallSign  .=$info[0] ;
-					}
+					
+					$query = "SELECT `COL_CALL` FROM $dbnameHRD.$tbHRD where `COL_PRIMARY_KEY` ='$Key'";
+					try 
+						{  
+							$stmt = $db->prepare($query); 
+							$stmt->execute(); 
+						} 
+						catch(PDOException $ex) 
+						{  
+							die("Failed to run query: " . $ex->getMessage()); 
+						}  
+						$rows = $stmt->fetchAll(); 
+
+						foreach($rows as $row)
+							{
+								$CallSign  .=$row['COL_CALL'] ;
+							}
 					$FileName = $side . "-" . $Key . "-" . $CallSign . ".jpg";
 			   } 
 			   else
@@ -291,14 +302,25 @@ if(empty($_SESSION['user']))
 	echo "<br>";
 	if ($LOG == 4)
 		{
-			$sql = "SELECT `COL_CALL` , `COL_BAND`,`COL_TIME_OFF`,`COL_PRIMARY_KEY`FROM `TABLE_HRD_CONTACTS_V01` WHERE `COL_CALL` ='$callsign'" ;
-			$query1 = mysql_query($sql);
-			while($info = mysql_fetch_array( $query1 ))
+			$query = "SELECT `COL_CALL` , `COL_BAND`,`COL_TIME_OFF`,`COL_PRIMARY_KEY`FROM $dbnameHRD.$tbHRD WHERE `COL_CALL` ='$callsign'";  
+			try 
+			{  
+				$stmt = $db->prepare($query); 
+				$stmt->execute(); 
+			} 
+			catch(PDOException $ex) 
+			{  
+				die("Failed to run query: " . $ex->getMessage()); 
+			}  
+			$rows = $stmt->fetchAll(); 
+
+			foreach($rows as $row)
 				{
-					$QSLWORKED  .=$info[0] . ' Was worked on the '  .$info[1] . ' Band on ' . date("jS M Y",strtotime($info[2])) . ' Contact number is: '.$info[3] . '<br>';
+					$QSLWORKED  .=$row['COL_CALL'] . ' Was worked on the '  .$row['COL_BAND'] . ' Band on ' . date("jS M Y",strtotime($row['COL_TIME_OFF'])) . ' Contact number is: '.$row['COL_PRIMARY_KEY'] . '<br>';
 				}
-		}
-		echo $QSLWORKED  ;
+			
+			echo $QSLWORKED  ;
+		}	
 	
 ?>
 <a href="memberlist.php">Memberlist</a><br> 
