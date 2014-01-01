@@ -52,6 +52,8 @@ This is a command line PHP script with one option.
 		$Band = $value['Band'];
 		$Mode = $value['Mode'];
 		$Call = $value['Call'];
+		$Call_R = str_replace( "/", "-", $Call);
+		
 	}
 	$Mode = str_replace( "USB", "SSB", $Mode);
 	$Mode = str_replace( "LSB", "SSB", $Mode);
@@ -75,7 +77,7 @@ This is a command line PHP script with one option.
 			symlink($base . $HTaccess, $pathToThumbs . "/" . $HTaccess );
 		}
 		
-	$FileName= "$filePath/E-$Key-$Call.jpg";
+	$FileName= "$filePath/E-$Key-$Call_R.jpg";
 	if (file_exists($FileName)) {
 		echo "The file $FileName exists \n";
 	} else {
@@ -113,7 +115,7 @@ This is a command line PHP script with one option.
 			$pic =  getTexts($str, $start1, $end1);
 			file_put_contents($FileName, file_get_contents("http://www.eqsl.cc/$pic"));
 			chmod("$FileName", 0644);
-			$FileName= "E-$Key-$Call.jpg";
+			$FileName= "E-$Key-$Call_R.jpg";
 			// open the directory
 			$dir = opendir( $pathToThumbs );
 			// load image and get image size
