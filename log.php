@@ -87,7 +87,7 @@
 				{
 					Echo "<BR>1<BR>" . $LOG . "<BR><BR>";
 				}
-			    $sql = "SELECT `COL_CALL` , `COL_BAND`,`COL_TIME_OFF`,`COL_PRIMARY_KEY`FROM `TABLE_HRD_CONTACTS_V01` WHERE `COL_CALL` = \"KV4PY\"";
+			    $sql = "SELECT `COL_CALL` , `COL_BAND`,`COL_TIME_OFF`,`COL_PRIMARY_KEY`FROM `TABLE_HRD_CONTACTS_V01` WHERE `COL_CALL` = $CALL_SEARCH";
 				$query1 = mysql_query($sql);
 				while($info = mysql_fetch_array( $query1 ))
 				{
@@ -165,11 +165,23 @@
 						;// do no-think
 					}
 				else
-				{
-					$query = str_replace( "DESC", "DESC Limit $QTY ", $query);
-				}
+					{	
+					if ($COUNTRY == "USA")
+					{
+						$query = str_replace( "DESC", "DESC Limit $QTY ", $query);
+						
+					}
+					else
+						{
+							;// do no-think
+						}
+					}
+					if ($debug == "true")
+					{
+						Echo "<BR>5<BR>" . $query . "<BR>";
+					}
 			}
-			Else
+			else
 			{
 				$sql = "(SELECT Select_Name,Select_Query FROM $dbnameWEB.tb_Select where Select_Name = '$LOG')";
 				$query1 = mysql_query($sql);
