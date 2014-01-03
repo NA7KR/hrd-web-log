@@ -1,10 +1,3 @@
-<html>
-	<head>
-		<title>Edit Account</title>
-		<link type="text/css" rel="stylesheet" href="css/style.css" />
-	</head>
-<body " class="background1">
-<div id="loginForm">
 <?php 
 /***************************************************************************
 *			NA7KR Log Program 
@@ -18,7 +11,18 @@
  *   (at your option) any later version.
  *
  ***************************************************************************/
-    require("common.php"); 
+session_start();
+?>
+    <html>
+	<head>
+		<title>Edit Account</title>
+		<link type="text/css" rel="stylesheet" href="css/style.css" />
+	</head>
+<body " class="background1">
+<div id="loginForm">
+<?php
+    require_once(__DIR__ . '/../Lookup.class.php');
+    $db = new Db();
     if(empty($_SESSION['user'])) 
     { 
         header("Location: login.php"); 
@@ -32,19 +36,9 @@
         } 
         if($_POST['email'] != $_SESSION['user']['email']) 
         { 
-			$query = "SELECT 1 FROM users WHERE  email = :email "; 
-            $query_params = array(':email' => $_POST['email'] ); 
-            try 
-            {
-                $stmt = $db->prepare($query); 
-                $result = $stmt->execute($query_params); 
-            } 
-            catch(PDOException $ex) 
-            { 
-                die("Failed to run query: " . $ex->getMessage()); 
-            } 
-            $row = $stmt->fetch(); 
-            if($row) 
+            $email = $_POST['email'];
+            $id_lookup = $db->query("SELECT 1 FROM users WHERE email = $email"); 
+            if($id_lookup) 
             { 
                 die("This E-Mail address is already in use"); 
             } 
@@ -69,21 +63,15 @@
             $query_params[':password'] = $password; 
             $query_params[':salt'] = $salt; 
         }  
+        
+    
         $query = "UPDATE users SET email = :email "; 
         if($password !== null) 
         { 
             $query .= ", password = :password , salt = :salt  "; 
         } 
-        $query .= "WHERE  id = :user_id  ";    
-        try 
-        { 
-            $stmt = $db->prepare($query); 
-            $result = $stmt->execute($query_params); 
-        } 
-        catch(PDOException $ex) 
-        {   
-            die("Failed to run query: " . $ex->getMessage()); 
-        } 
+        $update =  $db->query(" .= WHERE  id = :user_id  ");    
+      
         $_SESSION['user']['email'] = $_POST['email']; 
         header("Location: private.php"); 
         die("Redirecting to private.php"); 
