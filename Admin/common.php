@@ -11,7 +11,7 @@
  *   (at your option) any later version.
  *
  ***************************************************************************/	
-	include_once "/var/www/config.php";   
+    include_once "/var/www/config.php";   
     $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'); 
      
     try 
@@ -45,5 +45,5 @@
         undo_magic_quotes_gpc($_GET); 
         undo_magic_quotes_gpc($_COOKIE); 
     }   
-    header('Content-Type: text/html; charset=utf-8'); 
-    session_start(); 
+    //header('Content-Type: text/html; charset=utf-8'); 
+    //session_start(); 

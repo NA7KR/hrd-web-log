@@ -38,7 +38,7 @@
 </script>
 
 	<?php
-		include_once "/var/www/config.php";
+		include_once (__DIR__ . '/../config.php');
 		include "counter.php";
 	?>
 	<title><?php echo $myCall ?> Ham Radio LogBook</title> 
@@ -223,7 +223,7 @@
 
 function  buildData($query)
 {
-    include "/var/www/config.php";
+    include (__DIR__ . '/../config.php');
 	$SetCall = 0;
     $result = mysql_query($query);
      if ($debug == "true")
@@ -386,7 +386,7 @@ function qrzcom_interface($callsign)
 #################################################
 function MakeViews()
 {
-	include "/var/www/config.php";
+	include (__DIR__ . '/../config.php');
 	$sql = "create or replace view  $dbnameHRD.bands  as select  col_band from $dbnameHRD.$tbHRD group by 1";
 	mysql_query($sql);
 	
@@ -444,7 +444,7 @@ function safe($value)
 #################################################
 function fbutton($button)
 {
-	include "/var/www/config.php";
+	include (__DIR__ . '/../config.php');
 	$link = "";
 	$select = "";
 	$CountryArray = "";
