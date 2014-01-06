@@ -1,56 +1,57 @@
 <?php
-/***************************************************************************
-*			NA7KR Log Program 
- ***************************************************************************/
 
-/***************************************************************************
+/* * *************************************************************************
+ * 			NA7KR Log Program 
+ * ************************************************************************* */
+
+/* * *************************************************************************
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation; either version 2 of the License, or
  *   (at your option) any later version.
  *
- ***************************************************************************/
-function createThumbs( $pathToImages, $pathToThumbs, $thumbWidth ) 
-{
-  // open the directory
-  $dir = opendir( $pathToImages );
+ * ************************************************************************* */
 
-  // loop through it, looking for any/all JPG files:
-  while (false !== ($fname = readdir( $dir ))) {
-    // parse path for the extension
-    $info = pathinfo($pathToImages . $fname);
-    // continue only if this is a JPEG image
-    if ( strtolower($info['extension']) == 'jpg' ) 
-    {
-      echo "Creating thumbnail for {$fname} <br />";
+function createThumbs($pathToImages, $pathToThumbs, $thumbWidth) {
+    // open the directory
+    $dir = opendir($pathToImages);
 
-      // load image and get image size
-      $img = imagecreatefromjpeg( "{$pathToImages}{$fname}" );
-      $width = imagesx( $img );
-      $height = imagesy( $img );
+    // loop through it, looking for any/all JPG files:
+    while (false !== ($fname = readdir($dir))) {
+        // parse path for the extension
+        $info = pathinfo($pathToImages . $fname);
+        // continue only if this is a JPEG image
+        if (strtolower($info['extension']) == 'jpg') {
+            echo "Creating thumbnail for {$fname} <br />";
 
-      // calculate thumbnail size
-      $new_width = $thumbWidth;
-      $new_height = floor( $height * ( $thumbWidth / $width ) );
+            // load image and get image size
+            $img = imagecreatefromjpeg("{$pathToImages}{$fname}");
+            $width = imagesx($img);
+            $height = imagesy($img);
 
-      // create a new temporary image
-      $tmp_img = imagecreatetruecolor( $new_width, $new_height );
+            // calculate thumbnail size
+            $new_width = $thumbWidth;
+            $new_height = floor($height * ( $thumbWidth / $width ));
 
-      // copy and resize old image into new image 
-      imagecopyresized( $tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height );
+            // create a new temporary image
+            $tmp_img = imagecreatetruecolor($new_width, $new_height);
 
-      // save thumbnail into a file
-      imagejpeg( $tmp_img, "{$pathToThumbs}{$fname}" );
+            // copy and resize old image into new image 
+            imagecopyresized($tmp_img, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+            // save thumbnail into a file
+            imagejpeg($tmp_img, "{$pathToThumbs}{$fname}");
+        }
     }
-  }
-  // close the directory
-  closedir( $dir );
+    // close the directory
+    closedir($dir);
 }
+
 // call createThumb function and pass to it as parameters the path 
 // to the directory that contains images, the path to the directory
 // in which thumbnails will be placed and the thumbnail's width. 
 // We are assuming that the path will be a relative path working 
 // both in the filesystem, and through the web for links
-createThumbs("/srv/cards/0-999/","/srv/cards/0-999/thumbs/",100);
+createThumbs("/srv/cards/0-999/", "/srv/cards/0-999/thumbs/", 100);
 ?>
