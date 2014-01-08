@@ -37,7 +37,7 @@ if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
         echo $Call_O . "<br>";
         $Call_R = str_replace("/", "-", $Call_O);
         echo $Call_R . "<br>";
-        $update = $db->query("UPDATE tb_Cards SET COL_File_Path_E = :f WHERE COL_PRIMARY_KEY = :id", array("f" => $Call_R, "id" => $Key));
+        //$update = $db->query("UPDATE tb_Cards SET COL_File_Path_E = :f WHERE COL_PRIMARY_KEY = :id", array("f" => $Call_R, "id" => $Key));
 
         $Year = $qsl_lookup['Year'];
         $Month = $qsl_lookup['Month'];
