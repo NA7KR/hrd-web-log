@@ -17,7 +17,7 @@ if (empty($_SESSION['user'])) {
     die("Redirecting to login.php");
 }
 ?>
-
+<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <link type="text/css" rel="stylesheet" href="css/style.css" />
         <script type="text/javascript">
