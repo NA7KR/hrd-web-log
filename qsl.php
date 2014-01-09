@@ -31,14 +31,8 @@ if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
         $db = new Db();
         $id_lookup = $db->row("SELECT COL_File_Path_E FROM tb_Cards WHERE COL_PRIMARY_KEY = :f", array("f" => $Key));
         $qsl_lookup = $db->row("SELECT year(COL_TIME_OFF)as 'Year', month(COL_TIME_OFF)as 'Month', day(COL_TIME_OFF)as 'Day', hour(COL_TIME_OFF)as 'Hour', minute(COL_TIME_OFF) as 'Minute',COL_CALL as 'Call', COL_BAND as 'Band', COL_MODE as 'Mode' FROM NA7KR.TABLE_HRD_CONTACTS_V01  WHERE `COL_PRIMARY_KEY`   = $Key");
-        $db = new Db();
         echo $Key . "<br>";
         $Call_O = $id_lookup['COL_File_Path_E'];
-        echo $Call_O . "<br>";
-        $Call_R = str_replace("/", "-", $Call_O);
-        echo $Call_R . "<br>";
-        //$update = $db->query("UPDATE tb_Cards SET COL_File_Path_E = :f WHERE COL_PRIMARY_KEY = :id", array("f" => $Call_R, "id" => $Key));
-
         $Year = $qsl_lookup['Year'];
         $Month = $qsl_lookup['Month'];
         $Day = $qsl_lookup['Day'];
