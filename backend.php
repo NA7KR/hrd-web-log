@@ -12,24 +12,24 @@
 **************************************************************************/
 
 #################################################
-# QRZ.com callsign lookup 
+# QRZ.com callsign db.class.php 
 #################################################
 function qrzcom_interface($callsign) 
 {
-    $lookup = "<a href='http://www.qrz.com/db/$callsign'>$callsign</a>";
-    return ($lookup);
+    $db.class.php = "<a href='http://www.qrz.com/db/$callsign'>$callsign</a>";
+    return ($db.class.php);
 }
 
 #################################################
-# QRZ.com callsign lookup 
+# QRZ.com callsign db.class.php 
 #################################################
 function qsl_worked()
 {
     include (__DIR__ . '/../config.php');
-    require_once('Lookup.class.php');
+    require_once('db.class.php.class.php');
     $db = new Db();
-    $id_lookup = $db->query("SELECT DISTINCT `COL_CALL` FROM NA7KR.TABLE_HRD_CONTACTS_V01 WHERE 1");
-    foreach ($id_lookup as $row):
+    $id_db.class.php = $db->query("SELECT DISTINCT `COL_CALL` FROM NA7KR.TABLE_HRD_CONTACTS_V01 WHERE 1");
+    foreach ($id_db.class.php as $row):
     $QSLWORKED .=$row['COL_CALL'] . ',';
         if ($debug == "true") {
             echo $QSLWORKED;
@@ -44,21 +44,21 @@ function qsl_worked()
 #################################################
 function select() {
     include (__DIR__ . '/../config.php');
-    require_once('Lookup.class.php');
-    $Select_txt ='<FORM name ="form1" method ="post" action ="index.php">'. PHP_EOL;
+    require_once('db.class.php.class.php');
+    $data ='<FORM name ="form1" method ="post" action ="index.php">'. PHP_EOL;
     $db = new Db();
-    $id_lookup = $db->query("SELECT Select_TXT, Select_Name FROM $dbnameWEB.$tbSelect ORDER BY `Select_TXT` ");
-    foreach ($id_lookup as $row):
+    $id_db.class.php = $db->query("SELECT Select_TXT, Select_Name FROM $dbnameWEB.$tbSelect ORDER BY `Select_TXT` ");
+    foreach ($id_db.class.php as $row):
 
-        if ($row['Select_Name'] == "callsign_lookup") {
-            $Select_txt .='<input type="radio" value=' . $row['Select_Name'] . ' name="Log" > ' . $row['Select_TXT']. PHP_EOL;
+        if ($row['Select_Name'] == "callsign_db.class.php") {
+            $data .='<input type="radio" value=' . $row['Select_Name'] . ' name="Log" > ' . $row['Select_TXT']. PHP_EOL;
         } else {
-            $Select_txt .='<input type="radio" value=' . $row['Select_Name'] . ' name="Log"  > ' . $row['Select_TXT']. PHP_EOL;
+            $data .='<input type="radio" value=' . $row['Select_Name'] . ' name="Log"  > ' . $row['Select_TXT']. PHP_EOL;
         }
     endforeach;
-    $Select_txt .='<br><div><P style="text-align: center">'. PHP_EOL;
-    $Select_txt .= '<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div></FORM><BR>'. PHP_EOL;
-    return $Select_txt;
+    $data .='<br><div><P style="text-align: center">'. PHP_EOL;
+    $data .= '<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div></FORM><BR>'. PHP_EOL;
+    return $data;
 }
 
 
@@ -67,10 +67,10 @@ function select() {
 #################################################
 function buildfiles($Key) {
     include (__DIR__ . '/../config.php');
-    require_once('Lookup.class.php');
+    require_once('db.class.php.class.php');
     $db = new Db();
-        $id_lookup = $db->row("SELECT Select_File FROM $dbnameWEB.$tbSelect WHERE Select_Name = '$Key'");
-    return $id_lookup['Select_File'];
+        $id_db.class.php = $db->row("SELECT Select_File FROM $dbnameWEB.$tbSelect WHERE Select_Name = '$Key'");
+    return $id_db.class.php['Select_File'];
 }
 
 #################################################

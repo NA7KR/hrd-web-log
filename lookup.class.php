@@ -14,7 +14,7 @@
  * ************************************************************************* */
 require_once( 'Db.class.php');
 
-class Lookup {
+class db.class.php {
     /*
       # Your Table name
       protected $table = 'users';

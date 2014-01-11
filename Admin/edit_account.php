@@ -21,7 +21,7 @@ session_start();
     <body " class="background1">
         <div id="loginForm">
             <?php
-            require_once(__DIR__ . '/../Lookup.class.php');
+            require_once(__DIR__ . '/../db.class.php.class.php');
             $db = new Db();
             if (empty($_SESSION['user'])) {
                 header("Location: login.php");
@@ -33,8 +33,8 @@ session_start();
                 }
                 if ($_POST['email'] != $_SESSION['user']['email']) {
                     $email = $_POST['email'];
-                    $id_lookup = $db->query("SELECT 1 FROM users WHERE email = $email");
-                    if ($id_lookup) {
+                    $id_db.class.php = $db->query("SELECT 1 FROM users WHERE email = $email");
+                    if ($id_db.class.php) {
                         die("This E-Mail address is already in use");
                     }
                 }

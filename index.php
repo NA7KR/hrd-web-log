@@ -40,8 +40,13 @@
         <?php
         if (isset($_POST['Submit1'])) {
             $LOG = safe($_POST['Log']);
+            $QTY = safe($_POST['Qty']);
+          
+            $CALL_SEARCH = safe($_POST['Call_Search']);
             include_once buildfiles($LOG);
-            
+            $data ='<FORM name ="form1" method ="post" action ="index.php">'. PHP_EOL;
+            $data .= '<input type="hidden" name="Log" value=' .  $LOG . '>';
+            echo $data;
         } else {
             echo select();
             ?>
