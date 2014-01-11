@@ -12,9 +12,9 @@
  *   (at your option) any later version.
  *
  * ************************************************************************* */
-require_once( 'Db.class.php');
+require_once( 'db.class.php');
 
-class db.class.php {
+class Lookup {
     /*
       # Your Table name
       protected $table = 'users';

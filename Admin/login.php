@@ -21,9 +21,9 @@ session_start();
         <div id="loginForm">
             <?php
             require_once(__DIR__ . '/../db.class.php');
-            $db.class.php = new db.class.php();
+            $Lookup = new Lookup();
             $submitted_username = '';
-            d($db.class.php->count('id', 'users'), "User");
+            d($Lookup->count('id', 'users'), "User");
 
             function d($value, $Key) {
                 if ($value >= 1) {

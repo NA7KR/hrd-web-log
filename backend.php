@@ -12,7 +12,7 @@
 **************************************************************************/
 
 #################################################
-# QRZ.com callsign db.class.php 
+# QRZ.com callsign lookup
 #################################################
 function qrzcom_interface($callsign) 
 {
@@ -21,12 +21,12 @@ function qrzcom_interface($callsign)
 }
 
 #################################################
-# QRZ.com callsign db.class.php 
+# QRZ.com callsign lookup
 #################################################
 function qsl_worked()
 {
     include (__DIR__ . '/../config.php');
-    require_once('db.class.php');
+    require_once('lookup.class.php');
     $db = new Db();
     $id_lookup = $db->query("SELECT DISTINCT `COL_CALL` FROM NA7KR.TABLE_HRD_CONTACTS_V01 WHERE 1");
     foreach ($id_lookup as $row):
@@ -44,13 +44,13 @@ function qsl_worked()
 #################################################
 function select() {
     include (__DIR__ . '/../config.php');
-    require_once('db.class.php');
+    require_once('lookup.class.php');
     $data ='<FORM name ="form1" method ="post" action ="index.php">'. PHP_EOL;
     $db = new Db();
     $id_lookup = $db->query("SELECT Select_TXT, Select_Name FROM $dbnameWEB.$tbSelect ORDER BY `Select_TXT` ");
     foreach ($id_lookup as $row):
 
-        if ($row['Select_Name'] == "callsign_db.class.php") {
+        if ($row['Select_Name'] == "callsign_lookup") {
             $data .='<input type="radio" value=' . $row['Select_Name'] . ' name="Log" > ' . $row['Select_TXT']. PHP_EOL;
         } else {
             $data .='<input type="radio" value=' . $row['Select_Name'] . ' name="Log"  > ' . $row['Select_TXT']. PHP_EOL;
@@ -67,7 +67,7 @@ function select() {
 #################################################
 function buildfiles($Key) {
     include (__DIR__ . '/../config.php');
-    require_once('db.class.php');
+    require_once('lookup.class.php');
     $db = new Db();
         $id_lookup = $db->row("SELECT Select_File FROM $dbnameWEB.$tbSelect WHERE Select_Name = '$Key'");
     return $id_lookup['Select_File'];
