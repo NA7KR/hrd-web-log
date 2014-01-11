@@ -12,7 +12,7 @@
  *
  * ************************************************************************ */
 include_once (__DIR__ . '/../config.php');
-require_once('db.class.php.class.php');
+require_once('db.class.php');
 require_once("backend.php");
 $db = new Db();
 $i = 0; //style counter
@@ -36,7 +36,7 @@ if (isset($_POST['Submit1'])) {
 }
 if ($SUBMIT == "true") {
 
-    $id_db.class.php = $db->query("SELECT COL_CALL AS `Call`,COL_BAND AS Band, COL_State AS State, COL_Country AS Country, \n"
+    $id_lookup = $db->query("SELECT COL_CALL AS `Call`,COL_BAND AS Band, COL_State AS State, COL_Country AS Country, \n"
             . "$dbnameHRD.$tbHRD.COL_PRIMARY_KEY AS ID, COL_TIME_OFF AS Date, CASE COL_EQSL_QSL_RCVD When 'Y' Then 'Yes' end AS EQSL, \n"
             . "CASE COL_LOTW_QSL_RCVD  When 'V' Then 'Yes' end AS LOTW, CASE COL_QSL_RCVD When 'Y' Then 'Yes' end AS QSL, \n"
             . "COL_MODE AS `Mode`, $dbnameWEB.tb_Cards.COL_File_Path_E AS 'E QSL', $dbnameWEB.tb_Cards.COL_File_Path_F AS File, \n"
@@ -52,7 +52,7 @@ if ($SUBMIT == "true") {
             . "<th>LOTW</th>" . "<th>QSL</th>" . "<th>Mode</th>"
             . "<th>E QSL</th>" . "<th>File</th>" . "<th>File Back</th>"
             . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
-    foreach ($id_db.class.php as $row): {
+    foreach ($id_lookup as $row): {
             //
             $data .= "<td>" . $row['Call'] . "</td>" . PHP_EOL;
             $data .= "<td>" . $row['Band'] . "</td>" . PHP_EOL;

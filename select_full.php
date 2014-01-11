@@ -11,17 +11,17 @@
  *
  * ************************************************************************ */
 include_once (__DIR__ . '/../config.php');
-    require_once('db.class.php.class.php');
+    require_once('db.class.php');
     require_once("backend.php");
     $db = new Db();
    
     $i = 0; //style counter
     $counter = 0;
     $filePath = "/Awards";
-    //$id_db.class.php = $db->query("SELECT date(`COL_TIME_OFF`)AS`Date` ,`COL_CALL`AS`CallSign`,`COL_MODE`AS`Mode` ,"
+    //$id_lookup = $db->query("SELECT date(`COL_TIME_OFF`)AS`Date` ,`COL_CALL`AS`CallSign`,`COL_MODE`AS`Mode` ,"
     //    . " `COL_BAND`AS`Band` ,`COL_GRIDSQUARE`AS`Grid` ,`COL_COUNTRY`AS`Country` ,"
     //    . "`COL_STATE`AS`State` ,`COL_QTH`AS`QTH` FROM $dbnameHRD.$tbHRD WHERE COL_BAND LIKE '_Band_' AND COL_MODE LIKE '_Mode_'");
-    $id_db.class.php = $db->query("SELECT date(`COL_TIME_OFF`)AS`Date` ,`COL_CALL`AS`CallSign`,`COL_MODE`AS`Mode` ,"
+    $id_lookup = $db->query("SELECT date(`COL_TIME_OFF`)AS`Date` ,`COL_CALL`AS`CallSign`,`COL_MODE`AS`Mode` ,"
         . " `COL_BAND`AS`Band` ,`COL_GRIDSQUARE`AS`Grid` ,`COL_COUNTRY`AS`Country` ,"
         . "`COL_STATE`AS`State` ,`COL_QTH`AS`QTH` FROM $dbnameHRD.$tbHRD ");
     
@@ -34,7 +34,7 @@ include_once (__DIR__ . '/../config.php');
             . "<th>Contury</th>"
             . "<th>State</th>"
             . "</tr><tr bgcolor='#5e5eff'>". PHP_EOL;
-    foreach ($id_db.class.php as $row): 
+    foreach ($id_lookup as $row): 
         {  
             $fileName = $row['File'];
             $data .=  "<td>" . $row['Date'] . "</td>";

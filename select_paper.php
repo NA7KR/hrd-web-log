@@ -11,7 +11,7 @@
  *
  * ************************************************************************ */
 include_once (__DIR__ . '/../config.php');
-require_once('db.class.php.class.php');
+require_once('db.class.php');
 require_once("backend.php");
 $db = new Db();
 $i = 0; //style counter
@@ -22,7 +22,7 @@ $find = '.jpg';
 $fileMutiply = 1000;
 
 
-    $id_db.class.php = $db->query("SELECT tb_Cards.COL_PRIMARY_KEY as 'Log ID', $tbHRD.COL_CALL as 'Call',"
+    $id_lookup = $db->query("SELECT tb_Cards.COL_PRIMARY_KEY as 'Log ID', $tbHRD.COL_CALL as 'Call',"
   . "tb_Cards.COL_File_Path_F as 'Card', tb_Cards.COL_File_Path_B as 'Back'"
   . "FROM HRD_Web.tb_Cards INNER JOIN $dbnameHRD.$tbHRD ON tb_Cards.COL_PRIMARY_KEY =" 
   . "$tbHRD.COL_PRIMARY_KEY WHERE tb_Cards.COL_File_Path_F <> ''");
@@ -31,7 +31,7 @@ $fileMutiply = 1000;
     $data = "<table border='0' align='center'><tbody><tr>"
             . "<th>Log ID</th>" . "<th>Call</th>" . "<th>Card</th>" 
             . "<th>Back</th>" . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
-    foreach ($id_db.class.php as $row): {
+    foreach ($id_lookup as $row): {
             //
             $data .= "<td>" . $row['Log ID'] . "</td>" . PHP_EOL;
             $data .= "<td>" . $row['Call'] . "</td>" . PHP_EOL;

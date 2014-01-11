@@ -52,7 +52,7 @@ if (empty($_SESSION['user'])) {
         <?php
         include_once (__DIR__ . '/../../config.php');
         include (__DIR__ . '/../../counter.php');
-        require_once(__DIR__ . '/../db.class.php.class.php');
+        require_once(__DIR__ . '/../db.class.php');
         if (!isset($_SERVER['HTTPS']) || !$_SERVER['HTTPS']) { // if request is not secure, redirect to secure url
             $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
             header('Location: ' . $url);
@@ -173,8 +173,8 @@ if (isset($_FILES['file'])) {
             }
 
             $Key = $_POST['username'];
-            $id_db.class.php = $db->row("SELECT COL_CALL FROM $dbnameHRD.$tbHRD where COL_PRIMARY_KEY ='$Key'");
-            $CallSign .=$id_db.class.php['COL_CALL'];
+            $id_lookup = $db->row("SELECT COL_CALL FROM $dbnameHRD.$tbHRD where COL_PRIMARY_KEY ='$Key'");
+            $CallSign .=$id_lookup['COL_CALL'];
             $FileName = $side . "-" . $Key . "-" . $CallSign . ".jpg";
         } else {
             echo "<div class='error'> Please Enter Number </div>";
@@ -223,8 +223,8 @@ if (isset($_FILES['file'])) {
                         $update = $db->query("INSERT INTO `HRD_Web`.`tb_awards` (`COL_PRIMARY_KEY`, `COL_Award`, `COL_File`) VALUES ('NULL', '$AwardsDes', '$FileName'");
                     } elseif (($LOG == 2) || ($LOG == 3)) {
 
-                        $id_db.class.php = $db->row("SELECT * FROM `HRD_Web`.`tb_Cards` WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key ");
-                        if ($id_db.class.php['COL_PRIMARY_KEY'] <> "") {
+                        $id_lookup = $db->row("SELECT * FROM `HRD_Web`.`tb_Cards` WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key ");
+                        if ($id_lookup['COL_PRIMARY_KEY'] <> "") {
                             $update = $db->query("UPDATE `HRD_Web`.`tb_Cards` SET  `$tbside` = '$FileName' WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key");
                         } else {
                             $update = $db->query("INSERT INTO `HRD_Web`.`tb_Cards` (`COL_PRIMARY_KEY`, `$tbside`) VALUES ( $Key, $FileName)");
@@ -242,8 +242,8 @@ $LOG = $_POST['Log'];
 $callsign = $_POST['callsign'];
 echo "<br>";
 if ($LOG == 4) {
-    $id_db.class.php = $db->query("SELECT `COL_CALL` , `COL_BAND`,`COL_TIME_OFF`,`COL_PRIMARY_KEY`FROM $dbnameHRD.$tbHRD WHERE `COL_CALL` ='$callsign'");
-    foreach ($id_db.class.php as $row) {
+    $id_lookup = $db->query("SELECT `COL_CALL` , `COL_BAND`,`COL_TIME_OFF`,`COL_PRIMARY_KEY`FROM $dbnameHRD.$tbHRD WHERE `COL_CALL` ='$callsign'");
+    foreach ($id_lookup as $row) {
         $QSLWORKED .=$row['COL_CALL'] . ' Was worked on the ' . $row['COL_BAND'] . ' Band on ' . date("jS M Y", strtotime($row['COL_TIME_OFF'])) . ' Contact number is: ' . $row['COL_PRIMARY_KEY'] . '<br>';
     }
     echo $QSLWORKED;

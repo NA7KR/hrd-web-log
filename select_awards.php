@@ -11,15 +11,15 @@
  *
  * ************************************************************************ */
     include_once (__DIR__ . '/../config.php');
-    require_once('db.class.php.class.php');
+    require_once('db.class.php');
     require_once("backend.php");
     $db = new Db();
     $find = '.jpg';
     $i = 0; //style counter
     $filePath = "/Awards";
-    $id_db.class.php = $db->query("SELECT COL_Award as Award, COL_File as 'File' FROM $dbnameWEB.tb_awards WHERE 1");
+    $id_lookup = $db->query("SELECT COL_Award as Award, COL_File as 'File' FROM $dbnameWEB.tb_awards WHERE 1");
     $data = "<table border='0' align='center'><tbody><tr><th>Award</th><th>File</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
-    foreach ($id_db.class.php as $row): 
+    foreach ($id_lookup as $row): 
         {  
             $fileName = $row['File'];
             $data .=  "<td>" . $row['Award'] . "</td>" . PHP_EOL;

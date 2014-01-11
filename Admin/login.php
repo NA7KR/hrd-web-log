@@ -20,7 +20,7 @@ session_start();
     <body " class="background1">
         <div id="loginForm">
             <?php
-            require_once(__DIR__ . '/../db.class.php.class.php');
+            require_once(__DIR__ . '/../db.class.php');
             $db.class.php = new db.class.php();
             $submitted_username = '';
             d($db.class.php->count('id', 'users'), "User");
@@ -30,21 +30,21 @@ session_start();
                     if (!empty($_POST['username'])) {
                         $db = new Db();
                         $Key = $_POST['username'];
-                        $id_db.class.php = $db->row("SELECT id, username, password, salt, email FROM users WHERE username =  :f", array("f" => $Key));
+                        $id_lookup = $db->row("SELECT id, username, password, salt, email FROM users WHERE username =  :f", array("f" => $Key));
 
-                        if ($id_db.class.php) {
-                            $check_password = hash('sha256', $_POST['password'] . $id_db.class.php['salt']);
+                        if ($id_lookup) {
+                            $check_password = hash('sha256', $_POST['password'] . $id_lookup['salt']);
                             for ($round = 0; $round < 65536; $round++) {
-                                $check_password = hash('sha256', $check_password . $id_db.class.php['salt']);
+                                $check_password = hash('sha256', $check_password . $id_lookup['salt']);
                             }
-                            if ($check_password == $id_db.class.php['password']) {
+                            if ($check_password == $id_lookup['password']) {
                                 $login_ok = true;
                             }
                         }
                         if ($login_ok) {
-                            unset($id_db.class.php['salt']);
-                            unset($id_db.class.php['password']);
-                            $_SESSION['user'] = $id_db.class.php;
+                            unset($id_lookup['salt']);
+                            unset($id_lookup['password']);
+                            $_SESSION['user'] = $id_lookup;
                             header("Location: welcome.php");
                             die("Redirecting to: welcome.php");
                         } else {

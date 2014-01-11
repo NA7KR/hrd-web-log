@@ -29,10 +29,10 @@ if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
         require("Db.class.php");
         $Key = $argv[1];
         $db = new Db();
-        $id_db.class.php = $db->row("SELECT COL_File_Path_E FROM tb_Cards WHERE COL_PRIMARY_KEY = :f", array("f" => $Key));
+        $id_lookup = $db->row("SELECT COL_File_Path_E FROM tb_Cards WHERE COL_PRIMARY_KEY = :f", array("f" => $Key));
         $qsl_db.class.php = $db->row("SELECT year(COL_TIME_OFF)as 'Year', month(COL_TIME_OFF)as 'Month', day(COL_TIME_OFF)as 'Day', hour(COL_TIME_OFF)as 'Hour', minute(COL_TIME_OFF) as 'Minute',COL_CALL as 'Call', COL_BAND as 'Band', COL_MODE as 'Mode' FROM NA7KR.TABLE_HRD_CONTACTS_V01  WHERE `COL_PRIMARY_KEY`   = $Key");
         echo $Key . "<br>";
-        $Call_O = $id_db.class.php['COL_File_Path_E'];
+        $Call_O = $id_lookup['COL_File_Path_E'];
         $Year = $qsl_db.class.php['Year'];
         $Month = $qsl_db.class.php['Month'];
         $Day = $qsl_db.class.php['Day'];

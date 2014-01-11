@@ -11,7 +11,7 @@
  *
  * ************************************************************************ */
 include_once (__DIR__ . '/../config.php');
-require_once('db.class.php.class.php');
+require_once('db.class.php');
 require_once("backend.php");
 $db = new Db();
 $i = 0; //style counter
@@ -22,12 +22,12 @@ $find = '.jpg';
 $fileMutiply = 1000;
 
 
-    $id_db.class.php = $db->query("SELECT `COL_CALL` as 'Call', `COL_LOTW_QSL_RCVD` as 'Confirmed' FROM $dbnameHRD.$tbHRD Where `COL_LOTW_QSL_RCVD` = 'V'");
+    $id_lookup = $db->query("SELECT `COL_CALL` as 'Call', `COL_LOTW_QSL_RCVD` as 'Confirmed' FROM $dbnameHRD.$tbHRD Where `COL_LOTW_QSL_RCVD` = 'V'");
     
     $data = "<table border='0' align='center'><tbody><tr>"
             . "<th>Call</th>" . "<th>Confirmed</th>" 
             . "<th>Back</th>" . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
-    foreach ($id_db.class.php as $row): {
+    foreach ($id_lookup as $row): {
             //
             $data .= "<td>" . $row['Call'] . "</td>" . PHP_EOL;
             $data .= "<td>" . $row['Confirmed'] . "</td>" . grid_style($i) . PHP_EOL; 

@@ -25,9 +25,9 @@ session_start();
             header("Location: login.php");
             die("Redirecting to login.php");
         }
-        require_once(__DIR__ . '/../db.class.php.class.php');
+        require_once(__DIR__ . '/../db.class.php');
         $db = new Db();
-        $id_db.class.php = $db->query("SELECT id, username, email FROM $dbnameWEB.users");
+        $id_lookup = $db->query("SELECT id, username, email FROM $dbnameWEB.users");
         ?> 
         <h1>Memberlist</h1> 
         <table> 
@@ -36,7 +36,7 @@ session_start();
                 <th>Username</th> 
                 <th>E-Mail Address</th> 
             </tr> 
-<?php foreach ($id_db.class.php as $row): ?> 
+<?php foreach ($id_lookup as $row): ?> 
                 <tr> 
                     <td><?php echo $row['id']; ?></td> <!-- htmlentities is not needed here because $row['id'] is always an integer --> 
                     <td><?php echo htmlentities($row['username'], ENT_QUOTES, 'UTF-8'); ?></td> 
