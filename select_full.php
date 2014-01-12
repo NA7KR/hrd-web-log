@@ -18,12 +18,10 @@ include_once (__DIR__ . '/../config.php');
     $i = 0; //style counter
     $counter = 0;
     $filePath = "/Awards";
-    //$id_lookup = $db->query("SELECT date(`COL_TIME_OFF`)AS`Date` ,`COL_CALL`AS`CallSign`,`COL_MODE`AS`Mode` ,"
-    //    . " `COL_BAND`AS`Band` ,`COL_GRIDSQUARE`AS`Grid` ,`COL_COUNTRY`AS`Country` ,"
-    //    . "`COL_STATE`AS`State` ,`COL_QTH`AS`QTH` FROM $dbnameHRD.$tbHRD WHERE COL_BAND LIKE '_Band_' AND COL_MODE LIKE '_Mode_'");
     $id_lookup = $db->query("SELECT date(`COL_TIME_OFF`)AS`Date` ,`COL_CALL`AS`CallSign`,`COL_MODE`AS`Mode` ,"
         . " `COL_BAND`AS`Band` ,`COL_GRIDSQUARE`AS`Grid` ,`COL_COUNTRY`AS`Country` ,"
-        . "`COL_STATE`AS`State` ,`COL_QTH`AS`QTH` FROM $dbnameHRD.$tbHRD ");
+        . "`COL_STATE`AS`State` ,`COL_QTH`AS`QTH` FROM $dbnameHRD.$tbHRD WHERE COL_BAND LIKE '%$Band%' AND "
+        . " COL_MODE LIKE '%$Mode%' ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` DESC");
     
     $data = "<table border='0' align='center'><tbody><tr>"
             . "<th>Date</th>"
@@ -38,7 +36,7 @@ include_once (__DIR__ . '/../config.php');
         {  
             $fileName = $row['File'];
             $data .=  "<td>" . $row['Date'] . "</td>";
-            $data .=  "<td>" . $row['CallSign'] . "</td>";
+            $data .=  "<td>" . qrzcom_interface($row['CallSign']) . "</td>";
             $data .=  "<td>" . $row['Mode'] . "</td>";
             $data .=  "<td>" . $row['Band'] . "</td>";
             $data .=  "<td>" . $row['Grid'] . "</td>";

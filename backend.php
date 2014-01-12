@@ -1,81 +1,82 @@
 <?php
-/*************************************************************************
-* 			NA7KR Log Program 
-**************************************************************************
+/* * ***********************************************************************
+ * 			NA7KR Log Program 
+ * *************************************************************************
 
-**************************************************************************
-*   This program is free software; you can redistribute it and/or modify
-*   it under the terms of the GNU General Public License as published by
-*   the Free Software Foundation; either version 2 of the License, or
-*   (at your option) any later version.
-*
-**************************************************************************/
+ * *************************************************************************
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ * ************************************************************************ */
 
 #################################################
 # QRZ.com callsign lookup
 #################################################
-function qrzcom_interface($callsign) 
-{
-    $lookup  = "<a href='http://www.qrz.com/db/$callsign'>$callsign</a>";
+
+function qrzcom_interface($callsign) {
+    $lookup = "<a href='http://www.qrz.com/db/$callsign'>$callsign</a>";
     return ($lookup);
 }
 
 #################################################
 # QRZ.com callsign lookup
 #################################################
-function qsl_worked()
-{
+
+function qsl_worked() {
     include (__DIR__ . '/../config.php');
     require_once('lookup.class.php');
     $db = new Db();
     $id_lookup = $db->query("SELECT DISTINCT `COL_CALL` FROM NA7KR.TABLE_HRD_CONTACTS_V01 WHERE 1");
     foreach ($id_lookup as $row):
-    $QSLWORKED .=$row['COL_CALL'] . ',';
+        $QSLWORKED .=$row['COL_CALL'] . ',';
         if ($debug == "true") {
             echo $QSLWORKED;
         }
     endforeach;
     return ($QSLWORKED);
-    
-} 
+}
 
 #################################################
 # read DB for oprion view
 #################################################
+
 function select() {
     include (__DIR__ . '/../config.php');
     require_once('lookup.class.php');
-    $data ='<FORM name ="form1" method ="post" action ="index.php">'. PHP_EOL;
+    $data = '<FORM name ="form1" method ="post" action ="index.php">' . PHP_EOL;
     $db = new Db();
     $id_lookup = $db->query("SELECT Select_TXT, Select_Name FROM $dbnameWEB.$tbSelect ORDER BY `Select_TXT` ");
     foreach ($id_lookup as $row):
 
         if ($row['Select_Name'] == "callsign_lookup") {
-            $data .='<input type="radio" value=' . $row['Select_Name'] . ' name="Log" > ' . $row['Select_TXT']. PHP_EOL;
+            $data .='<input type="radio" value=' . $row['Select_Name'] . ' name="Log" > ' . $row['Select_TXT'] . PHP_EOL;
         } else {
-            $data .='<input type="radio" value=' . $row['Select_Name'] . ' name="Log"  > ' . $row['Select_TXT']. PHP_EOL;
+            $data .='<input type="radio" value=' . $row['Select_Name'] . ' name="Log"  > ' . $row['Select_TXT'] . PHP_EOL;
         }
     endforeach;
-    $data .='<br><div><P style="text-align: center">'. PHP_EOL;
-    $data .= '<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div></FORM><BR>'. PHP_EOL;
+    $data .='<br><div><P style="text-align: center">' . PHP_EOL;
+    $data .= '<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div></FORM><BR>' . PHP_EOL;
     return $data;
 }
-
 
 #################################################
 # build include files
 #################################################
+
 function buildfiles($Key) {
     include (__DIR__ . '/../config.php');
     require_once('lookup.class.php');
     $db = new Db();
-        $id_lookup = $db->row("SELECT Select_File FROM $dbnameWEB.$tbSelect WHERE Select_Name = '$Key'");
+    $id_lookup = $db->row("SELECT Select_File FROM $dbnameWEB.$tbSelect WHERE Select_Name = '$Key'");
     return $id_lookup['Select_File'];
 }
 
 #################################################
-# SQL safe
+# SQL safe 
 #################################################
+
 function safe($value) {
     return mysql_real_escape_string($value);
 }
@@ -84,6 +85,7 @@ function safe($value) {
 # Make Grid
 # $i mod 2 is checking to see if the row number is odd or even odd rows are colored differently than even rows to create a datagrid look and feel
 #################################################
+
 function grid_style($i) {
     if (($i % 2) != 0) {
         $style = "<tr bgcolor='#5e5eff'>";
@@ -95,23 +97,90 @@ function grid_style($i) {
 }
 
 #################################################
-# 
+# Footer
 # 
 #################################################
-function footer($i) {    
-?>
-<div class="c1">
-<span class="auto-style5">
-    <?php    
-        date_default_timezone_set('America/Los_Angeles');
-        echo "Was last modified: " . date("F d Y H:i", filemtime($i));
-        require_once("backend.php");
-    ?>
-</span>
-</div>
-<br><br>
 
-<div style="display:none;"><?php echo qsl_worked(); ?></div>
-<?php 
+function footer($i) {
+    ?>
+    <div class="c1">
+        <span class="auto-style5">
+            <?php
+            date_default_timezone_set('America/Los_Angeles');
+            echo "Was last modified: " . date("F d Y H:i", filemtime($i));
+            ?>
+        </span>
+    </div>
+    <br><br>
+
+    <div style="display:none;"><?php echo qsl_worked(); ?></div>
+    <?php
 }
-?>
+
+#################################################
+# BAND
+# 
+#################################################
+
+function band() {
+    include (__DIR__ . '/../config.php');
+    require_once('lookup.class.php');
+    $db = new Db();
+    $id_lookup = $db->query("SELECT COL_BAND FROM $dbnameHRD.$tbHRD GROUP BY `COL_BAND` ");
+    foreach ($id_lookup as $row): {
+            $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked name="Band">' . $row['COL_BAND'];
+        }
+    endforeach;
+    $select .='<input type="radio" value= _Any_Band_  checked name="Band"> Any Band';
+    $select .='<BR>';
+    return($select);
+}
+
+#################################################
+# MODE
+# 
+#################################################
+
+function mode() {
+    include (__DIR__ . '/../config.php');
+    require_once('lookup.class.php');
+    $db = new Db();
+    $id_lookup = $db->query("SELECT COL_MODE FROM $dbnameHRD.$tbHRD GROUP BY `COL_MODE` ");
+    foreach ($id_lookup as $row): {
+            $result = $row['COL_MODE'];
+            if ($result === "LSB") {
+                $result = "";
+            } elseif ($result === "USB") {
+                $result = "";
+            } else {
+                $select .='<input type="radio" value=' . $result . ' checked name="Mode">' . $result;
+            }
+        }
+    endforeach;
+    return($select);
+}
+
+#################################################
+# Country
+#  
+#################################################
+
+function country($i) {
+    $result = count($CountrysArray);
+    if ($result >= 2) {
+        $select .="<BR><select id='mySelect' name='Country'>";
+        foreach ($CountrysArray as $CountryArray) {
+            if (isset($user_input)) {
+                $selected = $user_input == $CountryArray['value'] ? ' selected="selected"' : '';
+            } else {
+                $select .= "<option value=\"$CountryArray\"$selected>$CountryArray</option>";
+            }
+        }
+    } else {
+        foreach ($CountrysArray as $CountryArray) {
+            $select .= $CountryArray;
+        }
+    }
+
+    return($i);
+}

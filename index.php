@@ -14,7 +14,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <link type="text/css" rel="stylesheet" href="Admin/css/style.css" />
+        <link type="text/css" rel="stylesheet" href="Admin/css/style.css" >
         <title>
             <?php
             include_once (__DIR__ . '/../config.php');
@@ -41,6 +41,18 @@
         if (isset($_POST['Submit1'])) {
             $LOG = safe($_POST['Log']);
             $QTY = safe($_POST['Qty']);
+            $BAND = safe($_POST['Band']);
+            $MODE = safe($_POST['Mode']);
+            $COUNTRY = safe($_POST['Country']);
+            $CALL_SEARCH = safe($_POST['Call_Search']);
+            if ($BAND == "_Any_Band_")
+            {
+                $BAND ="%";
+            }
+            if ($MODE == "_Any_Mode_")
+            {
+                $MODE ="%";
+            }
           
             $CALL_SEARCH = safe($_POST['Call_Search']);
             include_once buildfiles($LOG);

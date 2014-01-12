@@ -31,18 +31,29 @@ if (isset($_POST['Submit1'])) {
     $data = '<FORM name ="form1" method ="post" action ="index.php">' . PHP_EOL;
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
-    //echo $data;
-    //$data = "";
+    
 }
 if ($SUBMIT == "true") {
-
-    $id_lookup = $db->query("SELECT COL_CALL AS `Call`,COL_BAND AS Band, COL_State AS State, COL_Country AS Country, \n"
+    if ($QTY == "All")
+    {
+            $id_lookup = $db->query("SELECT COL_CALL AS `Call`,COL_BAND AS Band, COL_State AS State, COL_Country AS Country, \n"
             . "$dbnameHRD.$tbHRD.COL_PRIMARY_KEY AS ID, COL_TIME_OFF AS Date, CASE COL_EQSL_QSL_RCVD When 'Y' Then 'Yes' end AS EQSL, \n"
             . "CASE COL_LOTW_QSL_RCVD  When 'V' Then 'Yes' end AS LOTW, CASE COL_QSL_RCVD When 'Y' Then 'Yes' end AS QSL, \n"
             . "COL_MODE AS `Mode`, $dbnameWEB.tb_Cards.COL_File_Path_E AS 'E QSL', $dbnameWEB.tb_Cards.COL_File_Path_F AS File, \n"
             . "$dbnameWEB.tb_Cards.COL_File_Path_B AS 'File Back' FROM $dbnameHRD.$tbHRD LEFT OUTER JOIN HRD_Web.tb_Cards \n"
             . "ON $dbnameHRD.$tbHRD.COL_PRIMARY_KEY = $dbnameWEB.tb_Cards.COL_PRIMARY_KEY where COL_CALL like '%$CALL_SEARCH%' \n"
             . "ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` DESC");
+    }
+    else
+    {	
+            $id_lookup = $db->query("SELECT COL_CALL AS `Call`,COL_BAND AS Band, COL_State AS State, COL_Country AS Country, \n"
+            . "$dbnameHRD.$tbHRD.COL_PRIMARY_KEY AS ID, COL_TIME_OFF AS Date, CASE COL_EQSL_QSL_RCVD When 'Y' Then 'Yes' end AS EQSL, \n"
+            . "CASE COL_LOTW_QSL_RCVD  When 'V' Then 'Yes' end AS LOTW, CASE COL_QSL_RCVD When 'Y' Then 'Yes' end AS QSL, \n"
+            . "COL_MODE AS `Mode`, $dbnameWEB.tb_Cards.COL_File_Path_E AS 'E QSL', $dbnameWEB.tb_Cards.COL_File_Path_F AS File, \n"
+            . "$dbnameWEB.tb_Cards.COL_File_Path_B AS 'File Back' FROM $dbnameHRD.$tbHRD LEFT OUTER JOIN HRD_Web.tb_Cards \n"
+            . "ON $dbnameHRD.$tbHRD.COL_PRIMARY_KEY = $dbnameWEB.tb_Cards.COL_PRIMARY_KEY where COL_CALL like '%$CALL_SEARCH%' \n"
+            . "ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` DESC Limit $QTY");
+    }
 
 
     $data = "<table border='0' align='center'><tbody><tr>"
@@ -54,7 +65,7 @@ if ($SUBMIT == "true") {
             . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
     foreach ($id_lookup as $row): {
             //
-            $data .= "<td>" . $row['Call'] . "</td>" . PHP_EOL;
+            $data .= "<td>" . qrzcom_interface($row['Call']) . "</td>" . PHP_EOL;
             $data .= "<td>" . $row['Band'] . "</td>" . PHP_EOL;
             $data .= "<td>" . $row['State'] . "</td>" . PHP_EOL;
             $data .= "<td>" . $row['Country'] . "</td>" . PHP_EOL;
@@ -99,10 +110,12 @@ if ($SUBMIT == "true") {
     $data = str_replace("LSB", "SSB", $data);
     $data .= "</table><br><br>" . PHP_EOL;
 } else {
-    $data .='If you select Callsign db.class.php enter Callsign in the box' . PHP_EOL;
-    $data .='<br><input id="mySelect2" type="db.class.php" name="Call_Search"><br>' . PHP_EOL;
+    //$data .="<br>" .  band() . PHP_EOL;
+    //$data .=  mode() . "<br>" . PHP_EOL;
+    $data .='If you select Callsign lookup enter Callsign in the box' . PHP_EOL;
+    $data .='<br><input id="mySelect2" type="lookup" name="Call_Search"><br>' . PHP_EOL;
     $data .='Select from drop down the amount of QLS would like to return' . PHP_EOL;
-    $data .='<br><select id="mySelect3" name="Qty"><option>50</option><option>100</option><option>All</option></select>' . PHP_EOL;
+    $data .='<br><select id="mySelect3" name="Qty"><option>50</option><option>100</option><option>250</option><option>500</option><option>1000</option><option>All</option></select>' . PHP_EOL;
     $data .='<br><div><P style="text-align: center"><Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div></FORM><BR>' . PHP_EOL;
 }
 
