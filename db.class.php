@@ -11,7 +11,7 @@
  *   (at your option) any later version.
  *
  ***************************************************************************/
-require("db.class.php");
+require("log.class.php");
 class DB
 {
 	private $pdo;	# @object, The PDO object
