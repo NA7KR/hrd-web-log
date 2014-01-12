@@ -20,7 +20,8 @@
             include_once (__DIR__ . '/../config.php');
             require("backend.php");
             include "counter.php";
-            echo $myCall
+            echo $myCall;
+            MakeViews();
             ?> 
             Ham Radio LogBook</title> 
         <meta name="keywords" content="Ham Radio NA7KR">
@@ -45,19 +46,13 @@
             $MODE = safe($_POST['Mode']);
             $COUNTRY = safe($_POST['Country']);
             $CALL_SEARCH = safe($_POST['Call_Search']);
-            if ($BAND == "_Any_Band_")
-            {
-                $BAND ="%";
-            }
-            if ($MODE == "_Any_Mode_")
-            {
-                $MODE ="%";
-            }
-          
+           
             $CALL_SEARCH = safe($_POST['Call_Search']);
             include_once buildfiles($LOG);
-            $data ='<FORM name ="form1" method ="post" action ="index.php">'. PHP_EOL;
-            $data .= '<input type="hidden" name="Log" value=' .  $LOG . '>';
+            $data ='<FORM name ="form1" method ="post" action ="index.php">' . PHP_EOL;
+            $data .= '<input type="hidden" name="Log" value=' .  $LOG . '>' . PHP_EOL;
+            $data .= '<input type="hidden" name="Band" value=' .  $BAND . '>' . PHP_EOL;
+            $data .= '<input type="hidden" name="Mode" value=' .  $MODE . '>' . PHP_EOL;
             echo $data;
         } else {
             echo select();

@@ -184,3 +184,32 @@ function country($i) {
 
     return($i);
 }
+
+#################################################
+# Make Views
+#################################################
+
+function MakeViews()
+{
+    include (__DIR__ . '/../config.php');
+    require_once('lookup.class.php');
+    $db = new Db();
+    $id_lookup = $db->query("create or replace view $dbnameHRD.bands  as select col_band from $dbnameHRD.$tbHRD group by 1");
+    $id_lookup = $db->query("create or replace view $dbnameHRD.modes as select col_mode from $dbnameHRD.$tbHRD group by 1");
+    $id_lookup = $db->query("create or replace view $dbnameHRD.towork as  \n"
+    . "select col_mode, col_band, STATE, COUNTRY, sCOUNTRY  \n"
+    . "FROM $dbnameWEB.$tbStates, $dbnameHRD.modes, $dbnameHRD.bands  \n"
+    . "WHERE concat( col_mode,'-', col_band,'-', ST,'-', COUNTRY ) NOT IN ( \n"
+    . "SELECT concat( COL_MODE,'-', COL_BAND,'-', COL_STATE,'-', COL_COUNTRY )AS the_key  \n"
+    . "FROM  $dbnameHRD.$tbHRD   \n"
+    . "where COL_STATE is not null)  \n");
+
+    $id_lookup = $db->query("create or replace view $dbnameHRD.zone_to_work as  \n"
+    . "SELECT col_mode, col_band, zones \n"
+    . "FROM $dbnameWEB.tb_zones, $dbnameHRD.modes, $dbnameHRD.bands \n"
+    . "WHERE concat( col_mode,'-', col_band,'-', Zones ) NOT IN (\n"
+    . "SELECT concat( COL_MODE,'-', COL_BAND,'-', COL_ITUZ )AS the_key \n"
+    . "FROM $dbnameHRD.$tbHRD \n"
+    . "where COL_ITUZ is not null) \n");
+	
+}

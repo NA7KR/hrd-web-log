@@ -33,26 +33,22 @@ if (isset($_POST['Submit1'])) {
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
     
 }
+$query ="SELECT COL_CALL AS `Call`,COL_BAND AS Band, COL_State AS State, COL_Country AS Country, \n"
+            . "$dbnameHRD.$tbHRD.COL_PRIMARY_KEY AS ID, COL_TIME_OFF AS Date, CASE COL_EQSL_QSL_RCVD When 'Y' Then 'Yes' end AS EQSL, \n"
+            . "CASE COL_LOTW_QSL_RCVD  When 'V' Then 'Yes' end AS LOTW, CASE COL_QSL_RCVD When 'Y' Then 'Yes' end AS QSL, \n"
+            . "COL_MODE AS `Mode`, $dbnameWEB.tb_Cards.COL_File_Path_E AS 'E QSL', $dbnameWEB.tb_Cards.COL_File_Path_F AS File, \n"
+            . "$dbnameWEB.tb_Cards.COL_File_Path_B AS 'File Back' FROM $dbnameHRD.$tbHRD LEFT OUTER JOIN HRD_Web.tb_Cards \n"
+            . "ON $dbnameHRD.$tbHRD.COL_PRIMARY_KEY = $dbnameWEB.tb_Cards.COL_PRIMARY_KEY where COL_CALL like '%$CALL_SEARCH%' \n"
+            . "ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` DESC";
 if ($SUBMIT == "true") {
     if ($QTY == "All")
     {
-            $id_lookup = $db->query("SELECT COL_CALL AS `Call`,COL_BAND AS Band, COL_State AS State, COL_Country AS Country, \n"
-            . "$dbnameHRD.$tbHRD.COL_PRIMARY_KEY AS ID, COL_TIME_OFF AS Date, CASE COL_EQSL_QSL_RCVD When 'Y' Then 'Yes' end AS EQSL, \n"
-            . "CASE COL_LOTW_QSL_RCVD  When 'V' Then 'Yes' end AS LOTW, CASE COL_QSL_RCVD When 'Y' Then 'Yes' end AS QSL, \n"
-            . "COL_MODE AS `Mode`, $dbnameWEB.tb_Cards.COL_File_Path_E AS 'E QSL', $dbnameWEB.tb_Cards.COL_File_Path_F AS File, \n"
-            . "$dbnameWEB.tb_Cards.COL_File_Path_B AS 'File Back' FROM $dbnameHRD.$tbHRD LEFT OUTER JOIN HRD_Web.tb_Cards \n"
-            . "ON $dbnameHRD.$tbHRD.COL_PRIMARY_KEY = $dbnameWEB.tb_Cards.COL_PRIMARY_KEY where COL_CALL like '%$CALL_SEARCH%' \n"
-            . "ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` DESC");
+            $id_lookup = $db->query("$query");
     }
     else
     {	
-            $id_lookup = $db->query("SELECT COL_CALL AS `Call`,COL_BAND AS Band, COL_State AS State, COL_Country AS Country, \n"
-            . "$dbnameHRD.$tbHRD.COL_PRIMARY_KEY AS ID, COL_TIME_OFF AS Date, CASE COL_EQSL_QSL_RCVD When 'Y' Then 'Yes' end AS EQSL, \n"
-            . "CASE COL_LOTW_QSL_RCVD  When 'V' Then 'Yes' end AS LOTW, CASE COL_QSL_RCVD When 'Y' Then 'Yes' end AS QSL, \n"
-            . "COL_MODE AS `Mode`, $dbnameWEB.tb_Cards.COL_File_Path_E AS 'E QSL', $dbnameWEB.tb_Cards.COL_File_Path_F AS File, \n"
-            . "$dbnameWEB.tb_Cards.COL_File_Path_B AS 'File Back' FROM $dbnameHRD.$tbHRD LEFT OUTER JOIN HRD_Web.tb_Cards \n"
-            . "ON $dbnameHRD.$tbHRD.COL_PRIMARY_KEY = $dbnameWEB.tb_Cards.COL_PRIMARY_KEY where COL_CALL like '%$CALL_SEARCH%' \n"
-            . "ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` DESC Limit $QTY");
+            $query = str_replace( "DESC", "DESC Limit $QTY ", $query);
+            $id_lookup = $db->query("$query");
     }
 
 
