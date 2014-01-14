@@ -19,7 +19,7 @@
             <?php
             include_once (__DIR__ . '/../config.php');
             require("backend.php");
-            include "counter.php";
+            //include_once "counter.php";
             echo $myCall;
             MakeViews();
             ?> 
@@ -40,19 +40,20 @@
         <br><br>
         <?php
         if (isset($_POST['Submit1'])) {
-            $LOG = safe($_POST['Log']);
-            $QTY = safe($_POST['Qty']);
-            $BAND = safe($_POST['Band']);
-            $MODE = safe($_POST['Mode']);
-            $COUNTRY = safe($_POST['Country']);
-            $CALL_SEARCH = safe($_POST['Call_Search']);
-           
-            $CALL_SEARCH = safe($_POST['Call_Search']);
-            include_once buildfiles($LOG);
-            $data ='<FORM name ="form1" method ="post" action ="index.php">' . PHP_EOL;
-            $data .= '<input type="hidden" name="Log" value=' .  $LOG . '>' . PHP_EOL;
-            $data .= '<input type="hidden" name="Band" value=' .  $BAND . '>' . PHP_EOL;
-            $data .= '<input type="hidden" name="Mode" value=' .  $MODE . '>' . PHP_EOL;
+                $LOG = safe($_POST['Log']);
+                $QTY = safe($_POST['Qty']);
+                $BAND = safe($_POST['Band']);
+                $MODE = safe($_POST['Mode']);
+                $COUNTRY = safe($_POST['Countey']);
+                $SUBMIT = safe($_POST['Submit']);
+                $CALL_SEARCH = safe($_POST['Call_Search']);
+                include_once buildfiles($LOG);
+                $data = '<FORM name ="form1" method ="post" action ="index.php">' . PHP_EOL;
+                $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
+                $data .= '<input type="hidden" name="Submit" value= "true">' . PHP_EOL;
+                $data .= '<input type="hidden" name="Band" value=' .  $BAND . '>' . PHP_EOL;
+                $data .= '<input type="hidden" name="Mode" value=' .  $MODE . '>' . PHP_EOL;
+                $data .= '<input type="hidden" name="Mode" value=' .  $COUNTRY . '>' . PHP_EOL;
             echo $data;
         } else {
             echo select();
@@ -84,8 +85,5 @@
         footer($phpfile);
         }
         
-        ?>
-       
+        ?>      
 </html>
-   
-       

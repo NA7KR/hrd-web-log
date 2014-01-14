@@ -197,7 +197,7 @@ function MakeViews()
     $id_lookup = $db->query("create or replace view $dbnameHRD.bands  as select col_band from $dbnameHRD.$tbHRD group by 1");
     $id_lookup = $db->query("create or replace view $dbnameHRD.modes as select col_mode from $dbnameHRD.$tbHRD group by 1");
     $id_lookup = $db->query("create or replace view $dbnameHRD.towork as  \n"
-    . "select col_mode, col_band, STATE, COUNTRY, sCOUNTRY  \n"
+    . "select col_mode, col_band, STATE,ST, COUNTRY, sCOUNTRY  \n"
     . "FROM $dbnameWEB.$tbStates, $dbnameHRD.modes, $dbnameHRD.bands  \n"
     . "WHERE concat( col_mode,'-', col_band,'-', ST,'-', COUNTRY ) NOT IN ( \n"
     . "SELECT concat( COL_MODE,'-', COL_BAND,'-', COL_STATE,'-', COL_COUNTRY )AS the_key  \n"
