@@ -41,21 +41,11 @@
         <?php
 		//echo safe("this%20is\na&nbsb;'test';");
         if (isset($_POST['Submit1'])) {
-                $LOG = safe($_POST['Log']);
-                $QTY = safe($_POST['Qty']);
-                $BAND = safe($_POST['Band']);
-                $MODE = safe($_POST['Mode']);
-                $COUNTRY = safe($_POST['Countey']);
-                $SUBMIT = safe($_POST['Submit']);
-                $CALL_SEARCH = safe($_POST['Call_Search']);
-                //echo "LOG " . $LOG;
+                $LOG = ($_POST['Log']);
                 include buildfiles($LOG);
                 $data = '<FORM name ="form1" method ="post" action ="index.php">' . PHP_EOL;
-                $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
+                $data .= '<input type="hidden" name="Log" value=' . $_POST['Log'] . '>' . PHP_EOL;
                 $data .= '<input type="hidden" name="Submit" value= "true">' . PHP_EOL;
-                $data .= '<input type="hidden" name="Band" value=' .  $BAND . '>' . PHP_EOL;
-                $data .= '<input type="hidden" name="Mode" value=' .  $MODE . '>' . PHP_EOL;
-                $data .= '<input type="hidden" name="Mode" value=' .  $COUNTRY . '>' . PHP_EOL;
             echo $data;
         } else {
             echo select();

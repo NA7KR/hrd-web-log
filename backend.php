@@ -69,7 +69,7 @@ function buildfiles($Key) {
     include (__DIR__ . '/../config.php');
     require_once('lookup.class.php');
     $db = new Db();
-    $id_lookup = $db->row("SELECT Select_File FROM $dbnameWEB.$tbSelect WHERE Select_Name = $Key");
+    $id_lookup = $db->row("SELECT Select_File FROM $dbnameWEB.$tbSelect WHERE Select_Name = :f", array("f" => $Key));
     return $id_lookup['Select_File'];
 }
 
