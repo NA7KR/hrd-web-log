@@ -39,7 +39,7 @@
         </div>
         <br><br>
         <?php
-
+		//echo safe("this%20is\na&nbsb;'test';");
         if (isset($_POST['Submit1'])) {
                 $LOG = safe($_POST['Log']);
                 $QTY = safe($_POST['Qty']);

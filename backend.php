@@ -69,7 +69,7 @@ function buildfiles($Key) {
     include (__DIR__ . '/../config.php');
     require_once('lookup.class.php');
     $db = new Db();
-    $id_lookup = $db->row("SELECT Select_File FROM $dbnameWEB.$tbSelect WHERE Select_Name = '$Key'");
+    $id_lookup = $db->row("SELECT Select_File FROM $dbnameWEB.$tbSelect WHERE Select_Name = $Key");
     return $id_lookup['Select_File'];
 }
 
@@ -78,9 +78,10 @@ function buildfiles($Key) {
 #################################################
 
 function safe($value) {
-	//return (new Db()).quote($value);
+	$db = new Db();
+	return $db->quote($value);
 //    return mysql_real_escape_string($value);
-	return $value;
+	//return $value;
 }
 
 #################################################
