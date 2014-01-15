@@ -78,7 +78,9 @@ function buildfiles($Key) {
 #################################################
 
 function safe($value) {
-    return mysql_real_escape_string($value);
+	//return (new Db()).quote($value);
+//    return mysql_real_escape_string($value);
+	return $value;
 }
 
 #################################################

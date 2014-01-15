@@ -30,7 +30,7 @@ class DB
 	
 	private function Connect() # This method makes connection to the database.
 	{
-		include "/var/www/config.php";
+		include_once (__DIR__ . '/../config.php');
 		$dsn = "mysql:host={$dbhost};dbname={$dbnameWEB}"; # Puts content into the settings array.
 		try # Tries to connect to the database.
 		{
@@ -158,6 +158,10 @@ class DB
 		}
 		$this->log->write($message); # Write into log
 		return $exception;
-	}			
+	}	
+    //public function quote($value)
+	//{
+	//	return $pdo->quote($value) . "\n";
+	//}
 }
 ?>

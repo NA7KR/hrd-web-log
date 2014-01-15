@@ -19,7 +19,7 @@
             <?php
             include_once (__DIR__ . '/../config.php');
             require("backend.php");
-            //include_once "counter.php";
+            include "counter.php";
             echo $myCall;
             MakeViews();
             ?> 
@@ -39,6 +39,7 @@
         </div>
         <br><br>
         <?php
+
         if (isset($_POST['Submit1'])) {
                 $LOG = safe($_POST['Log']);
                 $QTY = safe($_POST['Qty']);
@@ -47,7 +48,8 @@
                 $COUNTRY = safe($_POST['Countey']);
                 $SUBMIT = safe($_POST['Submit']);
                 $CALL_SEARCH = safe($_POST['Call_Search']);
-                include_once buildfiles($LOG);
+                echo "LOG " . $LOG;
+                include buildfiles($LOG);
                 $data = '<FORM name ="form1" method ="post" action ="index.php">' . PHP_EOL;
                 $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
                 $data .= '<input type="hidden" name="Submit" value= "true">' . PHP_EOL;
