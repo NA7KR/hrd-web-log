@@ -131,11 +131,11 @@ function band() {
     $db = new Db();
     $id_lookup = $db->query("SELECT COL_BAND FROM $dbnameHRD.$tbHRD GROUP BY `COL_BAND` ");
     foreach ($id_lookup as $row): {
-            $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked name="Band">' . $row['COL_BAND'];
+            $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked name="Band">' . $row['COL_BAND'] . PHP_EOL;
         }
     endforeach;
-    $select .='<input type="radio" value= _Any_Band_  checked name="Band"> Any Band';
-    $select .='<BR>';
+    //$select .='<input type="radio" value= _Any_Band_  checked name="Band"> Any Band'. PHP_EOL;
+    $select .='<BR>'. PHP_EOL;
     return($select);
 }
 
@@ -156,7 +156,7 @@ function mode() {
             } elseif ($result === "USB") {
                 $result = "";
             } else {
-                $select .='<input type="radio" value=' . $result . ' checked name="Mode">' . $result;
+                $select .='<input type="radio" value=' . $result . ' checked name="Mode">' . $result . PHP_EOL;
             }
         }
     endforeach;
@@ -216,3 +216,17 @@ function MakeViews()
     . "where COL_ITUZ is not null) \n");
 	
 }
+
+#################################################
+# Make Views
+#################################################
+
+function OptionList()
+{
+  $data = "<div class=\"formField\">Band  :<input type=\"radio\" name=\"idmethod\" value=\"input1\" id=\"input1\"/></div>";
+  $data .="<br>";
+  $data .="<div class=\"formField\">Mode  :<input type=\"radio\" name=\"idmethod\" value=\"input2\" id=\"input2\"/></div>";
+  $data .= "<br>";
+  $data .="<div class=\"formField\">Call  :<input type=\"radio\" name=\"idmethod\" value=\"input3\" id=\"input3\"/></div>";
+  Return $data;
+}        

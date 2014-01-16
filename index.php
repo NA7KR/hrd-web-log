@@ -22,6 +22,7 @@
             include "counter.php";
             echo $myCall;
             MakeViews();
+            include ("java.php");
             ?> 
             Ham Radio LogBook</title> 
         <meta name="keywords" content="Ham Radio NA7KR">
@@ -32,7 +33,7 @@
         <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
     </head>
 
-    <body onload="onLoad();" class="background1">
+    <body  class="background1">
         <?php include_once("analyticstracking.php") ?>
         <div class="auto-style1"> Hello welcome my log book at reads from Ham Radio Deluxe log.. <span class="auto-style3"><br>
             </span><span class="auto-style4">My Call is <?php echo qrzcom_interface($myCall) ?></span><br>
@@ -75,7 +76,6 @@
         <?php
         $phpfile = __FILE__ ;
         footer($phpfile);
-        }
-        
+        } 
         ?>      
 </html>
