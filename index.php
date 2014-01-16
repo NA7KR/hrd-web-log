@@ -16,15 +16,16 @@
     <head>
         <link type="text/css" rel="stylesheet" href="Admin/css/style.css" >
         <title>
-            <?php
+        <?php
             include_once (__DIR__ . '/../config.php');
+            echo $myCall . " Ham Radio LogBook</title>" . PHP_EOL;
+            include ("java.php"); 
+            //include_once("analyticstracking.php");
             require("backend.php");
             include "counter.php";
-            echo $myCall;
+            // make/updates database views
             MakeViews();
-            include ("java.php");
-            ?> 
-            Ham Radio LogBook</title> 
+        ?>
         <meta name="keywords" content="Ham Radio NA7KR">
         <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
         <meta name="description" content="<?php echo $myCall ?> Ham Radio LogBook"> 
@@ -34,7 +35,7 @@
     </head>
 
     <body  class="background1">
-        <?php include_once("analyticstracking.php") ?>
+    
         <div class="auto-style1"> Hello welcome my log book at reads from Ham Radio Deluxe log.. <span class="auto-style3"><br>
             </span><span class="auto-style4">My Call is <?php echo qrzcom_interface($myCall) ?></span><br>
         </div>
@@ -43,11 +44,12 @@
 		//echo safe("this%20is\na&nbsb;'test';");
         if (isset($_POST['Submit1'])) {
                 $LOG = ($_POST['Log']);
-                include buildfiles($LOG);
-                $data = '<FORM name ="form1" method ="post" action ="index.php">' . PHP_EOL;
+                $data = '<form name ="form1" method ="post" action ="index.php">' . PHP_EOL;
                 $data .= '<input type="hidden" name="Log" value=' . $_POST['Log'] . '>' . PHP_EOL;
                 $data .= '<input type="hidden" name="Submit" value= "true">' . PHP_EOL;
-            echo $data;
+                echo $data;
+                $data ="";
+                include buildfiles($LOG);
         } else {
             echo select();
             ?>

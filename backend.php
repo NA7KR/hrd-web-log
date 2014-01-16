@@ -45,7 +45,7 @@ function qsl_worked() {
 function select() {
     include (__DIR__ . '/../config.php');
     require_once('lookup.class.php');
-    $data = '<FORM name ="form1" method ="post" action ="index.php">' . PHP_EOL;
+    $data = '<form name ="form1" method ="post" action ="index.php">' . PHP_EOL;
     $db = new Db();
     $id_lookup = $db->query("SELECT Select_TXT, Select_Name FROM $dbnameWEB.$tbSelect ORDER BY `Select_TXT` ");
     foreach ($id_lookup as $row):
@@ -223,10 +223,10 @@ function MakeViews()
 
 function OptionList()
 {
-  $data = "<div class=\"formField\">Band  :<input type=\"radio\" name=\"idmethod\" value=\"input1\" id=\"input1\"/></div>";
-  $data .="<br>";
-  $data .="<div class=\"formField\">Mode  :<input type=\"radio\" name=\"idmethod\" value=\"input2\" id=\"input2\"/></div>";
-  $data .= "<br>";
-  $data .="<div class=\"formField\">Call  :<input type=\"radio\" name=\"idmethod\" value=\"input3\" id=\"input3\"/></div>";
+  $data = "<div class=\"formField\">Band  :<input type=\"radio\" name=\"idmethod\" value=\"input1\" id=\"input1\"/></div>" . PHP_EOL;
+  $data .="<br>". PHP_EOL;
+  $data .="<div class=\"formField\">Mode  :<input type=\"radio\" name=\"idmethod\" value=\"input2\" id=\"input2\"/></div>" . PHP_EOL;
+  $data .= "<br>" . PHP_EOL;
+  $data .="<div class=\"formField\">Call  :<input type=\"radio\" name=\"idmethod\" value=\"input3\" id=\"input3\"/></div>" . PHP_EOL;
   Return $data;
 }        

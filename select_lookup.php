@@ -30,7 +30,6 @@ if (isset($_POST['Submit1'])) {
     $MODE = ($_POST['Mode']);
 
     include_once buildfiles($LOG);
-    $data = '<FORM name ="form1" method ="post" action ="index.php">' . PHP_EOL;
     $data .= '<input type="hidden" name="Log" value=' . $_POST['Log'] . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
@@ -127,7 +126,7 @@ if ($SUBMIT == "true") {
     $data .="<br>" . PHP_EOL;
     
     $data .='If you select Callsign lookup enter Callsign in the box' . PHP_EOL;
-    $data .='<br><input id="mySelect2" type="lookup" name="Call_Search"><br>' . PHP_EOL;
+    $data .='<br><input id="Call" type="lookup" name="Call_Search"><br>' . PHP_EOL;
     $data .='Select from drop down the amount of QLS would like to return' . PHP_EOL;
     $data .='<br><select id="mySelect3" name="Qty"><option>50</option><option>100</option><option>250</option><option>500</option><option>1000</option><option>All</option></select>' . PHP_EOL;
     $data .='<br><div><P style="text-align: center"><Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div></FORM><BR>' . PHP_EOL;

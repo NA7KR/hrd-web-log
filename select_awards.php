@@ -17,6 +17,7 @@
     $find = '.jpg';
     $i = 0; //style counter
     $filePath = "/Awards";
+    $data ="";
     $id_lookup = $db->query("SELECT COL_Award as Award, COL_File as 'File' FROM $dbnameWEB.tb_awards WHERE 1");
     $data = "<table border='0' align='center'><tbody><tr><th>Award</th><th>File</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
     foreach ($id_lookup as $row): 
