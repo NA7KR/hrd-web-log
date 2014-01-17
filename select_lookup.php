@@ -118,20 +118,23 @@ if ($SUBMIT == "true") {
     $data = str_replace("LSB", "SSB", $data);
     $data .= "</table><br><br>" . PHP_EOL;
 } else {
+    $data ='<table width=600 class="center2">'. PHP_EOL;
+    $data .='<tr><td>'. PHP_EOL;
     $data .=OptionList(). PHP_EOL;
-    $data .="<br>" . PHP_EOL;
     $data .=band() . PHP_EOL;
-    $data .="<br>" . PHP_EOL;
     $data .=mode() . PHP_EOL;
-    $data .="<br>" . PHP_EOL;
-    
-    $data .='If you select Callsign lookup enter Callsign in the box' . PHP_EOL;
-    $data .='<br><input id="Call" type="lookup" name="Call_Search"><br>' . PHP_EOL;
-    $data .='Select from drop down the amount of QLS would like to return' . PHP_EOL;
-    $data .='<br><select id="mySelect3" name="Qty"><option>50</option><option>100</option><option>250</option><option>500</option><option>1000</option><option>All</option></select>' . PHP_EOL;
-    $data .='<br><div><P style="text-align: center"><Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div></FORM><BR>' . PHP_EOL;
+    $data .='<span id="Call">' . PHP_EOL;
+    $data .='Enter Callsign in the box' . PHP_EOL;
+    $data .='<input  type="lookup" name="Call_Search"><br>' . PHP_EOL;
+    $data .='</span>' . PHP_EOL;
+    $data .='</td></tr>' . PHP_EOL;
+    $data .='</table>' . PHP_EOL;
+    $data .='<div class="c1">' . PHP_EOL;
+    $data .='<span class="auto-style5">' . PHP_EOL;
+    $data .='Select from drop down the amount of QLS would like to return<br>' . PHP_EOL;
+    $data .='<select name="Qty"><option>50</option><option>100</option><option>250</option><option>500</option><option>1000</option><option>All</option></select><br>' . PHP_EOL;
+    $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;  
 }
-
 echo $data;
 $phpfile = __FILE__;
 footer($phpfile);

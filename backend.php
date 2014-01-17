@@ -130,12 +130,12 @@ function band() {
     require_once('lookup.class.php');
     $db = new Db();
     $id_lookup = $db->query("SELECT COL_BAND FROM $dbnameHRD.$tbHRD GROUP BY `COL_BAND` ");
+    $select .='<span id="Band">' . PHP_EOL;
     foreach ($id_lookup as $row): {
             $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked name="Band">' . $row['COL_BAND'] . PHP_EOL;
         }
     endforeach;
-    //$select .='<input type="radio" value= _Any_Band_  checked name="Band"> Any Band'. PHP_EOL;
-    $select .='<BR>'. PHP_EOL;
+    $select .='</span>'. PHP_EOL;
     return($select);
 }
 
@@ -149,6 +149,7 @@ function mode() {
     require_once('lookup.class.php');
     $db = new Db();
     $id_lookup = $db->query("SELECT COL_MODE FROM $dbnameHRD.$tbHRD GROUP BY `COL_MODE` ");
+    $select .='<span id="Mode">' . PHP_EOL;
     foreach ($id_lookup as $row): {
             $result = $row['COL_MODE'];
             if ($result === "LSB") {
@@ -160,6 +161,7 @@ function mode() {
             }
         }
     endforeach;
+    $select .='</span>'. PHP_EOL;
     return($select);
 }
 
@@ -223,10 +225,11 @@ function MakeViews()
 
 function OptionList()
 {
-  $data = "<div class=\"formField\">Band  :<input type=\"radio\" name=\"idmethod\" value=\"input1\" id=\"input1\"/></div>" . PHP_EOL;
-  $data .="<br>". PHP_EOL;
-  $data .="<div class=\"formField\">Mode  :<input type=\"radio\" name=\"idmethod\" value=\"input2\" id=\"input2\"/></div>" . PHP_EOL;
-  $data .= "<br>" . PHP_EOL;
-  $data .="<div class=\"formField\">Call  :<input type=\"radio\" name=\"idmethod\" value=\"input3\" id=\"input3\"/></div>" . PHP_EOL;
+  $data ="Query Type:<br>" . PHP_EOL;
+  $data .= "<span> <input type=\"radio\" name=\"idmethod\" value=\"input1\" id=\"input1\">Band</span>" . PHP_EOL;
+  $data .= "<span> <input type=\"radio\" name=\"idmethod\" value=\"input2\" id=\"input2\">Mode</span>" . PHP_EOL;
+  $data .= "<span> <input type=\"radio\" name=\"idmethod\" value=\"input3\" id=\"input3\">Call</span>" . PHP_EOL;
+  $data .='<br>' . PHP_EOL;
+
   Return $data;
 }        
