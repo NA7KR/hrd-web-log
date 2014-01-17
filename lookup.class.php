@@ -12,27 +12,17 @@
  *
  * ************************************************************************* */
 require_once( 'db.class.php');
-
 class Lookup {
-
-
     private $db;
     public $variables;
-
     public function __construct($data = array()) {
         $this->db = new DB();
         $this->variables = $data;
     }
-
-
     public function count($field, $table) {
         if ($field) {
             return $this->db->single("SELECT COUNT(" . $field . ")" . " FROM " . $table);
         }
     }
-
 }
-
 ?>
-
-

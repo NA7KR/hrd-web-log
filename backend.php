@@ -220,16 +220,33 @@ function MakeViews()
 }
 
 #################################################
-# Make Views
+# Band Mode Call Options
 #################################################
 
-function OptionList()
-{
+function OptionList(){
   $data ="Query Type:<br>" . PHP_EOL;
-  $data .= "<span> <input type=\"radio\" name=\"idmethod\" value=\"input1\" id=\"input1\">Band</span>" . PHP_EOL;
-  $data .= "<span> <input type=\"radio\" name=\"idmethod\" value=\"input2\" id=\"input2\">Mode</span>" . PHP_EOL;
-  $data .= "<span> <input type=\"radio\" name=\"idmethod\" value=\"input3\" id=\"input3\">Call</span>" . PHP_EOL;
+  $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input1\" id=\"input1\">Band</span>" . PHP_EOL;
+  $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input2\" id=\"input2\">Mode</span>" . PHP_EOL;
+  $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input3\" id=\"input3\">Call</span>" . PHP_EOL;
+  $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input4\" id=\"input4\">State</span>" . PHP_EOL;
+  $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input5\" id=\"input5\">Country</span>" . PHP_EOL;
+  $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input6\" id=\"input6\"checked>None</span>" . PHP_EOL;
   $data .='<br>' . PHP_EOL;
+  Return $data;
+}  
+  
+#################################################
+# QTY Options
+#################################################
 
+function OptionQty(){
+  $data ='<select name="Qty"><option>' . PHP_EOL;
+  $data .='50</option><option>' . PHP_EOL;
+  $data .='100</option><option>' . PHP_EOL;
+  $data .='250</option><option>' . PHP_EOL;
+  $data .='500</option><option>' . PHP_EOL;
+  $data .='1000</option><option>' . PHP_EOL;
+  $data .='All</option>' . PHP_EOL;
+  $data .='</select><br>' . PHP_EOL;
   Return $data;
 }        

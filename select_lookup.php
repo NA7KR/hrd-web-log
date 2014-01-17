@@ -28,13 +28,13 @@ if (isset($_POST['Submit1'])) {
     $CALL_SEARCH = ($_POST['Call_Search']);
     $BAND = ($_POST['Band']);
     $MODE = ($_POST['Mode']);
-
+    $INPUT = ($_POST['optionlist']);
     include_once buildfiles($LOG);
     $data .= '<input type="hidden" name="Log" value=' . $_POST['Log'] . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
+ 
 }
-//clean input
-$CALL_SEARCH = safe("%" . $CALL_SEARCH . "%");
+
 
 $query = "SELECT COL_CALL AS `Call`,COL_BAND AS Band, COL_State AS State, COL_Country AS Country, \n"
         . "$dbnameHRD.$tbHRD.COL_PRIMARY_KEY AS ID, COL_TIME_OFF AS Date, CASE COL_EQSL_QSL_RCVD When 'Y' Then 'Yes' end AS EQSL, \n"
@@ -45,17 +45,24 @@ $query = "SELECT COL_CALL AS `Call`,COL_BAND AS Band, COL_State AS State, COL_Co
         . "ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` DESC";
 if ($SUBMIT == "true") {
 
-    if ($BAND <> "_Any_Band_") {
+    if ($INPUT == "input1") {
         $BAND = safe("%" . $BAND . "%");
         $query = str_replace("__REPLACE__", "COL_BAND like $BAND ", $query);
     }
-    elseif ($MODE <> "_Any_Mode_") {
+    elseif ($INPUT == "input2") {
         $MODE = safe("%" . $MODE . "%");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
         $query = str_replace("__REPLACE__", "COL_MODE like $MODE ", $query);
-    } else {
+    } 
+    elseif ($INPUT == "input3"){
+        $CALL_SEARCH = safe("%" . $CALL_SEARCH . "%");
         $query = str_replace("__REPLACE__", "COL_CALL like $CALL_SEARCH ", $query);
+    }
+    else
+    {
+       $CALL_SEARCH = safe("%" . $CALL_SEARCH . "%");
+       $query = str_replace("__REPLACE__", "COL_CALL like $CALL_SEARCH ", $query); 
     }
     if ($QTY == "All") {
         $id_lookup = $db->query("$query");
@@ -114,8 +121,10 @@ if ($SUBMIT == "true") {
             unset($row); // break the reference with the last element
         }
     endforeach;
+      
     $data = str_replace("USB", "SSB", $data);
     $data = str_replace("LSB", "SSB", $data);
+    
     $data .= "</table><br><br>" . PHP_EOL;
 } else {
     $data ='<table width=600 class="center2">'. PHP_EOL;
@@ -125,14 +134,14 @@ if ($SUBMIT == "true") {
     $data .=mode() . PHP_EOL;
     $data .='<span id="Call">' . PHP_EOL;
     $data .='Enter Callsign in the box' . PHP_EOL;
-    $data .='<input  type="lookup" name="Call_Search"><br>' . PHP_EOL;
+    $data .='<input  type="text" name="Call_Search"><br>' . PHP_EOL;
     $data .='</span>' . PHP_EOL;
     $data .='</td></tr>' . PHP_EOL;
     $data .='</table>' . PHP_EOL;
     $data .='<div class="c1">' . PHP_EOL;
     $data .='<span class="auto-style5">' . PHP_EOL;
     $data .='Select from drop down the amount of QLS would like to return<br>' . PHP_EOL;
-    $data .='<select name="Qty"><option>50</option><option>100</option><option>250</option><option>500</option><option>1000</option><option>All</option></select><br>' . PHP_EOL;
+    $data .=OptionQty() . PHP_EOL;
     $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;  
 }
 echo $data;
