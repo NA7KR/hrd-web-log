@@ -10,14 +10,32 @@
  *   (at your option) any later version.
  *
  * ************************************************************************ */
-    include_once (__DIR__ . '/../config.php');
-    require_once('db.class.php');
-    require_once("backend.php");
-    $db = new Db();
-    $find = '.jpg';
-    $i = 0; //style counter
-    $counter = 0;
-    $filePath = "/Awards";
+include_once (__DIR__ . '/../config.php');
+require_once('db.class.php');
+require_once("backend.php");
+$db = new Db();
+$i = 0; //style counter
+$x = 0; //
+$FileNoGroup = 0;
+$find = '.jpg';
+$fileMutiply = 1000;
+ $counter = 0;
+if (isset($_POST['Submit1'])) {
+    $LOG = \filter_input(\INPUT_POST, 'Log', \FILTER_SANITIZE_STRING);
+    $QTY = \filter_input(\INPUT_POST, 'Qty', \FILTER_SANITIZE_STRING);
+    $SUBMIT = \filter_input(\INPUT_POST, 'Submit', \FILTER_SANITIZE_STRING);
+    $CALL_SEARCH = \filter_input(\INPUT_POST, 'Call_Search', \FILTER_SANITIZE_STRING);
+    $BAND =  \filter_input(\INPUT_POST, 'Band', \FILTER_SANITIZE_STRING);
+    $MODE = \filter_input(\INPUT_POST, 'Mode', \FILTER_SANITIZE_STRING);
+    $STATE = \filter_input(\INPUT_POST, 'State', \FILTER_SANITIZE_STRING);
+    $COUNTRY = \filter_input(\INPUT_POST, 'Country', \FILTER_SANITIZE_STRING);
+    $INPUT = \filter_input(\INPUT_POST, 'optionlist', \FILTER_SANITIZE_STRING);
+    include_once buildfiles($LOG);
+    $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
+    $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
+ 
+}   
+
     $id_lookup = $db->query("SELECT COL_COUNTRY as 'Countrys Worked' FROM $dbnameHRD.$tbHRD WHERE 1 group by 1");
     //$id_lookup = $db->query("SELECT COL_COUNTRY as 'Countrys Worked' FROM $tbHRD WHERE 1 and COL_BAND LIKE $BAND and COL_MODE LIKE $MODE  group by 1");
     $data = "<table border='0' align='center'><tbody><tr><th>Country</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;

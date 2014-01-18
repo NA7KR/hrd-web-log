@@ -21,16 +21,17 @@ $FileNoGroup = 0;
 $find = '.jpg';
 $fileMutiply = 1000;
 if (isset($_POST['Submit1'])) {
-    $LOG = ($_POST['Log']);
-   //$QTY = ($_POST['Qty']);
-    $QTY = \filter_input(\INPUT_POST, 'Qty', \FILTER_SANITIZE_NUMBER_INT);
-    $SUBMIT = ($_POST['Submit']);
-    $CALL_SEARCH = ($_POST['Call_Search']);
-    $BAND = ($_POST['Band']);
-    $MODE = ($_POST['Mode']);
-    $INPUT = ($_POST['optionlist']);
+    $LOG = \filter_input(\INPUT_POST, 'Log', \FILTER_SANITIZE_STRING);
+    $QTY = \filter_input(\INPUT_POST, 'Qty', \FILTER_SANITIZE_STRING);
+    $SUBMIT = \filter_input(\INPUT_POST, 'Submit', \FILTER_SANITIZE_STRING);
+    $CALL_SEARCH = \filter_input(\INPUT_POST, 'Call_Search', \FILTER_SANITIZE_STRING);
+    $BAND =  \filter_input(\INPUT_POST, 'Band', \FILTER_SANITIZE_STRING);
+    $MODE = \filter_input(\INPUT_POST, 'Mode', \FILTER_SANITIZE_STRING);
+    $STATE = \filter_input(\INPUT_POST, 'State', \FILTER_SANITIZE_STRING);
+    $COUNTRY = \filter_input(\INPUT_POST, 'Country', \FILTER_SANITIZE_STRING);
+    $INPUT = \filter_input(\INPUT_POST, 'optionlist', \FILTER_SANITIZE_STRING);
     include_once buildfiles($LOG);
-    $data .= '<input type="hidden" name="Log" value=' . $_POST['Log'] . '>' . PHP_EOL;
+    $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
  
 }
@@ -41,36 +42,45 @@ $query = "SELECT COL_CALL AS `Call`,COL_BAND AS Band, COL_State AS State, COL_Co
         . "CASE COL_LOTW_QSL_RCVD  When 'V' Then 'Yes' end AS LOTW, CASE COL_QSL_RCVD When 'Y' Then 'Yes' end AS QSL, \n"
         . "COL_MODE AS `Mode`, $dbnameWEB.tb_Cards.COL_File_Path_E AS 'E QSL', $dbnameWEB.tb_Cards.COL_File_Path_F AS File, \n"
         . "$dbnameWEB.tb_Cards.COL_File_Path_B AS 'File Back' FROM $dbnameHRD.$tbHRD LEFT OUTER JOIN HRD_Web.tb_Cards \n"
-        . "ON $dbnameHRD.$tbHRD.COL_PRIMARY_KEY = $dbnameWEB.tb_Cards.COL_PRIMARY_KEY where __REPLACE__ \n"
+        . "ON $dbnameHRD.$tbHRD.COL_PRIMARY_KEY = $dbnameWEB.tb_Cards.COL_PRIMARY_KEY  __REPLACE__ \n"
         . "ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` DESC";
 if ($SUBMIT == "true") {
-
     if ($INPUT == "input1") {
         $BAND = safe("%" . $BAND . "%");
-        $query = str_replace("__REPLACE__", "COL_BAND like $BAND ", $query);
+        $query = str_replace("__REPLACE__", "where COL_BAND like $BAND ", $query);
     }
     elseif ($INPUT == "input2") {
         $MODE = safe("%" . $MODE . "%");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
-        $query = str_replace("__REPLACE__", "COL_MODE like $MODE ", $query);
+        $query = str_replace("__REPLACE__", "where COL_MODE like $MODE ", $query);
     } 
     elseif ($INPUT == "input3"){
         $CALL_SEARCH = safe("%" . $CALL_SEARCH . "%");
-        $query = str_replace("__REPLACE__", "COL_CALL like $CALL_SEARCH ", $query);
+        $query = str_replace("__REPLACE__", "where COL_CALL like $CALL_SEARCH ", $query);
+    }
+    elseif ($INPUT == "input4"){
+        $STATE = safe("%" . $STATE . "%");
+        $query = str_replace("__REPLACE__", "where COL_STATE like $STATE ", $query);
+    }
+    elseif ($INPUT == "input5"){
+        $COUNTRY = safe("%" . $COUNTRY . "%");
+        $query = str_replace("__REPLACE__", "where COL_COUNTRY like $COUNTRY ", $query);
+    }
+    elseif ($INPUT == "input6"){
+        $query = str_replace("__REPLACE__", " ", $query);
     }
     else
     {
-       $CALL_SEARCH = safe("%" . $CALL_SEARCH . "%");
-       $query = str_replace("__REPLACE__", "COL_CALL like $CALL_SEARCH ", $query); 
+       $query = str_replace("__REPLACE__", " ", $query); 
     }
     if ($QTY == "All") {
-        $id_lookup = $db->query("$query");
+        $id_lookup = $db->query("$query ");
     } else {
         $query = str_replace("DESC", "DESC Limit $QTY ", $query);
         $id_lookup = $db->query("$query");
     }
-
+    
     $data = "<table border='0' align='center'><tbody><tr>"
             . "<th>Call</th>"
             . "<th>Band</th>" . "<th>State</th>" . "<th>Country</th>"
@@ -132,6 +142,8 @@ if ($SUBMIT == "true") {
     $data .=OptionList(). PHP_EOL;
     $data .=band() . PHP_EOL;
     $data .=mode() . PHP_EOL;
+    $data .=OptionState() . PHP_EOL;
+    $data .=OptionCountry() . PHP_EOL;
     $data .='<span id="Call">' . PHP_EOL;
     $data .='Enter Callsign in the box' . PHP_EOL;
     $data .='<input  type="text" name="Call_Search"><br>' . PHP_EOL;
@@ -144,7 +156,10 @@ if ($SUBMIT == "true") {
     $data .=OptionQty() . PHP_EOL;
     $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;  
 }
-echo $data;
+    //$data .= "Input 1 " . $QTY;
+    //$data .= "Query " . $query;
+  
+ echo $data;
 $phpfile = __FILE__;
 footer($phpfile);
 ?>

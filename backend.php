@@ -249,4 +249,64 @@ function OptionQty(){
   $data .='All</option>' . PHP_EOL;
   $data .='</select><br>' . PHP_EOL;
   Return $data;
-}        
+}     
+
+#################################################
+# Country Options
+#################################################
+
+function OptionCountry(){
+    include (__DIR__ . '/../config.php');
+    require_once('db.class.php');
+    require_once("backend.php");
+    $db = new Db();    
+    $id_lookup = $db->query("SELECT COL_COUNTRY as 'Countrys Worked' FROM $dbnameHRD.$tbHRD WHERE 1 group by 1");
+    $data ='<span id="Country">' . PHP_EOL;
+    $data .='<select name="Country">' . PHP_EOL;
+    foreach ($id_lookup as $row): 
+        {  
+           $Name = $row['Countrys Worked'];
+           $data .='<option>' . $Name . '</option>' . PHP_EOL;
+           unset($row); // break the reference with the last element
+        }
+   endforeach;
+   $data .='</select>' . PHP_EOL;
+   $data .='</span>' . PHP_EOL;
+   Return $data;
+}
+
+#################################################
+# State Options
+#################################################
+
+function OptionState(){
+    include (__DIR__ . '/../config.php');
+    require_once('db.class.php');
+    require_once("backend.php");
+    $db = new Db();    
+    //$id_lookup = $db->query("SELECT COL_STATE as 'State Worked' FROM $dbnameHRD.$tbHRD WHERE 1 group by 1");
+    $SQL = "SELECT distinct COL_STATE as 'State Worked', COL_COUNTRY, 
+        case when State is null then COL_STATE else State end as 'State'
+        FROM NA7KR.TABLE_HRD_CONTACTS_V01 
+        left outer JOIN HRD_Web.tb_States_Countries 
+        on COL_STATE = 
+        HRD_Web.tb_States_Countries.ST 
+        Where COL_STATE is not null
+        order by 2,1";
+
+     $id_lookup = $db->query($SQL);
+    
+    $data ='<span id="State">' . PHP_EOL;
+    $data .='<select name="State">' . PHP_EOL;
+    foreach ($id_lookup as $row): 
+        {  
+            $Name = $row['State'];
+            $Value = $row['State Worked']; 
+            $data .= '<option value=' . $Value .' >' . $Name . '</option>' . PHP_EOL;
+            unset($row); // break the reference with the last element
+        }
+   endforeach;
+   $data .='</select>' . PHP_EOL;
+   $data .='</span>' . PHP_EOL;
+   Return $data;
+}
