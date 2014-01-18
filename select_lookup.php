@@ -36,14 +36,22 @@ if (isset($_POST['Submit1'])) {
  
 }
 
-
-$query = "SELECT COL_CALL AS `Call`,COL_BAND AS Band, COL_State AS State, COL_Country AS Country, \n"
-        . "$dbnameHRD.$tbHRD.COL_PRIMARY_KEY AS ID, COL_TIME_OFF AS Date, CASE COL_EQSL_QSL_RCVD When 'Y' Then 'Yes' end AS EQSL, \n"
-        . "CASE COL_LOTW_QSL_RCVD  When 'V' Then 'Yes' end AS LOTW, CASE COL_QSL_RCVD When 'Y' Then 'Yes' end AS QSL, \n"
-        . "COL_MODE AS `Mode`, $dbnameWEB.tb_Cards.COL_File_Path_E AS 'E QSL', $dbnameWEB.tb_Cards.COL_File_Path_F AS File, \n"
-        . "$dbnameWEB.tb_Cards.COL_File_Path_B AS 'File Back' FROM $dbnameHRD.$tbHRD LEFT OUTER JOIN HRD_Web.tb_Cards \n"
+$query = "SELECT COL_CALL AS `Call`, \n"
+        . "COL_BAND AS Band, \n"
+        . "COL_State AS State, \n"
+        . "COL_Country AS Country, \n"
+        . "$dbnameHRD.$tbHRD.COL_PRIMARY_KEY AS ID, \n"
+        . " COL_TIME_OFF AS Date, \n"
+        . "CASE COL_EQSL_QSL_RCVD When 'Y' Then 'Yes' end AS EQSL, \n"
+        . "CASE COL_LOTW_QSL_RCVD  When 'V' Then 'Yes' end AS LOTW, \n"
+        . "CASE COL_QSL_RCVD When 'Y' Then 'Yes' end AS QSL, \n"
+        . "COL_MODE AS `Mode`, $dbnameWEB.tb_Cards.COL_File_Path_E AS 'E QSL', \n"
+        . "$dbnameWEB.tb_Cards.COL_File_Path_F AS File, \n"
+        . "$dbnameWEB.tb_Cards.COL_File_Path_B AS 'File Back' \n"
+        . "FROM $dbnameHRD.$tbHRD LEFT OUTER JOIN HRD_Web.tb_Cards \n"
         . "ON $dbnameHRD.$tbHRD.COL_PRIMARY_KEY = $dbnameWEB.tb_Cards.COL_PRIMARY_KEY  __REPLACE__ \n"
-        . "ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` DESC";
+        . "ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` \n"
+        . "DESC";
 if ($SUBMIT == "true") {
     if ($INPUT == "input1") {
         $BAND = safe("%" . $BAND . "%");
@@ -136,10 +144,11 @@ if ($SUBMIT == "true") {
     $data = str_replace("LSB", "SSB", $data);
     
     $data .= "</table><br><br>" . PHP_EOL;
+    $data .=OptionList(false,false,false,false,false,false). PHP_EOL;
 } else {
     $data ='<table width=600 class="center2">'. PHP_EOL;
     $data .='<tr><td>'. PHP_EOL;
-    $data .=OptionList(). PHP_EOL;
+    $data .=OptionList(true,true,true,true,true,true). PHP_EOL;
     $data .=band() . PHP_EOL;
     $data .=mode() . PHP_EOL;
     $data .=OptionState() . PHP_EOL;

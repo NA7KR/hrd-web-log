@@ -76,6 +76,7 @@
             </div>
             <br><br>
         <?php
+        echo \OptionList(false,false,false,false,false,false). \PHP_EOL;
         $phpfile = __FILE__ ;
         footer($phpfile);
         } 
