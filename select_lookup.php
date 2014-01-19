@@ -25,7 +25,7 @@ if (isset($_POST['Submit1'])) {
     $QTY = \filter_input(\INPUT_POST, 'Qty', \FILTER_SANITIZE_STRING);
     $SUBMIT = \filter_input(\INPUT_POST, 'Submit', \FILTER_SANITIZE_STRING);
     $CALL_SEARCH = \filter_input(\INPUT_POST, 'Call_Search', \FILTER_SANITIZE_STRING);
-    $BAND =  \filter_input(\INPUT_POST, 'Band', \FILTER_SANITIZE_STRING);
+    $BAND = \filter_input(\INPUT_POST, 'Band', \FILTER_SANITIZE_STRING);
     $MODE = \filter_input(\INPUT_POST, 'Mode', \FILTER_SANITIZE_STRING);
     $STATE = \filter_input(\INPUT_POST, 'State', \FILTER_SANITIZE_STRING);
     $COUNTRY = \filter_input(\INPUT_POST, 'Country', \FILTER_SANITIZE_STRING);
@@ -33,7 +33,6 @@ if (isset($_POST['Submit1'])) {
     include_once buildfiles($LOG);
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
- 
 }
 
 $query = "SELECT COL_CALL AS `Call`, \n"
@@ -56,31 +55,24 @@ if ($SUBMIT == "true") {
     if ($INPUT == "input1") {
         $BAND = safe("%" . $BAND . "%");
         $query = str_replace("__REPLACE__", "where COL_BAND like $BAND ", $query);
-    }
-    elseif ($INPUT == "input2") {
+    } elseif ($INPUT == "input2") {
         $MODE = safe("%" . $MODE . "%");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
         $query = str_replace("__REPLACE__", "where COL_MODE like $MODE ", $query);
-    } 
-    elseif ($INPUT == "input3"){
+    } elseif ($INPUT == "input3") {
         $CALL_SEARCH = safe("%" . $CALL_SEARCH . "%");
         $query = str_replace("__REPLACE__", "where COL_CALL like $CALL_SEARCH ", $query);
-    }
-    elseif ($INPUT == "input4"){
+    } elseif ($INPUT == "input4") {
         $STATE = safe("%" . $STATE . "%");
         $query = str_replace("__REPLACE__", "where COL_STATE like $STATE ", $query);
-    }
-    elseif ($INPUT == "input5"){
+    } elseif ($INPUT == "input5") {
         $COUNTRY = safe("%" . $COUNTRY . "%");
         $query = str_replace("__REPLACE__", "where COL_COUNTRY like $COUNTRY ", $query);
-    }
-    elseif ($INPUT == "input6"){
+    } elseif ($INPUT == "input6") {
         $query = str_replace("__REPLACE__", " ", $query);
-    }
-    else
-    {
-       $query = str_replace("__REPLACE__", " ", $query); 
+    } else {
+        $query = str_replace("__REPLACE__", " ", $query);
     }
     if ($QTY == "All") {
         $id_lookup = $db->query("$query ");
@@ -88,7 +80,7 @@ if ($SUBMIT == "true") {
         $query = str_replace("DESC", "DESC Limit $QTY ", $query);
         $id_lookup = $db->query("$query");
     }
-    
+
     $data = "<table border='0' align='center'><tbody><tr>"
             . "<th>Call</th>"
             . "<th>Band</th>" . "<th>State</th>" . "<th>Country</th>"
@@ -139,16 +131,16 @@ if ($SUBMIT == "true") {
             unset($row); // break the reference with the last element
         }
     endforeach;
-      
+
     $data = str_replace("USB", "SSB", $data);
     $data = str_replace("LSB", "SSB", $data);
-    
+
     $data .= "</table><br><br>" . PHP_EOL;
-    $data .=OptionList(false,false,false,false,false,false). PHP_EOL;
+    $data .=OptionList(false, false, false, false, false, false) . PHP_EOL;
 } else {
-    $data ='<table width=600 class="center2">'. PHP_EOL;
-    $data .='<tr><td>'. PHP_EOL;
-    $data .=OptionList(true,true,true,true,true,true). PHP_EOL;
+    $data = '<table width=600 class="center2">' . PHP_EOL;
+    $data .='<tr><td>' . PHP_EOL;
+    $data .=OptionList(true, true, true, true, true, true) . PHP_EOL;
     $data .=band() . PHP_EOL;
     $data .=mode() . PHP_EOL;
     $data .=OptionState() . PHP_EOL;
@@ -163,12 +155,12 @@ if ($SUBMIT == "true") {
     $data .='<span class="auto-style5">' . PHP_EOL;
     $data .='Select from drop down the amount of QLS would like to return<br>' . PHP_EOL;
     $data .=OptionQty() . PHP_EOL;
-    $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;  
+    $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;
 }
-    //$data .= "Input 1 " . $QTY;
-    //$data .= "Query " . $query;
-  
- echo $data;
+//$data .= "Input 1 " . $QTY;
+//$data .= "Query " . $query;
+
+echo $data;
 $phpfile = __FILE__;
 footer($phpfile);
 ?>

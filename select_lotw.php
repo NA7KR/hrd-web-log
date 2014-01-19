@@ -1,4 +1,5 @@
 <?php
+
 /* * ***********************************************************************
  * 			NA7KR Log Program 
  * *************************************************************************
@@ -17,12 +18,37 @@ $db = new Db();
 $i = 0; //style counter
 $x = 0; //
 $counter = 0;
-$FileNoGroup = 0;
-$find = '.jpg';
-$fileMutiply = 1000;
-
-
-    $id_lookup = $db->query("SELECT `COL_CALL` as 'Call', `COL_LOTW_QSL_RCVD` as 'Confirmed' FROM $dbnameHRD.$tbHRD Where `COL_LOTW_QSL_RCVD` = 'V'");
+if (isset($_POST['Submit1'])) {
+    $LOG = \filter_input(\INPUT_POST, 'Log', \FILTER_SANITIZE_STRING);
+    $SUBMIT = \filter_input(\INPUT_POST, 'Submit', \FILTER_SANITIZE_STRING);
+    $BAND = \filter_input(\INPUT_POST, 'Band', \FILTER_SANITIZE_STRING);
+    $MODE = \filter_input(\INPUT_POST, 'Mode', \FILTER_SANITIZE_STRING);
+    $INPUT = \filter_input(\INPUT_POST, 'optionlist', \FILTER_SANITIZE_STRING);
+    include_once buildfiles($LOG);
+    $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
+    $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
+}
+$query = "SELECT `COL_CALL` as 'Call', `COL_LOTW_QSL_RCVD` as 'Confirmed' FROM $dbnameHRD.$tbHRD Where `COL_LOTW_QSL_RCVD` = 'V'";
+if ($SUBMIT == "true") {
+    if ($INPUT == "input1") {
+        $BAND = safe("%" . $BAND . "%");
+        $query = str_replace("__REPLACE__", "COL_BAND like $BAND ", $query);
+    } elseif ($INPUT == "input2") {
+        $MODE = safe("%" . $MODE . "%");
+        $MODE = str_replace("USB", "SSB", $MODE);
+        $MODE = str_replace("LSB", "SSB", $MODE);
+        $query = str_replace("__REPLACE__", "COL_MODE like $MODE ", $query);
+    } elseif ($INPUT == "input4") {
+        $STATE = safe("%" . $STATE . "%");
+        $query = str_replace("__REPLACE__", "COL_STATE like $STATE ", $query);
+    } elseif ($INPUT == "input5") {
+        $COUNTRY = safe("%" . $COUNTRY . "%");
+        $query = str_replace("__REPLACE__", "COL_COUNTRY like $COUNTRY ", $query);
+    } elseif ($INPUT == "input6") {
+        $query = str_replace("__REPLACE__", " ", $query);
+    } else {
+        $query = str_replace("__REPLACE__", " ", $query);
+    }
     
     $data = "<table border='0' align='center'><tbody><tr>"
             . "<th>Call</th>" . "<th>Confirmed</th>" 
@@ -38,8 +64,20 @@ $fileMutiply = 1000;
     endforeach;
     $data .= "</table>" . PHP_EOL;
     $data .= "<p style='text-align: center'><BR> Counter " . $counter . "</p><BR>". PHP_EOL;
-
+    $data .=OptionList(false, false, false, false, false, false) . PHP_EOL; 
+} else {
+    $data = '<table width=500 class="center2">' . PHP_EOL;
+    $data .='<tr><td>' . PHP_EOL;
+    $data .=OptionList(true, true, false, false, false, true) . PHP_EOL;
+    $data .=band() . PHP_EOL;
+    $data .=mode() . PHP_EOL;
+    $data .='</td></tr>' . PHP_EOL;
+    $data .='</table>' . PHP_EOL;
+    $data .='<div class="c1">' . PHP_EOL;
+    $data .='<span class="auto-style5">' . PHP_EOL;
+    $data .='none will return all<br>' . PHP_EOL;
+    $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;
+}
 echo $data;
 $phpfile = __FILE__;
 footer($phpfile);
-?>

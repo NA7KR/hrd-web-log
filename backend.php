@@ -78,10 +78,10 @@ function buildfiles($Key) {
 #################################################
 
 function safe($value) {
-	$db = new Db();
-	return $db->quote($value);
+    $db = new Db();
+    return $db->quote($value);
 //    return mysql_real_escape_string($value);
-	//return $value;
+    //return $value;
 }
 
 #################################################
@@ -135,7 +135,7 @@ function band() {
             $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked name="Band">' . $row['COL_BAND'] . PHP_EOL;
         }
     endforeach;
-    $select .='</span>'. PHP_EOL;
+    $select .='</span>' . PHP_EOL;
     return($select);
 }
 
@@ -161,7 +161,7 @@ function mode() {
             }
         }
     endforeach;
-    $select .='</span>'. PHP_EOL;
+    $select .='</span>' . PHP_EOL;
     return($select);
 }
 
@@ -194,176 +194,153 @@ function country($i) {
 # Make Views
 #################################################
 
-function MakeViews()
-{
+function MakeViews() {
     include (__DIR__ . '/../config.php');
     require_once('lookup.class.php');
     $db = new Db();
     $id_lookup = $db->query("create or replace view $dbnameHRD.bands  as select col_band from $dbnameHRD.$tbHRD group by 1");
     $id_lookup = $db->query("create or replace view $dbnameHRD.modes as select col_mode from $dbnameHRD.$tbHRD group by 1");
     $id_lookup = $db->query("create or replace view $dbnameHRD.towork as  \n"
-    . "select col_mode, \n"
-    . "col_band, \n"
-    . "STATE,ST, \n"
-    . "COUNTRY, \n"
-    . "sCOUNTRY  \n"
-    . "FROM $dbnameWEB.$tbStates, $dbnameHRD.modes, $dbnameHRD.bands  \n"
-    . "WHERE concat( col_mode,'-', col_band,'-', ST,'-', COUNTRY ) NOT IN ( \n"
-    . "SELECT concat( COL_MODE,'-', COL_BAND,'-', COL_STATE,'-', COL_COUNTRY )AS the_key  \n"
-    . "FROM  $dbnameHRD.$tbHRD   \n"
-    . "where COL_STATE is not null)  \n");
+            . "select col_mode, \n"
+            . "col_band, \n"
+            . "STATE,ST, \n"
+            . "COUNTRY, \n"
+            . "sCOUNTRY  \n"
+            . "FROM $dbnameWEB.$tbStates, $dbnameHRD.modes, $dbnameHRD.bands  \n"
+            . "WHERE concat( col_mode,'-', col_band,'-', ST,'-', COUNTRY ) NOT IN ( \n"
+            . "SELECT concat( COL_MODE,'-', COL_BAND,'-', COL_STATE,'-', COL_COUNTRY )AS the_key  \n"
+            . "FROM  $dbnameHRD.$tbHRD   \n"
+            . "where COL_STATE is not null)  \n");
 
     $id_lookup = $db->query("create or replace view $dbnameHRD.zone_to_work as  \n"
-    . "SELECT col_mode, col_band, zones \n"
-    . "FROM $dbnameWEB.tb_zones, $dbnameHRD.modes, $dbnameHRD.bands \n"
-    . "WHERE concat( col_mode,'-', col_band,'-', Zones ) NOT IN (\n"
-    . "SELECT concat( COL_MODE,'-', COL_BAND,'-', COL_ITUZ )AS the_key \n"
-    . "FROM $dbnameHRD.$tbHRD \n"
-    . "where COL_ITUZ is not null) \n");
-	
+            . "SELECT col_mode, col_band, zones \n"
+            . "FROM $dbnameWEB.tb_zones, $dbnameHRD.modes, $dbnameHRD.bands \n"
+            . "WHERE concat( col_mode,'-', col_band,'-', Zones ) NOT IN (\n"
+            . "SELECT concat( COL_MODE,'-', COL_BAND,'-', COL_ITUZ )AS the_key \n"
+            . "FROM $dbnameHRD.$tbHRD \n"
+            . "where COL_ITUZ is not null) \n");
 }
 
 #################################################
 # Band Mode Call Options
 #################################################
 
-function OptionList($key1,$key2,$key3,$key4,$key5,$key6){
-    if ($key1 == true or $key2 == true or  $key3 == true or  $key4 == true or $key5 == true )
-    {
-        $data ="Query Type:<br>" . PHP_EOL;
+function OptionList($key1, $key2, $key3, $key4, $key5, $key6) {
+    if ($key1 == true or $key2 == true or $key3 == true or $key4 == true or $key5 == true) {
+        $data = "Query Type:<br>" . PHP_EOL;
     }
-  if ($key1 == true)
-  {
-    $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input1\" id=\"input1\">Band</span>" . PHP_EOL;
-  }
-    else 
-        { 
-          $data .= '<span id="input1"></span>' . PHP_EOL;
-          $data .='<span id="Band"></span>' . PHP_EOL;
-        }
-   // key2
-  if ($key2 == true)
-  {
-    $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input2\" id=\"input2\">Mode</span>" . PHP_EOL;
-  }
-    else 
-        { 
-          $data .= '<span id="input2"></span>' . PHP_EOL;
-          $data .='<span id="Mode"></span>' . PHP_EOL;
-        }
-  // key3
-  if ($key3 == true)
-    {
-      $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input3\" id=\"input3\">Call</span>" . PHP_EOL;
+    if ($key1 == true) {
+        $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input1\" id=\"input1\">Band</span>" . PHP_EOL;
+    } else {
+        $data .= '<span id="input1"></span>' . PHP_EOL;
+        $data .='<span id="Band"></span>' . PHP_EOL;
     }
-    else 
-        { 
-          $data .= '<span id="input3"></span>' . PHP_EOL;
-          $data .='<span id="Call"></span>' . PHP_EOL;
-        }
-  // key 4
-  if ($key4 == true)
-    {
-      $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input4\" id=\"input4\">State</span>" . PHP_EOL;
+    // key2
+    if ($key2 == true) {
+        $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input2\" id=\"input2\">Mode</span>" . PHP_EOL;
+    } else {
+        $data .= '<span id="input2"></span>' . PHP_EOL;
+        $data .='<span id="Mode"></span>' . PHP_EOL;
     }
-    else 
-        { 
-          $data .= '<span id="input4"></span>' . PHP_EOL;
-          $data .='<span id="State"></span>' . PHP_EOL;
-        }
-  // key 5
-  if ($key5 == true)
-    {
-      $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input5\" id=\"input5\">Country</span>" . PHP_EOL;
+    // key3
+    if ($key3 == true) {
+        $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input3\" id=\"input3\">Call</span>" . PHP_EOL;
+    } else {
+        $data .= '<span id="input3"></span>' . PHP_EOL;
+        $data .='<span id="Call"></span>' . PHP_EOL;
     }
-    else 
-        { 
-          $data .='<span id="input5"></span>' . PHP_EOL;
-          $data .='<span id="Country"></span>' . PHP_EOL;
-        }
-  // key6
-  if ($key5 == true)  
-    {
+    // key 4
+    if ($key4 == true) {
+        $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input4\" id=\"input4\">State</span>" . PHP_EOL;
+    } else {
+        $data .= '<span id="input4"></span>' . PHP_EOL;
+        $data .='<span id="State"></span>' . PHP_EOL;
+    }
+    // key 5
+    if ($key5 == true) {
+        $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input5\" id=\"input5\">Country</span>" . PHP_EOL;
+    } else {
+        $data .='<span id="input5"></span>' . PHP_EOL;
+        $data .='<span id="Country"></span>' . PHP_EOL;
+    }
+    // key6
+    if ($key6 == true) {
         $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input6\" id=\"input6\"checked>None</span>" . PHP_EOL;
+    } else {
+        $data .='<span id="input6"></span>' . PHP_EOL;
     }
-    else 
-        { 
-          $data .='<span id="input6"></span>' . PHP_EOL;
-        }
-  $data .='<br>' . PHP_EOL;
-  Return $data;
-}  
-  
+    $data .='<br>' . PHP_EOL;
+    Return $data;
+}
+
 #################################################
 # QTY Options
 #################################################
 
-function OptionQty(){
-  $data ='<select name="Qty"><option>' . PHP_EOL;
-  $data .='50</option><option>' . PHP_EOL;
-  $data .='100</option><option>' . PHP_EOL;
-  $data .='250</option><option>' . PHP_EOL;
-  $data .='500</option><option>' . PHP_EOL;
-  $data .='1000</option><option>' . PHP_EOL;
-  $data .='All</option>' . PHP_EOL;
-  $data .='</select><br>' . PHP_EOL;
-  Return $data;
-}     
+function OptionQty() {
+    $data = '<select name="Qty"><option>' . PHP_EOL;
+    $data .='50</option><option>' . PHP_EOL;
+    $data .='100</option><option>' . PHP_EOL;
+    $data .='250</option><option>' . PHP_EOL;
+    $data .='500</option><option>' . PHP_EOL;
+    $data .='1000</option><option>' . PHP_EOL;
+    $data .='All</option>' . PHP_EOL;
+    $data .='</select><br>' . PHP_EOL;
+    Return $data;
+}
 
 #################################################
 # Country Options
 #################################################
 
-function OptionCountry(){
+function OptionCountry() {
     include (__DIR__ . '/../config.php');
     require_once('db.class.php');
     require_once("backend.php");
-    $db = new Db();    
+    $db = new Db();
     $id_lookup = $db->query("SELECT COL_COUNTRY as 'Countrys Worked' FROM $dbnameHRD.$tbHRD WHERE 1 group by 1");
-    $data ='<span id="Country">' . PHP_EOL;
+    $data = '<span id="Country">' . PHP_EOL;
     $data .='<select name="Country">' . PHP_EOL;
-    foreach ($id_lookup as $row): 
-        {  
-           $Name = $row['Countrys Worked'];
-           $data .='<option>' . $Name . '</option>' . PHP_EOL;
-           unset($row); // break the reference with the last element
+    foreach ($id_lookup as $row): {
+            $Name = $row['Countrys Worked'];
+            $data .='<option>' . $Name . '</option>' . PHP_EOL;
+            unset($row); // break the reference with the last element
         }
-   endforeach;
-   $data .='</select>' . PHP_EOL;
-   $data .='</span>' . PHP_EOL;
-   Return $data;
+    endforeach;
+    $data .='</select>' . PHP_EOL;
+    $data .='</span>' . PHP_EOL;
+    Return $data;
 }
 
 #################################################
 # State Options
 #################################################
 
-function OptionState(){
+function OptionState() {
     include (__DIR__ . '/../config.php');
     require_once('db.class.php');
     require_once("backend.php");
-    $db = new Db();    
+    $db = new Db();
     $SQL = "SELECT distinct COL_STATE as 'State Worked',\n"
-          . "COL_COUNTRY, \n"
-          . "case when State is null then COL_STATE else State end as 'State' \n"
-          . "FROM $dbnameHRD.$tbHRD \n"
-          . "left outer JOIN $dbnameWEB.tb_States_Countries \n"
-          . "on COL_STATE = $dbnameWEB.tb_States_Countries.ST \n"
-          . "Where COL_STATE is not null \n"
-          . "order by 2,1";
+            . "COL_COUNTRY, \n"
+            . "case when State is null then COL_STATE else State end as 'State' \n"
+            . "FROM $dbnameHRD.$tbHRD \n"
+            . "left outer JOIN $dbnameWEB.tb_States_Countries \n"
+            . "on COL_STATE = $dbnameWEB.tb_States_Countries.ST \n"
+            . "Where COL_STATE is not null \n"
+            . "order by 2,1";
 
     $id_lookup = $db->query($SQL);
-    $data ='<span id="State">' . PHP_EOL;
+    $data = '<span id="State">' . PHP_EOL;
     $data .='<select name="State">' . PHP_EOL;
-    foreach ($id_lookup as $row): 
-        {  
+    foreach ($id_lookup as $row): {
             $Name = $row['State'];
-            $Value = $row['State Worked']; 
-            $data .= '<option value=' . $Value .' >' . $Name . '</option>' . PHP_EOL;
+            $Value = $row['State Worked'];
+            $data .= '<option value=' . $Value . ' >' . $Name . '</option>' . PHP_EOL;
             unset($row); // break the reference with the last element
         }
-   endforeach;
-   $data .='</select>' . PHP_EOL;
-   $data .='</span>' . PHP_EOL;
-   Return $data;
+    endforeach;
+    $data .='</select>' . PHP_EOL;
+    $data .='</span>' . PHP_EOL;
+    Return $data;
 }

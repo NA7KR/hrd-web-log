@@ -26,7 +26,7 @@ if (isset($_POST['Submit1'])) {
     $QTY = \filter_input(\INPUT_POST, 'Qty', \FILTER_SANITIZE_STRING);
     $SUBMIT = \filter_input(\INPUT_POST, 'Submit', \FILTER_SANITIZE_STRING);
     $CALL_SEARCH = \filter_input(\INPUT_POST, 'Call_Search', \FILTER_SANITIZE_STRING);
-    $BAND =  \filter_input(\INPUT_POST, 'Band', \FILTER_SANITIZE_STRING);
+    $BAND = \filter_input(\INPUT_POST, 'Band', \FILTER_SANITIZE_STRING);
     $MODE = \filter_input(\INPUT_POST, 'Mode', \FILTER_SANITIZE_STRING);
     $STATE = \filter_input(\INPUT_POST, 'State', \FILTER_SANITIZE_STRING);
     $COUNTRY = \filter_input(\INPUT_POST, 'Country', \FILTER_SANITIZE_STRING);
@@ -34,9 +34,8 @@ if (isset($_POST['Submit1'])) {
     include_once buildfiles($LOG);
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
- 
 }
-$query= "SELECT date(`COL_TIME_OFF`)AS`Date` , \n"
+$query = "SELECT date(`COL_TIME_OFF`)AS`Date` , \n"
         . " `COL_CALL`AS`CallSign`, \n"
         . " `COL_MODE`AS`Mode` , \n"
         . " `COL_BAND`AS`Band` , \n"
@@ -46,36 +45,26 @@ $query= "SELECT date(`COL_TIME_OFF`)AS`Date` , \n"
         . "`COL_QTH`AS`QTH` FROM $dbnameHRD.$tbHRD \n"
         . " __REPLACE__ \n"
         . "ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` \n"
-        . "DESC ";  
+        . "DESC ";
 if ($SUBMIT == "true") {
     if ($INPUT == "input1") {
         $BAND = safe("%" . $BAND . "%");
         $query = str_replace("__REPLACE__", "where COL_BAND like $BAND ", $query);
-    }
-    elseif ($INPUT == "input2") {
+    } elseif ($INPUT == "input2") {
         $MODE = safe("%" . $MODE . "%");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
         $query = str_replace("__REPLACE__", "where COL_MODE like $MODE ", $query);
-    } 
-    elseif ($INPUT == "input3"){
-        $CALL_SEARCH = safe("%" . $CALL_SEARCH . "%");
-        $query = str_replace("__REPLACE__", "where COL_CALL like $CALL_SEARCH ", $query);
-    }
-    elseif ($INPUT == "input4"){
+    } elseif ($INPUT == "input4") {
         $STATE = safe("%" . $STATE . "%");
         $query = str_replace("__REPLACE__", "where COL_STATE like $STATE ", $query);
-    }
-    elseif ($INPUT == "input5"){
+    } elseif ($INPUT == "input5") {
         $COUNTRY = safe("%" . $COUNTRY . "%");
         $query = str_replace("__REPLACE__", "where COL_COUNTRY like $COUNTRY ", $query);
-    }
-    elseif ($INPUT == "input6"){
+    } elseif ($INPUT == "input6") {
         $query = str_replace("__REPLACE__", " ", $query);
-    }
-    else
-    {
-       $query = str_replace("__REPLACE__", " ", $query); 
+    } else {
+        $query = str_replace("__REPLACE__", " ", $query);
     }
     if ($QTY == "All") {
         $id_lookup = $db->query("$query ");
@@ -84,7 +73,7 @@ if ($SUBMIT == "true") {
         $id_lookup = $db->query("$query");
     }
     $id_lookup = $db->query($query);
-    
+
     $data = "<table border='0' align='center'><tbody><tr>"
             . "<th>Date</th>"
             . "<th>CallSign</th>"
@@ -93,30 +82,28 @@ if ($SUBMIT == "true") {
             . "<th>Grid</th>"
             . "<th>Contury</th>"
             . "<th>State</th>"
-            . "</tr><tr bgcolor='#5e5eff'>". PHP_EOL;
-    foreach ($id_lookup as $row): 
-        {  
+            . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
+    foreach ($id_lookup as $row): {
             $fileName = $row['File'];
-            $data .=  "<td>" . $row['Date'] . "</td>";
-            $data .=  "<td>" . qrzcom_interface($row['CallSign']) . "</td>";
-            $data .=  "<td>" . $row['Mode'] . "</td>";
-            $data .=  "<td>" . $row['Band'] . "</td>";
-            $data .=  "<td>" . $row['Grid'] . "</td>";
-            $data .=  "<td>" . $row['Country'] . "</td>";
-            $data .=  "<td>" . $row['State'] . "</td>" . grid_style($i) . PHP_EOL;
+            $data .= "<td>" . $row['Date'] . "</td>";
+            $data .= "<td>" . qrzcom_interface($row['CallSign']) . "</td>";
+            $data .= "<td>" . $row['Mode'] . "</td>";
+            $data .= "<td>" . $row['Band'] . "</td>";
+            $data .= "<td>" . $row['Grid'] . "</td>";
+            $data .= "<td>" . $row['Country'] . "</td>";
+            $data .= "<td>" . $row['State'] . "</td>" . grid_style($i) . PHP_EOL;
             $counter++;
-            $i++;   
+            $i++;
             unset($row); // break the reference with the last element
         }
     endforeach;
     $data .= "</table>" . PHP_EOL;
-    $data .= "<p style='text-align: center'><BR> Counter " . $counter . "</p><BR>". PHP_EOL;
-    $data .=OptionList(false,false,false,false,false,false). PHP_EOL;
-}
-else {
-    $data ='<table width=600 class="center2">'. PHP_EOL;
-    $data .='<tr><td>'. PHP_EOL;
-    $data .=OptionList(true,true,false,true,true,true). PHP_EOL;
+    $data .= "<p style='text-align: center'><BR> Counter " . $counter . "</p><BR>" . PHP_EOL;
+    $data .=OptionList(false, false, false, false, false, false) . PHP_EOL;
+} else {
+    $data = '<table width=600 class="center2">' . PHP_EOL;
+    $data .='<tr><td>' . PHP_EOL;
+    $data .=OptionList(true, true, false, true, true, true) . PHP_EOL;
     $data .=band() . PHP_EOL;
     $data .=mode() . PHP_EOL;
     $data .=OptionState() . PHP_EOL;
@@ -127,8 +114,8 @@ else {
     $data .='<span class="auto-style5">' . PHP_EOL;
     $data .='Select from drop down the amount of QLS would like to return<br>' . PHP_EOL;
     $data .=OptionQty() . PHP_EOL;
-    $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;  
+    $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;
 }
-    echo $data;
-    $phpfile = __FILE__ ;
-    footer($phpfile);
+echo $data;
+$phpfile = __FILE__;
+footer($phpfile);
