@@ -31,20 +31,20 @@ if (isset($_POST['Submit1'])) {
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 };
-$query = "SELECT $dbnameWEB.tb_zones.zones as `ITU Zone to Work`"
-    . "FROM $dbnameWEB.tb_zones left outer join $dbnameHRD.$tbHRD on $dbnameWEB.tb_zones.zones = $dbnameHRD.$tbHRD.COL_ITUZ  "
+$query = "SELECT $dbnameWEB.tb_zones.zones as `ITU Zone to Work` \n"
+    . "FROM $dbnameWEB.tb_zones left outer join $dbnameHRD.$tbHRD on $dbnameWEB.tb_zones.zones = $dbnameHRD.$tbHRD.COL_ITUZ  \n"
     . "where COL_ITUZ is null __REPLACE__ ";
 
 if ($SUBMIT == "true") {
-    if ($INPUT == "input1") {
+    if ($INPUT == "input_band") {
         $BAND = safe("%" . $BAND . "%");
         $query = str_replace("__REPLACE__", " and COL_BAND like $BAND ", $query);
-    } elseif ($INPUT == "input2") {
+    } elseif ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
         $query = str_replace("__REPLACE__", "and COL_MODE like $MODE ", $query);
-    } elseif ($INPUT == "input6") {
+    } elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
     }
     $id_lookup = $db->query($query);

@@ -11,6 +11,12 @@
  *   (at your option) any later version.
  *
  * ************************************************************************ */
+$first = "false";
+$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+if ($first <> True)
+{
+    header( 'Location: index.php' ) ;
+}
 include_once (__DIR__ . '/../config.php');
 require_once('db.class.php');
 require_once("backend.php");
@@ -34,38 +40,38 @@ if (isset($_POST['Submit1'])) {
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
 
-$query = "SELECT $dbnameWEB.$tbStates.State as `State`, "
-        . "$dbnameWEB.$tbStates.ST as `State` "
-        . "FROM $dbnameWEB.$tbStates left outer join $dbnameHRD.$tbHRD on $dbnameWEB.$tbStates.Country = $dbnameHRD.$tbHRD.COL_COUNTRY "
-        . "AND  $dbnameWEB.$tbStates.ST = $dbnameHRD.$tbHRD.COL_STATE "
-        . "where ( $dbnameWEB.$tbStates.sCountry  = '%$Country%' ) " 
-        . "and col_state is not null "
-        . "AND COL_LOTW_QSL_RCVD not in ( 'Y' ) "
-        . "AND col_state not in (select col_state "
-        . "from $dbnameHRD.$tbHRD "
-        . "where col_state is not null "
-        . "and COL_LOTW_QSL_RCVD <> 'N' "
-        . "and COL_LOTW_QSL_RCVD <> 'R'"
-        . "and COL_BAND LIKE '%$Band%' "
-        . "and COL_MODE LIKE '%$Mode%') "
+$query = "SELECT $dbnameWEB.$tbStates.State as `State`, \n"
+        . "$dbnameWEB.$tbStates.ST as `State` \n"
+        . "FROM $dbnameWEB.$tbStates left outer join $dbnameHRD.$tbHRD on $dbnameWEB.$tbStates.Country = $dbnameHRD.$tbHRD.COL_COUNTRY \n"
+        . "AND  $dbnameWEB.$tbStates.ST = $dbnameHRD.$tbHRD.COL_STATE \n"
+        . "where ( $dbnameWEB.$tbStates.sCountry  = '%$Country%' ) \n"
+        . "and col_state is not null \n"
+        . "AND COL_LOTW_QSL_RCVD not in ( 'Y' ) \n"
+        . "AND col_state not in (select col_state \n"
+        . "from $dbnameHRD.$tbHRD \n"
+        . "where col_state is not null \n"
+        . "and COL_LOTW_QSL_RCVD <> 'N' \n"
+        . "and COL_LOTW_QSL_RCVD <> 'R' \n"
+        . "and COL_BAND LIKE '%$Band%' \n"
+        . "and COL_MODE LIKE '%$Mode%') \n"
         . "group by 1,2";
 
 if ($SUBMIT == "true") {
-    if ($INPUT == "input1") {
+    if ($INPUT == "input_band") {
         $BAND = safe("%" . $BAND . "%");
         $query = str_replace("__REPLACE__", "COL_BAND like $BAND ", $query);
-    } elseif ($INPUT == "input2") {
+    } elseif ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
         $query = str_replace("__REPLACE__", "COL_MODE like $MODE ", $query);
-    } elseif ($INPUT == "input4") {
+    } elseif ($INPUT == "input_state") {
         $STATE = safe("%" . $STATE . "%");
         $query = str_replace("__REPLACE__", "COL_STATE like $STATE ", $query);
-    } elseif ($INPUT == "input5") {
+    } elseif ($INPUT == "input_country") {
         $COUNTRY = safe("%" . $COUNTRY . "%");
         $query = str_replace("__REPLACE__", "COL_COUNTRY like $COUNTRY ", $query);
-    } elseif ($INPUT == "input6") {
+    } elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
     } else {
         $query = str_replace("__REPLACE__", " ", $query);

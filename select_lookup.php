@@ -11,6 +11,12 @@
  *   (at your option) any later version.
  *
  * ************************************************************************ */
+$first = "false";
+$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+if ($first <> True)
+{
+    header( 'Location: index.php' ) ;
+}
 include_once (__DIR__ . '/../config.php');
 require_once('db.class.php');
 require_once("backend.php");
@@ -52,24 +58,24 @@ $query = "SELECT COL_CALL AS `Call`, \n"
         . "ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` \n"
         . "DESC";
 if ($SUBMIT == "true") {
-    if ($INPUT == "input1") {
+    if ($INPUT == "input_band") {
         $BAND = safe("%" . $BAND . "%");
         $query = str_replace("__REPLACE__", "where COL_BAND like $BAND ", $query);
-    } elseif ($INPUT == "input2") {
+    } elseif ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
         $query = str_replace("__REPLACE__", "where COL_MODE like $MODE ", $query);
-    } elseif ($INPUT == "input3") {
+    } elseif ($INPUT == "input_search") {
         $CALL_SEARCH = safe("%" . $CALL_SEARCH . "%");
         $query = str_replace("__REPLACE__", "where COL_CALL like $CALL_SEARCH ", $query);
-    } elseif ($INPUT == "input4") {
+    } elseif ($INPUT == "input_state") {
         $STATE = safe("%" . $STATE . "%");
         $query = str_replace("__REPLACE__", "where COL_STATE like $STATE ", $query);
-    } elseif ($INPUT == "input5") {
+    } elseif ($INPUT == "input_country") {
         $COUNTRY = safe("%" . $COUNTRY . "%");
         $query = str_replace("__REPLACE__", "where COL_COUNTRY like $COUNTRY ", $query);
-    } elseif ($INPUT == "input6") {
+    } elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
     } else {
         $query = str_replace("__REPLACE__", " ", $query);

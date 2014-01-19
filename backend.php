@@ -10,7 +10,12 @@
  *   (at your option) any later version.
  *
  * ************************************************************************ */
-
+$first = "false";
+$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+if ($first <> True)
+{
+    header( 'Location: index.php' ) ;
+}
 #################################################
 # QRZ.com callsign lookup
 #################################################
@@ -230,44 +235,44 @@ function OptionList($key1, $key2, $key3, $key4, $key5, $key6) {
         $data = "Query Type:<br>" . PHP_EOL;
     }
     if ($key1 == true) {
-        $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input1\" id=\"input1\">Band</span>" . PHP_EOL;
+        $data .= '<span> <input type="radio" name="optionlist" value="input_band" id="input_band">Band</span>' . PHP_EOL;
     } else {
-        $data .= '<span id="input1"></span>' . PHP_EOL;
+        $data .= '<span id="input_band"></span>' . PHP_EOL;
         $data .='<span id="Band"></span>' . PHP_EOL;
     }
     // key2
     if ($key2 == true) {
-        $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input2\" id=\"input2\">Mode</span>" . PHP_EOL;
+        $data .= '<span> <input type="radio" name="optionlist" value="input_mode" id="input_mode">Mode</span>' . PHP_EOL;
     } else {
-        $data .= '<span id="input2"></span>' . PHP_EOL;
+        $data .= '<span id="input_mode"></span>' . PHP_EOL;
         $data .='<span id="Mode"></span>' . PHP_EOL;
     }
     // key3
     if ($key3 == true) {
-        $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input3\" id=\"input3\">Call</span>" . PHP_EOL;
+        $data .= '<span> <input type="radio" name="optionlist" value="input_search" id="input_search">Call</span>' . PHP_EOL;
     } else {
-        $data .= '<span id="input3"></span>' . PHP_EOL;
+        $data .= '<span id="input_search"></span>' . PHP_EOL;
         $data .='<span id="Call"></span>' . PHP_EOL;
     }
     // key 4
     if ($key4 == true) {
-        $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input4\" id=\"input4\">State</span>" . PHP_EOL;
+        $data .= '<span> <input type="radio" name="optionlist" value="input_state" id="input_state">State</span>' . PHP_EOL;
     } else {
-        $data .= '<span id="input4"></span>' . PHP_EOL;
+        $data .= '<span id="input_state"></span>' . PHP_EOL;
         $data .='<span id="State"></span>' . PHP_EOL;
     }
     // key 5
     if ($key5 == true) {
-        $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input5\" id=\"input5\">Country</span>" . PHP_EOL;
+        $data .= '<span> <input type="radio" name="optionlist" value="input_country" id="input_country">Country</span>' . PHP_EOL;
     } else {
-        $data .='<span id="input5"></span>' . PHP_EOL;
+        $data .='<span id="input_country"></span>' . PHP_EOL;
         $data .='<span id="Country"></span>' . PHP_EOL;
     }
     // key6
     if ($key6 == true) {
-        $data .= "<span> <input type=\"radio\" name=\"optionlist\" value=\"input6\" id=\"input6\"checked>None</span>" . PHP_EOL;
+        $data .= '<span> <input type="radio" name="optionlist" value="input_none" id="input_none"checked>None</span>' . PHP_EOL;
     } else {
-        $data .='<span id="input6"></span>' . PHP_EOL;
+        $data .='<span id="input_none"></span>' . PHP_EOL;
     }
     $data .='<br>' . PHP_EOL;
     Return $data;

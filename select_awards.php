@@ -10,7 +10,13 @@
  *   (at your option) any later version.
  *
  * ************************************************************************ */
-    include_once (__DIR__ . '/../config.php');
+$first = "false";
+$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+if ($first <> True)
+{
+    header( 'Location: index.php' ) ;
+}    
+include_once (__DIR__ . '/../config.php');
     require_once('db.class.php');
     require_once("backend.php");
     $db = new Db();

@@ -14,18 +14,18 @@
 ?>
 <script type="text/javascript">
      window.onload = function() {
-            document.getElementById('input1').onchange = disablefield;
-            document.getElementById('input2').onchange = disablefield;
-            document.getElementById('input3').onchange = disablefield;
-            document.getElementById('input4').onchange = disablefield; 
-            document.getElementById('input5').onchange = disablefield;
-            document.getElementById('input6').onchange = disablefield;
-            document.getElementById('input1').checked = false;
-            document.getElementById('input2').checked = false;
-            document.getElementById('input3').checked = false;
-            document.getElementById('input4').checked = false;
-            document.getElementById('input5').checked = false;
-            document.getElementById('input6').checked = true;
+            document.getElementById('input_band').onchange = disablefield;
+            document.getElementById('input_mode').onchange = disablefield;
+            document.getElementById('input_search').onchange = disablefield;
+            document.getElementById('input_state').onchange = disablefield; 
+            document.getElementById('input_country').onchange = disablefield;
+            document.getElementById('input_none').onchange = disablefield;
+            document.getElementById('input_band').checked = false;
+            document.getElementById('input_mode').checked = false;
+            document.getElementById('input_search').checked = false;
+            document.getElementById('input_state').checked = false;
+            document.getElementById('input_country').checked = false;
+            document.getElementById('input_none').checked = true;
             document.getElementById('Band').style.display = "none"
             document.getElementById('Mode').style.display = "none"
             document.getElementById('Call').style.display = "none"
@@ -34,14 +34,14 @@
     }
 
     function disablefield(){
-            if (document.getElementById('input1').checked == true ){
+            if (document.getElementById('input_band').checked == true ){
                document.getElementById('Band').style.display = "block"
                 document.getElementById('Mode').style.display = "none"
                 document.getElementById('Call').style.display = "none"
                 document.getElementById('State').style.display = "none"
                 document.getElementById('Country').style.display = "none"
             }
-            else if ( document.getElementById('input2').checked == true ){
+            else if ( document.getElementById('input_mode').checked == true ){
                 document.getElementById('Band').style.display = "none"
                 document.getElementById('Mode').style.display = "block"
                 document.getElementById('Call').style.display = "none"
@@ -49,28 +49,28 @@
                 document.getElementById('Country').style.display = "none"
             }
 
-            else if (document.getElementById('input3').checked == true ){
+            else if (document.getElementById('input_search').checked == true ){
                 document.getElementById('Band').style.display = "none"
                 document.getElementById('Mode').style.display = "none"
                 document.getElementById('Call').style.display = "block"
                 document.getElementById('State').style.display = "none"
                 document.getElementById('Country').style.display = "none"
             }
-            else if (document.getElementById('input4').checked == true ){
+            else if (document.getElementById('input_state').checked == true ){
                 document.getElementById('Band').style.display = "none"
                 document.getElementById('Mode').style.display = "none"
                 document.getElementById('Call').style.display = "none"
                 document.getElementById('State').style.display = "block"
                 document.getElementById('Country').style.display = "none"
             }
-            else if (document.getElementById('input5').checked == true ){
+            else if (document.getElementById('input_country').checked == true ){
                 document.getElementById('Band').style.display = "none"
                 document.getElementById('Mode').style.display = "none"
                 document.getElementById('Call').style.display = "none"
                 document.getElementById('State').style.display = "none"
                 document.getElementById('Country').style.display = "block"
             }
-            else if (document.getElementById('input6').checked == true ){
+            else if (document.getElementById('input_none').checked == true ){
                 document.getElementById('Band').style.display = "none"
                 document.getElementById('Mode').style.display = "none"
                 document.getElementById('Call').style.display = "none"

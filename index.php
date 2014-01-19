@@ -43,10 +43,11 @@
                 <?php
                 //echo safe("this%20is\na&nbsb;'test';");
                 if (isset($_POST['Submit1'])) {
-                    $LOG = ($_POST['Log']);
+                    $LOG = \filter_input(\INPUT_POST, 'Log', \FILTER_SANITIZE_STRING);
                     $data = '<form name ="form1" method ="post" action ="index.php">' . PHP_EOL;
-                    $data .= '<input type="hidden" name="Log" value=' . $_POST['Log'] . '>' . PHP_EOL;
+                    $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
                     $data .= '<input type="hidden" name="Submit" value= "true">' . PHP_EOL;
+                    $data .= '<input type="hidden" name="1st" value= "true">' . PHP_EOL;
                     echo $data;
                     $data = "";
                     include buildfiles($LOG);

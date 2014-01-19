@@ -11,6 +11,12 @@
  *   (at your option) any later version.
  *
  * ************************************************************************* */
+$first = "false";
+$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+if ($first <> True)
+{
+    header( 'Location: index.php' ) ;
+}
 require_once( 'db.class.php');
 class Lookup {
     private $db;

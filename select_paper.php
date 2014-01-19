@@ -10,6 +10,12 @@
  *   (at your option) any later version.
  *
  * ************************************************************************ */
+$first = "false";
+$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+if ($first <> True)
+{
+    header( 'Location: index.php' ) ;
+}
 include_once (__DIR__ . '/../config.php');
 require_once('db.class.php');
 require_once("backend.php");
@@ -20,12 +26,14 @@ $counter = 0;
 $FileNoGroup = 0;
 $find = '.jpg';
 $fileMutiply = 1000;
+$query = "SELECT tb_Cards.COL_PRIMARY_KEY as 'Log ID', \n"
+        . "$tbHRD.COL_CALL as 'Call', \n"
+        . "tb_Cards.COL_File_Path_F as 'Card', \n"
+        . "tb_Cards.COL_File_Path_B as 'Back' \n"
+        . "FROM HRD_Web.tb_Cards INNER JOIN $dbnameHRD.$tbHRD ON tb_Cards.COL_PRIMARY_KEY = $tbHRD.COL_PRIMARY_KEY \n"
+        . "WHERE tb_Cards.COL_File_Path_F <> ''";
 
-
-    $id_lookup = $db->query("SELECT tb_Cards.COL_PRIMARY_KEY as 'Log ID', $tbHRD.COL_CALL as 'Call',"
-  . "tb_Cards.COL_File_Path_F as 'Card', tb_Cards.COL_File_Path_B as 'Back'"
-  . "FROM HRD_Web.tb_Cards INNER JOIN $dbnameHRD.$tbHRD ON tb_Cards.COL_PRIMARY_KEY =" 
-  . "$tbHRD.COL_PRIMARY_KEY WHERE tb_Cards.COL_File_Path_F <> ''");
+    $id_lookup = $db->query($query);
   
     
     $data = "<table border='0' align='center'><tbody><tr>"
@@ -66,4 +74,3 @@ $fileMutiply = 1000;
 echo $data;
 $phpfile = __FILE__;
 footer($phpfile);
-?>

@@ -11,7 +11,12 @@
  *   (at your option) any later version.
  *
  * ************************************************************************* */
-
+$first = "false";
+$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+if ($first <> True)
+{
+    header( 'Location: index.php' ) ;
+}
 class Log {
 
     private $path = '/logs/'; # @string, Log directory name
