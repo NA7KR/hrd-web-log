@@ -57,6 +57,7 @@ session_start();
                             <div id="formHeader">Website Login.</div>
                             <div id="formBody">
                                 <br>
+                                <input type="hidden" name="1st" value= "true">
                                 <div class="formField"><input type="call" name="username" required placeholder="Call" /></div>
                                 <br>
                                 <div class="formField"><input type="password" name="password" required placeholder="Password" /></div>
