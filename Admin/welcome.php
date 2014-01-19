@@ -17,7 +17,7 @@ if (empty($_SESSION['user'])) {
     die("Redirecting to login.php");
 }
 ?>
-<html xmlns="http://www.w3.org/1999/xhtml">
+
     <head>
         <link type="text/css" rel="stylesheet" href="css/style.css" />
         <script type="text/javascript">
@@ -52,7 +52,7 @@ if (empty($_SESSION['user'])) {
         <?php
         include_once (__DIR__ . '/../../config.php');
         include (__DIR__ . '/../../counter.php');
-        require_once(__DIR__ . '/../Lookup.class.php');
+        require_once(__DIR__ . '/../lookup.class.php');
         if (!isset($_SERVER['HTTPS']) || !$_SERVER['HTTPS']) { // if request is not secure, redirect to secure url
             $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
             header('Location: ' . $url);
@@ -61,7 +61,7 @@ if (empty($_SESSION['user'])) {
         ?>
         <title><?php echo $myCall ?> Ham Radio LogBook Upload / config</title> 
     </head>
-
+    
     <body onload= "lookup('hidden');
             qsl('hidden');
             awards('hidden');
@@ -172,7 +172,6 @@ if (isset($_FILES['file'])) {
                 mkdir($filePath, 0777, true);
             }
 
-            $Key = $_POST['username'];
             $id_lookup = $db->row("SELECT COL_CALL FROM $dbnameHRD.$tbHRD where COL_PRIMARY_KEY ='$Key'");
             $CallSign .=$id_lookup['COL_CALL'];
             $FileName = $side . "-" . $Key . "-" . $CallSign . ".jpg";
@@ -223,11 +222,17 @@ if (isset($_FILES['file'])) {
                         $update = $db->query("INSERT INTO `HRD_Web`.`tb_awards` (`COL_PRIMARY_KEY`, `COL_Award`, `COL_File`) VALUES ('NULL', '$AwardsDes', '$FileName'");
                     } elseif (($LOG == 2) || ($LOG == 3)) {
 
-                        $id_lookup = $db->row("SELECT * FROM `HRD_Web`.`tb_Cards` WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key ");
+                        $query = "SELECT * FROM `HRD_Web`.`tb_Cards` WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key ";
+                       
+                        $id_lookup = $db->row($query);
                         if ($id_lookup['COL_PRIMARY_KEY'] <> "") {
-                            $update = $db->query("UPDATE `HRD_Web`.`tb_Cards` SET  `$tbside` = '$FileName' WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key");
+                            $query = "UPDATE `HRD_Web`.`tb_Cards` SET  `$tbside` = '$FileName' WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key";
+                            echo @query;
+                            $update = $db->query($query);
+                                                  
                         } else {
                             $update = $db->query("INSERT INTO `HRD_Web`.`tb_Cards` (`COL_PRIMARY_KEY`, `$tbside`) VALUES ( $Key, $FileName)");
+                            
                         }
                     }
                 }

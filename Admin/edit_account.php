@@ -21,7 +21,7 @@ session_start();
     <body " class="background1">
         <div id="loginForm">
             <?php
-            require_once(__DIR__ . '/../Lookup.class.php');
+            require_once(__DIR__ . '/../db.class.php');
             $db = new Db();
             if (empty($_SESSION['user'])) {
                 header("Location: login.php");

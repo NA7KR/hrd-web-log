@@ -11,7 +11,13 @@
  *   (at your option) any later version.
  *
  ***************************************************************************/
-require("Log.class.php");
+$first = "false";
+$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+if ($first <> True)
+{
+    header( 'Location: index.php' ) ;
+}
+require("log.class.php");
 class DB
 {
 	private $pdo;	# @object, The PDO object
@@ -30,7 +36,7 @@ class DB
 	
 	private function Connect() # This method makes connection to the database.
 	{
-		include "/var/www/config.php";
+		include (__DIR__ . '/../config.php');
 		$dsn = "mysql:host={$dbhost};dbname={$dbnameWEB}"; # Puts content into the settings array.
 		try # Tries to connect to the database.
 		{
@@ -158,6 +164,10 @@ class DB
 		}
 		$this->log->write($message); # Write into log
 		return $exception;
-	}			
+	}	
+    public function quote($value)
+	{
+		return $this->pdo->quote($value);
+	}
 }
 ?>

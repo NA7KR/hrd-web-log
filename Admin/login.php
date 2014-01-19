@@ -20,11 +20,11 @@ session_start();
     <body " class="background1">
         <div id="loginForm">
             <?php
-            require_once(__DIR__ . '/../Lookup.class.php');
+            require_once(__DIR__ . '/../lookup.class.php');
             $Lookup = new Lookup();
             $submitted_username = '';
             d($Lookup->count('id', 'users'), "User");
-
+            
             function d($value, $Key) {
                 if ($value >= 1) {
                     if (!empty($_POST['username'])) {
@@ -75,7 +75,6 @@ session_start();
     }
 }
 ?>
-
         </div>
     </body>
 </html>
