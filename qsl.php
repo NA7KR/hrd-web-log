@@ -26,7 +26,7 @@ if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
         <?php
     } else {
         include (__DIR__ . '/../config.php');
-        require("Db.class.php");
+        require("db.class.php");
         $Key = $argv[1];
         $db = new Db();
         $id_lookup = $db->row("SELECT COL_File_Path_E FROM tb_Cards WHERE COL_PRIMARY_KEY = :f", array("f" => $Key));
