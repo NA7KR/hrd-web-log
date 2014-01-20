@@ -43,28 +43,29 @@ $query = "SELECT tb_Cards.COL_PRIMARY_KEY as 'Log ID', \n"
         . "$tbHRD.COL_CALL as 'Call', \n"
         . "tb_Cards.COL_File_Path_E as 'Card' \n"
         . "FROM HRD_Web.tb_Cards INNER JOIN $dbnameHRD.$tbHRD ON  tb_Cards.COL_PRIMARY_KEY = $tbHRD.COL_PRIMARY_KEY \n"
-        . "WHERE tb_Cards.COL_File_Path_E <> ''";
+        . "WHERE tb_Cards.COL_File_Path_E <> '' __REPLACE__";
   
 if ($SUBMIT == "true") {
     if ($INPUT == "input_band") {
         $BAND = safe("%" . $BAND . "%");
-        $query = str_replace("__REPLACE__", "COL_BAND like $BAND ", $query);
+        $query = str_replace("__REPLACE__", "and COL_BAND like $BAND ", $query);
     } elseif ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
-        $query = str_replace("__REPLACE__", "COL_MODE like $MODE ", $query);
+        $query = str_replace("__REPLACE__", "and COL_MODE like $MODE ", $query);
     } elseif ($INPUT == "input_state") {
         $STATE = safe("%" . $STATE . "%");
-        $query = str_replace("__REPLACE__", "COL_STATE like $STATE ", $query);
+        $query = str_replace("__REPLACE__", "and COL_STATE like $STATE ", $query);
     } elseif ($INPUT == "input_country") {
         $COUNTRY = safe("%" . $COUNTRY . "%");
-        $query = str_replace("__REPLACE__", "COL_COUNTRY like $COUNTRY ", $query);
+        $query = str_replace("__REPLACE__", "and COL_COUNTRY like $COUNTRY ", $query);
     } elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
     } else {
         $query = str_replace("__REPLACE__", " ", $query);
     }
+    $id_lookup = $db->query("$query");
     $data = "<table border='0' align='center'><tbody><tr>"
             . "<th>Log ID</th>" . "<th>Call</th>" . "<th>Card</th>" 
             . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
