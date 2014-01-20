@@ -52,32 +52,31 @@ $query = "SELECT $dbnameWEB.$tbStates.State as `State`, \n"
         . "where col_state is not null \n"
         . "and COL_LOTW_QSL_RCVD <> 'N' \n"
         . "and COL_LOTW_QSL_RCVD <> 'R' \n"
-        . "and COL_BAND LIKE '%$Band%' \n"
-        . "and COL_MODE LIKE '%$Mode%') \n"
+        . "__REPLACE__ \n"
         . "group by 1,2";
 
 if ($SUBMIT == "true") {
     if ($INPUT == "input_band") {
         $BAND = safe("%" . $BAND . "%");
-        $query = str_replace("__REPLACE__", "COL_BAND like $BAND ", $query);
+        $query = str_replace("__REPLACE__", " and COL_BAND like $BAND ", $query);
     } elseif ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
-        $query = str_replace("__REPLACE__", "COL_MODE like $MODE ", $query);
+        $query = str_replace("__REPLACE__", " and COL_MODE like $MODE ", $query);
     } elseif ($INPUT == "input_state") {
         $STATE = safe("%" . $STATE . "%");
-        $query = str_replace("__REPLACE__", "COL_STATE like $STATE ", $query);
+        $query = str_replace("__REPLACE__", " and COL_STATE like $STATE ", $query);
     } elseif ($INPUT == "input_country") {
         $COUNTRY = safe("%" . $COUNTRY . "%");
-        $query = str_replace("__REPLACE__", "COL_COUNTRY like $COUNTRY ", $query);
+        $query = str_replace("__REPLACE__", " and COL_COUNTRY like $COUNTRY ", $query);
     } elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
     } else {
         $query = str_replace("__REPLACE__", " ", $query);
     }
 
-
+    $id_lookup = $db->query("$query");
 
     $data = "<table border='0' align='center'><tbody><tr><th>State</th></tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
     foreach ($id_lookup as $row): {
@@ -102,7 +101,6 @@ if ($SUBMIT == "true") {
     $data .='<div class="c1">' . PHP_EOL;
     $data .='<span class="auto-style5">' . PHP_EOL;
     $data .='Select from drop down the amount of QLS would like to return<br>' . PHP_EOL;
-    $data .=OptionQty() . PHP_EOL;
     $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;
 }
 echo $data;
