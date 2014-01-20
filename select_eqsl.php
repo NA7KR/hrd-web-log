@@ -95,7 +95,7 @@ if ($SUBMIT == "true") {
     $data .= "<p style='text-align: center'><BR> Counter " . $counter . "</p><BR>". PHP_EOL;
     $data .=OptionList(false, false, false, false, false, false) . PHP_EOL; 
 } else {
-    $data = '<table width=500 class="center2">' . PHP_EOL;
+    $data = '<table width=600 class="center2">' . PHP_EOL;
     $data .='<tr><td>' . PHP_EOL;
     $data .=OptionList(true, true, false, false, false, true) . PHP_EOL;
     $data .=band() . PHP_EOL;

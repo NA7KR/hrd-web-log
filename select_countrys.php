@@ -47,7 +47,7 @@ if ($SUBMIT == "true") {
         $MODE = safe("%" . $MODE . "%");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
-        $query = str_replace("__REPLACE__", "where COL_MODE like $MODE ", $query);
+        $query = str_replace("__REPLACE__", "where COL_MODE like $MODE or COL_MODE like 'USB' or COL_MODE like 'LSB' ", $query);
     } elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
     }
@@ -65,7 +65,7 @@ if ($SUBMIT == "true") {
     $data .= "<p style='text-align: center'><BR> Counter " . $counter . "</p><BR>" . PHP_EOL;
     $data .=OptionList(false, false, false, false, false, false) . PHP_EOL; 
 } else {
-    $data = '<table width=500 class="center2">' . PHP_EOL;
+    $data = '<table width=600 class="center2">' . PHP_EOL;
     $data .='<tr><td>' . PHP_EOL;
     $data .=OptionList(true, true, false, false, false, true) . PHP_EOL;
     $data .=band() . PHP_EOL;

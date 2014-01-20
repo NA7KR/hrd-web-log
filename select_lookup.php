@@ -65,7 +65,7 @@ if ($SUBMIT == "true") {
         $MODE = safe("%" . $MODE . "%");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
-        $query = str_replace("__REPLACE__", "where COL_MODE like $MODE ", $query);
+        $query = str_replace("__REPLACE__", "where COL_MODE like $MODE or COL_MODE like 'USB' or COL_MODE like 'LSB' ", $query);
     } elseif ($INPUT == "input_search") {
         $CALL_SEARCH = safe("%" . $CALL_SEARCH . "%");
         $query = str_replace("__REPLACE__", "where COL_CALL like $CALL_SEARCH ", $query);
