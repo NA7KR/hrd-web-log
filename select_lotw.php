@@ -34,28 +34,28 @@ if (isset($_POST['Submit1'])) {
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
-$query = "SELECT `COL_CALL` as 'Call', `COL_LOTW_QSL_RCVD` as 'Confirmed' FROM $dbnameHRD.$tbHRD Where `COL_LOTW_QSL_RCVD` = 'V'";
+$query = "SELECT `COL_CALL` as 'Call', `COL_LOTW_QSL_RCVD` as 'Confirmed' FROM $dbnameHRD.$tbHRD Where `COL_LOTW_QSL_RCVD` = 'V' __REPLACE__";
 if ($SUBMIT == "true") {
     if ($INPUT == "input_band") {
         $BAND = safe("%" . $BAND . "%");
-        $query = str_replace("__REPLACE__", "COL_BAND like $BAND ", $query);
+        $query = str_replace("__REPLACE__", "and COL_BAND like $BAND ", $query);
     } elseif ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
-        $query = str_replace("__REPLACE__", "COL_MODE like $MODE ", $query);
+        $query = str_replace("__REPLACE__", "and COL_MODE like $MODE ", $query);
     } elseif ($INPUT == "input_state") {
         $STATE = safe("%" . $STATE . "%");
-        $query = str_replace("__REPLACE__", "COL_STATE like $STATE ", $query);
+        $query = str_replace("__REPLACE__", "and COL_STATE like $STATE ", $query);
     } elseif ($INPUT == "input_country") {
         $COUNTRY = safe("%" . $COUNTRY . "%");
-        $query = str_replace("__REPLACE__", "COL_COUNTRY like $COUNTRY ", $query);
+        $query = str_replace("__REPLACE__", "and COL_COUNTRY like $COUNTRY ", $query);
     } elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
     } else {
         $query = str_replace("__REPLACE__", " ", $query);
     }
-    
+    $id_lookup = $db->query("$query");
     $data = "<table border='0' align='center'><tbody><tr>"
             . "<th>Call</th>" . "<th>Confirmed</th>" 
             . "<th>Back</th>" . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
@@ -84,6 +84,7 @@ if ($SUBMIT == "true") {
     $data .='none will return all<br>' . PHP_EOL;
     $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;
 }
+//$data .=$query;
 echo $data;
 $phpfile = __FILE__;
 footer($phpfile);
