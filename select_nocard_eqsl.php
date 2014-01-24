@@ -103,7 +103,7 @@ if ($SUBMIT == "true") {
     $data .='Select from drop down the amount of QLS would like to return<br>' . PHP_EOL;
     $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;
 }
-$data .=$query;
+//$data .=$query;
 echo $data;
 $phpfile = __FILE__;
 footer($phpfile);
