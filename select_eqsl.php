@@ -1,5 +1,4 @@
 <?php
-
 /* * ***********************************************************************
  * 			NA7KR Log Program 
  * *************************************************************************
@@ -51,8 +50,8 @@ if ($SUBMIT == "true") {
         $query = str_replace("__REPLACE__", "and COL_BAND like $BAND ", $query);
     } elseif ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
-        $MODE = str_replace("USB", "SSB", $MODE);
-        $MODE = str_replace("LSB", "SSB", $MODE);
+        $MODE = str_replace("SSB", "USB%' or COL_MODE like '%LSB", $MODE);
+//        $MODE = str_replace("LSB", "SSB", $MODE);
         $query = str_replace("__REPLACE__", "and COL_MODE like $MODE ", $query);
     } elseif ($INPUT == "input_state") {
         $STATE = safe("%" . $STATE . "%");
@@ -65,7 +64,8 @@ if ($SUBMIT == "true") {
     } else {
         $query = str_replace("__REPLACE__", " ", $query);
     }
-    $id_lookup = $db->query("$query");
+
+$id_lookup = $db->query("$query");
     $data = "<table border='0' align='center'><tbody><tr>"
             . "<th>Log ID</th>" . "<th>Call</th>" . "<th>Card</th>" 
             . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
