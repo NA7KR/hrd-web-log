@@ -50,8 +50,7 @@ $query = "Select count(*) as `Count`, \n"
 if ($SUBMIT == "true") {
     if ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
-        $MODE = str_replace("USB", "SSB", $MODE);
-        $MODE = str_replace("LSB", "SSB", $MODE);
+	$MODE = str_replace("SSB", "USB%' or COL_MODE like '%LSB", $MODE);
         $query = str_replace("__REPLACE__", " where COL_MODE like $MODE ", $query);
     } elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
