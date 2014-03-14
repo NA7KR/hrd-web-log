@@ -41,8 +41,9 @@ if ($SUBMIT == "true") {
         $query = str_replace("__REPLACE__", "and COL_BAND like $BAND ", $query);
     } elseif ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
-        $MODE = str_replace("USB", "SSB", $MODE);
-        $MODE = str_replace("LSB", "SSB", $MODE);
+	$MODE = str_replace("SSB", "USB%' or COL_MODE like '%LSB", $MODE);
+//        $MODE = str_replace("USB", "SSB", $MODE);
+//        $MODE = str_replace("LSB", "SSB", $MODE);
         $query = str_replace("__REPLACE__", "and COL_MODE like $MODE ", $query);
     } elseif ($INPUT == "input_state") {
         $STATE = safe("%" . $STATE . "%");
