@@ -204,7 +204,7 @@ function MakeViews() {
     require_once('lookup.class.php');
     $db = new Db();
     $id_lookup = $db->query("create or replace view $dbnameHRD.bands  as select col_band from $dbnameHRD.$tbHRD group by 1");
-    $id_lookup = $db->query("create or replace view $dbnameHRD.modes as select col_mode from $dbnameHRD.$tbHRD group by 1");
+    $id_lookup = $db->query("create or replace view $dbnameHRD.modes as select col_mode from $dbnameHRD.$tbHRD where (col_mode not like '%LSB%' and col_mode not like '%USB%') group by 1 ");
     $id_lookup = $db->query("create or replace view $dbnameHRD.towork as  \n"
             . "select col_mode, \n"
             . "col_band, \n"
