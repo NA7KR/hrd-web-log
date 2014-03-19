@@ -204,7 +204,9 @@ function MakeViews() {
     require_once('lookup.class.php');
     $db = new Db();
     $id_lookup = $db->query("create or replace view $dbnameHRD.bands  as select col_band from $dbnameHRD.$tbHRD group by 1");
-    $id_lookup = $db->query("create or replace view $dbnameHRD.modes as select col_mode from $dbnameHRD.$tbHRD where (col_mode not like '%LSB%' and col_mode not like '%USB%') group by 1 ");
+    $id_lookup = $db->query("create or replace view $dbnameHRD.modes as  select \n"
+	    . " CASE When COL_MODE Like '%USB%' or COL_MODE like '%LSB%' then 'SSB' else COL_MODE End as col_mode \n"
+	    . " from $dbnameHRD.$tbHRD  group by 1"); 
     $id_lookup = $db->query("create or replace view $dbnameHRD.towork as  \n"
             . "select col_mode, \n"
             . "col_band, \n"
@@ -221,7 +223,7 @@ function MakeViews() {
             . "SELECT col_mode, col_band, zones \n"
             . "FROM $dbnameWEB.tb_zones, $dbnameHRD.modes, $dbnameHRD.bands \n"
             . "WHERE concat( col_mode,'-', col_band,'-', Zones ) NOT IN (\n"
-            . "SELECT concat( COL_MODE,'-', COL_BAND,'-', COL_ITUZ )AS the_key \n"
+            . "SELECT concat(CASE When COL_MODE Like '%USB%' or COL_MODE like '%LSB%' then 'SSB' else COL_MODE End ,'-', COL_BAND,'-', COL_ITUZ )AS the_key \n"
             . "FROM $dbnameHRD.$tbHRD \n"
             . "where COL_ITUZ is not null) \n");
 }
