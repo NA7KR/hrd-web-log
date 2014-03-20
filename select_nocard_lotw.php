@@ -91,11 +91,11 @@ if ($SUBMIT == "true") {
 } else {
     $data = '<table width=600 class="center2">' . PHP_EOL;
     $data .='<tr><td>' . PHP_EOL;
-    $data .=OptionList(true, true, false, true, true, true) . PHP_EOL;
+    $data .=OptionList(true, true, false, false, false, true) . PHP_EOL;
     $data .=band() . PHP_EOL;
     $data .=mode() . PHP_EOL;
-    $data .=OptionState() . PHP_EOL;
-    $data .=OptionCountry() . PHP_EOL;
+//    $data .=OptionState() . PHP_EOL;
+//    $data .=OptionCountry() . PHP_EOL;
     $data .='</td></tr>' . PHP_EOL;
     $data .='</table>' . PHP_EOL;
     $data .='<div class="c1">' . PHP_EOL;

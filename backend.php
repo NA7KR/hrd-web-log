@@ -137,7 +137,12 @@ function band() {
     $id_lookup = $db->query("SELECT COL_BAND FROM $dbnameHRD.$tbHRD GROUP BY `COL_BAND` ");
     $select .='<span id="Band">' . PHP_EOL;
     foreach ($id_lookup as $row): {
-            $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked name="Band">' . $row['COL_BAND'] . PHP_EOL;
+	if ($row['COL_BAND'] == "15m"){
+            $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked="checked" >' . $row['COL_BAND'] . PHP_EOL;
+	}
+	else{
+		 $select .='<input type="radio" value=' . $row['COL_BAND'] . ' >' . $row['COL_BAND'] . PHP_EOL;
+	}
         }
     endforeach;
     $select .='</span>' . PHP_EOL;
@@ -156,10 +161,12 @@ function mode() {
     $id_lookup = $db->query("SELECT DISTINCT  CASE When COL_MODE Like '%USB%' or COL_MODE like '%LSB%' then 'SSB' else COL_MODE End as COL_MODE  FROM $dbnameHRD.$tbHRD GROUP BY `COL_MODE` ");
     $select .='<span id="Mode">' . PHP_EOL;
     foreach ($id_lookup as $row): {
-            $result = $row['COL_MODE'];
-		{
-                $select .='<input type="radio" value=' . $result . ' checked name="Mode">' . $result . PHP_EOL;
-            }
+		if ($row['COL_MODE'] == "SSB"){
+                	$select .='<input type="radio" value=' . $row['COL_MODE'] . '  checked="checked" >' . $row['COL_MODE'] . PHP_EOL;
+		}
+		else{
+			$select .='<input type="radio" value=' . $row['COL_MODE'] . '  >' . $row['COL_MODE'] . PHP_EOL;
+	 	}
         }
     endforeach;
     $select .='</span>' . PHP_EOL;
