@@ -39,44 +39,51 @@ if ($SUBMIT == "true") {
     if ($INPUT == "input_band") {
 		$TEXT = $BAND;
 		$BAND = safe("%" . $BAND . "%");
-
 		$query ="SELECT $dbnameHRD.zone_to_work.zones as `ITU Zone to Work`, COL_MODE as `Modes`  FROM $dbnameHRD.zone_to_work where COL_BAND like __REPLACE__  order by col_band,col_mode,zones";
 		$query = str_replace("__REPLACE__", "$BAND ", $query);
-
 		$id_lookup = $db->query($query);
 		$data = "<table border='0' align='center'><tbody><tr><th>ITU Zone to Work $TEXT</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
-		foreach ($id_lookup as $row): 
-			{  
+		foreach ($id_lookup as $row):
+			{
 				$fileName = $row['File'];
 				$data .=  "<td>" . $row['ITU Zone to Work'] . "</td><td>" . $row['Modes'] . "</td>" . grid_style($i) . PHP_EOL;
-				$i++;   
+				$i++;
 				unset($row); // break the reference with the last element
 			}
 		endforeach;
-		} 
+		}
 	elseif ($INPUT == "input_mode") {
 		$TEXT = $MODE;
-        $MODE = safe("%" . $MODE . "%");
-//	$query= "SELECT DISTINCT zones as `ITU Zone to Work` FROM $dbnameHRD.zone_to_work WHERE col_mode LIKE __REPLACE__ ";
-		$MODE = str_replace("SSB", "USB%' or COL_MODE like '%LSB", $MODE);
-        $query = str_replace("__REPLACE__", "$MODE ", $query);
-    } 
+        	$MODE = safe("%" . $MODE . "%");
+		$query ="SELECT $dbnameHRD.zone_to_work.zones as `ITU Zone to Work`, COL_BAND as `Band`  FROM $dbnameHRD.zone_to_work where COL_MODE like __REPLACE__  order by col_band,col_mode,zones";
+        	$query = str_replace("__REPLACE__", "$MODE ", $query);
+ 		 $id_lookup = $db->query($query);
+                $data = "<table border='0' align='center'><tbody><tr><th>ITU Zone to Work $TEXT</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
+                foreach ($id_lookup as $row):
+                        {
+                                $fileName = $row['File'];
+                                $data .=  "<td>" . $row['ITU Zone to Work'] . "</td><td>" . $row['Band'] . "</td>" . grid_style($i) . PHP_EOL;
+                                $i++;
+                                unset($row); // break the reference with the last element
+                        }
+                endforeach;
+    		}
 	elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
-    
+
 		$id_lookup = $db->query($query);
 		$data = "<table border='0' align='center'><tbody><tr><th>ITU Zone to Work $TEXT</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
-		foreach ($id_lookup as $row): 
-			{  
+		foreach ($id_lookup as $row):
+			{
 				$fileName = $row['File'];
 				$data .=  "<td>" . $row['ITU Zone to Work'] . "</td>" . grid_style($i) . PHP_EOL;
-				$i++;   
+				$i++;
 				unset($row); // break the reference with the last element
 			}
 		endforeach;
 	}
     $data .= "</table><br><br>" . PHP_EOL;
-   $data .=OptionList(false, false, false, false, false, false) . PHP_EOL; 
+   $data .=OptionList(false, false, false, false, false, false) . PHP_EOL;
 } else {
     $data = '<table width=600 class="center2">' . PHP_EOL;
     $data .='<tr><td>' . PHP_EOL;

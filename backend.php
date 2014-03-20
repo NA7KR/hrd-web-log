@@ -153,15 +153,11 @@ function mode() {
     include (__DIR__ . '/../config.php');
     require_once('lookup.class.php');
     $db = new Db();
-    $id_lookup = $db->query("SELECT COL_MODE FROM $dbnameHRD.$tbHRD GROUP BY `COL_MODE` ");
+    $id_lookup = $db->query("SELECT CASE When COL_MODE Like '%USB%' or COL_MODE like '%LSB%' then 'SSB' else COL_MODE End as COL_MODE  FROM $dbnameHRD.$tbHRD GROUP BY `COL_MODE` ");
     $select .='<span id="Mode">' . PHP_EOL;
     foreach ($id_lookup as $row): {
             $result = $row['COL_MODE'];
-            if ($result === "LSB") {
-                $result = "";
-            } elseif ($result === "USB") {
-                $result = "";
-            } else {
+		{
                 $select .='<input type="radio" value=' . $result . ' checked name="Mode">' . $result . PHP_EOL;
             }
         }
