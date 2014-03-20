@@ -57,7 +57,8 @@ if (empty($_SESSION['user'])) {
             $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
             header('Location: ' . $url);
             exit;
-        }
+    	}
+
         ?>
         <title><?php echo $myCall ?> Ham Radio LogBook Upload / config</title> 
     </head>
@@ -258,3 +259,8 @@ if ($LOG == 4) {
 <a href="edit_account.php">Edit Account</a><br> 
 </body>
 </html>
+<?php
+require (__DIR__ . '/../backend.php');
+        // make/updates database views
+         MakeViews();
+?>
