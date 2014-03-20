@@ -24,7 +24,7 @@
             require("backend.php");
             include "counter.php";
             // make/updates database views
-            MakeViews();
+            //MakeViews();
             ?>
             <meta name="keywords" content="Ham Radio NA7KR">
             <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
