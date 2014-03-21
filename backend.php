@@ -138,10 +138,10 @@ function band() {
     $select .='<span id="Band">' . PHP_EOL;
     foreach ($id_lookup as $row): {
 	if ($row['COL_BAND'] == "15m"){
-            $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked="checked" >' . $row['COL_BAND'] . PHP_EOL;
+            $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked name="Band" >' . $row['COL_BAND'] . PHP_EOL;
 	}
 	else{
-		 $select .='<input type="radio" value=' . $row['COL_BAND'] . ' >' . $row['COL_BAND'] . PHP_EOL;
+		 $select .='<input type="radio" value=' . $row['COL_BAND'] . 'checked name="Band" >' . $row['COL_BAND'] . PHP_EOL;
 	}
         }
     endforeach;
@@ -162,10 +162,10 @@ function mode() {
     $select .='<span id="Mode">' . PHP_EOL;
     foreach ($id_lookup as $row): {
 		if ($row['COL_MODE'] == "SSB"){
-                	$select .='<input type="radio" value=' . $row['COL_MODE'] . '  checked="checked" >' . $row['COL_MODE'] . PHP_EOL;
+                	$select .='<input type="radio" value=' . $row['COL_MODE'] . 'checked name="Mode"  >' . $row['COL_MODE'] . PHP_EOL;
 		}
 		else{
-			$select .='<input type="radio" value=' . $row['COL_MODE'] . '  >' . $row['COL_MODE'] . PHP_EOL;
+			$select .='<input type="radio" value=' . $row['COL_MODE'] . 'checked name="Mode"  >' . $row['COL_MODE'] . PHP_EOL;
 	 	}
         }
     endforeach;
