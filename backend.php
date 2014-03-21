@@ -141,7 +141,7 @@ function band() {
             $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked name="Band" >' . $row['COL_BAND'] . PHP_EOL;
 	}
 	else{
-		 $select .='<input type="radio" value=' . $row['COL_BAND'] . 'checked name="Band" >' . $row['COL_BAND'] . PHP_EOL;
+		 $select .='<input type="radio" value=' . $row['COL_BAND'] . 'name="Band" >' . $row['COL_BAND'] . PHP_EOL;
 	}
         }
     endforeach;
@@ -162,10 +162,10 @@ function mode() {
     $select .='<span id="Mode">' . PHP_EOL;
     foreach ($id_lookup as $row): {
 		if ($row['COL_MODE'] == "SSB"){
-                	$select .='<input type="radio" value=' . $row['COL_MODE'] . 'checked name="Mode"  >' . $row['COL_MODE'] . PHP_EOL;
+                	$select .='<input type="radio" value=' . $row['COL_MODE'] . ' checked name="Mode"  >' . $row['COL_MODE'] . PHP_EOL;
 		}
 		else{
-			$select .='<input type="radio" value=' . $row['COL_MODE'] . 'checked name="Mode"  >' . $row['COL_MODE'] . PHP_EOL;
+			$select .='<input type="radio" value=' . $row['COL_MODE'] . ' name="Mode"  >' . $row['COL_MODE'] . PHP_EOL;
 	 	}
         }
     endforeach;
@@ -337,7 +337,7 @@ function OptionState() {
             . "FROM $dbnameHRD.$tbHRD \n"
             . "left outer JOIN $dbnameWEB.tb_States_Countries \n"
             . "on COL_STATE = $dbnameWEB.tb_States_Countries.ST \n"
-            . "Where COL_STATE is not null \n"
+            . "Where COL_STATE is not null and $dbnameWEB.tb_States_Countries.sCountry = 'USA' group by 1 \n"
             . "order by 2,1";
 
     $id_lookup = $db->query($SQL);

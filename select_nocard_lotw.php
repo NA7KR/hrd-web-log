@@ -39,12 +39,13 @@ if (isset($_POST['Submit1'])) {
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
+if ($Country= " ") {  $Country = "USA"; }
 
-$query = "SELECT $dbnameWEB.$tbStates.State as `State`, \n"
+$query = "SELECT $dbnameWEB.$tbStates.State as `StateF`, \n"
         . "$dbnameWEB.$tbStates.ST as `State` \n"
         . "FROM $dbnameWEB.$tbStates left outer join $dbnameHRD.$tbHRD on $dbnameWEB.$tbStates.Country = $dbnameHRD.$tbHRD.COL_COUNTRY \n"
         . "AND  $dbnameWEB.$tbStates.ST = $dbnameHRD.$tbHRD.COL_STATE \n"
-        . "where ( $dbnameWEB.$tbStates.sCountry  = '%$Country%' ) \n"
+        . "where ( $dbnameWEB.$tbStates.sCountry like '%$Country%' ) \n"
         . "and col_state is not null \n"
         . "AND COL_LOTW_QSL_RCVD not in ( 'Y' ) \n"
         . "AND col_state not in (select col_state \n"
@@ -52,7 +53,7 @@ $query = "SELECT $dbnameWEB.$tbStates.State as `State`, \n"
         . "where col_state is not null \n"
         . "and COL_LOTW_QSL_RCVD <> 'N' \n"
         . "and COL_LOTW_QSL_RCVD <> 'R' \n"
-        . "__REPLACE__ \n"
+        . "__REPLACE__ ) \n"
         . "group by 1,2";
 
 if ($SUBMIT == "true") {
