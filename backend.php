@@ -141,7 +141,7 @@ function band() {
             $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked name="Band" >' . $row['COL_BAND'] . PHP_EOL;
 	}
 	else{
-		 $select .='<input type="radio" value=' . $row['COL_BAND'] . 'name="Band" >' . $row['COL_BAND'] . PHP_EOL;
+		 $select .='<input type="radio" value=' . $row['COL_BAND'] . ' name="Band" >' . $row['COL_BAND'] . PHP_EOL;
 	}
         }
     endforeach;
