@@ -39,12 +39,13 @@ if (isset($_POST['Submit1'])) {
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
+if ($Country= " ") {  $Country = "USA"; }
 
-$query = "SELECT $dbnameWEB.$tbStates.State as `State`, \n"
+$query = "SELECT $dbnameWEB.$tbStates.State as `StateF`, \n"
         . "$dbnameWEB.$tbStates.ST as `State` \n"
         . "FROM $dbnameWEB.$tbStates left outer join $dbnameHRD.$tbHRD on $dbnameWEB.$tbStates.Country = $dbnameHRD.$tbHRD.COL_COUNTRY \n"
         . "AND  $dbnameWEB.$tbStates.ST = $dbnameHRD.$tbHRD.COL_STATE \n"
-        . "where ( $dbnameWEB.$tbStates.sCountry  = '%$Country%' ) \n"
+        . "where ( $dbnameWEB.$tbStates.sCountry like '%$Country%' ) \n"
         . "and col_state is not null \n"
         . "AND COL_LOTW_QSL_RCVD not in ( 'Y' ) \n"
         . "AND col_state not in (select col_state \n"
@@ -52,7 +53,7 @@ $query = "SELECT $dbnameWEB.$tbStates.State as `State`, \n"
         . "where col_state is not null \n"
         . "and COL_LOTW_QSL_RCVD <> 'N' \n"
         . "and COL_LOTW_QSL_RCVD <> 'R' \n"
-        . "__REPLACE__ \n"
+        . "__REPLACE__ ) \n"
         . "group by 1,2";
 
 if ($SUBMIT == "true") {
@@ -61,9 +62,12 @@ if ($SUBMIT == "true") {
         $query = str_replace("__REPLACE__", " and COL_BAND like $BAND ", $query);
     } elseif ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
-        $MODE = str_replace("USB", "SSB", $MODE);
-        $MODE = str_replace("LSB", "SSB", $MODE);
-        $query = str_replace("__REPLACE__", " and COL_MODE like $MODE ", $query);
+        if ($MODE == "'%SSB%'"){ 
+        	$query = str_replace("__REPLACE__", " and (COL_MODE like '%LSB%' or COL_MODE like '%USB%') ", $query);
+	}
+	else{
+	$query = str_replace("__REPLACE__", " and COL_MODE like $MODE ", $query);
+	}
     } elseif ($INPUT == "input_state") {
         $STATE = safe("%" . $STATE . "%");
         $query = str_replace("__REPLACE__", " and COL_STATE like $STATE ", $query);
@@ -81,21 +85,24 @@ if ($SUBMIT == "true") {
     $data = "<table border='0' align='center'><tbody><tr><th>State</th></tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
     foreach ($id_lookup as $row): {
             $fileName = $row['File'];
-            $data .= "<td>" . $row['State'] . "</td>" . grid_style($i) . PHP_EOL;
+            $data .= " <td>" . $row['StateF'] . "</td> <td>" . $row['State'] . "</td>" . grid_style($i) . PHP_EOL;
             $i++;
             unset($row); // break the reference with the last element
         }
     endforeach;
     $data .= "</table><br><br>" . PHP_EOL;
+    $data .='<div class="c1">' . PHP_EOL;
+    $data .='<span class="auto-style5">' . PHP_EOL;
+    $data .= "Count " .$i;
     $data .=OptionList(false, false, false, false, false, false) . PHP_EOL;
 } else {
     $data = '<table width=600 class="center2">' . PHP_EOL;
     $data .='<tr><td>' . PHP_EOL;
-    $data .=OptionList(true, true, false, true, true, true) . PHP_EOL;
+    $data .=OptionList(true, true, false, false, false, true) . PHP_EOL;
     $data .=band() . PHP_EOL;
     $data .=mode() . PHP_EOL;
-    $data .=OptionState() . PHP_EOL;
-    $data .=OptionCountry() . PHP_EOL;
+//    $data .=OptionState() . PHP_EOL;
+//    $data .=OptionCountry() . PHP_EOL;
     $data .='</td></tr>' . PHP_EOL;
     $data .='</table>' . PHP_EOL;
     $data .='<div class="c1">' . PHP_EOL;

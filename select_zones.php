@@ -82,7 +82,15 @@ if ($SUBMIT == "true") {
 			}
 		endforeach;
 	}
+
     $data .= "</table><br><br>" . PHP_EOL;
+    $data .='<div class="c1">' . PHP_EOL;
+    $data .='<span class="auto-style5">' . PHP_EOL;
+    $data .= "Count " .$i;
+    $data .=OptionList(false, false, false, false, false, false) . PHP_EOL;
+
+
+
    $data .=OptionList(false, false, false, false, false, false) . PHP_EOL;
 } else {
     $data = '<table width=600 class="center2">' . PHP_EOL;

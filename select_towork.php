@@ -34,28 +34,37 @@ if (isset($_POST['Submit1'])) {
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
+if ($Country= " ") {  $Country = "USA"; }
 
-$query = "SELECT COL_COUNTRY as 'Countrys Worked' FROM $dbnameHRD.$tbHRD  __REPLACE__ group by 1";
+
+
 if ($SUBMIT == "true") {
     if ($INPUT == "input_band") {
         $BAND = safe("%" . $BAND . "%");
-        $query = str_replace("__REPLACE__", "where COL_BAND like $BAND ", $query);
+		$query = "select * from HRD_Web.tb_States_Countries where st not in "
+		. "( select col_state from NA7KR.TABLE_HRD_CONTACTS_V01 where COL_BAND like $BAND and col_country = HRD_Web.tb_States_Countries.country ) "
+		. " and sCountry = 'USA' group by st";
     } elseif ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
-        $MODE = str_replace("USB", "SSB", $MODE);
-        $MODE = str_replace("LSB", "SSB", $MODE);
-        $query = str_replace("__REPLACE__", "where COL_MODE like $MODE or COL_MODE like 'USB' or COL_MODE like 'LSB' ", $query);
+		$query = "select * from HRD_Web.tb_States_Countries where st not in "
+		. "( select col_state from NA7KR.TABLE_HRD_CONTACTS_V01 where  __REPLACE__ and col_country = HRD_Web.tb_States_Countries.country ) "
+		. " and sCountry = 'USA' group by st";
+		if ( $MODE == "'%SSB%'" ){
+        $query = str_replace("__REPLACE__", " (COL_MODE like $MODE or COL_MODE like '%USB%' or COL_MODE like '%LSB%') ", $query);
+		}
+		else {
+		$query = str_replace("__REPLACE__", " COL_MODE like $MODE", $query);
+		}
     } elseif ($INPUT == "input_none") {
-        $query = str_replace("__REPLACE__", " ", $query);
-    }
-    $query ="SELECT $dbnameWEB.$tbStates.State as `State` , "
+		 $query ="SELECT $dbnameWEB.$tbStates.State as `State` , "
             . "$dbnameWEB.$tbStates.ST as `State` , "
             . "$dbnameWEB.$tbStates.Country as `Country`"
             . " FROM $dbnameWEB.$tbStates left outer join  $dbnameHRD.$tbHRD on $dbnameWEB.$tbStates.Country  = $dbnameHRD.$tbHRD.COL_COUNTRY "
             . "AND $dbnameWEB.$tbStates.ST = $dbnameHRD.$tbHRD.COL_STATE  "
-            . "where $dbnameWEB.$tbStates.sCountry  = '%$Country%' "
+            . "where $dbnameWEB.$tbStates.sCountry  like '%$Country%' "
             . "and col_state is null "
             . "group by 1,2";
+    }
 
     $id_lookup = $db->query($query);
     $data = "<table border='0' align='center'><tbody><tr><th>State</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
@@ -82,5 +91,6 @@ if ($SUBMIT == "true") {
     $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;
 }
 echo $data;
+//echo $query;
 $phpfile = __FILE__;
 footer($phpfile);

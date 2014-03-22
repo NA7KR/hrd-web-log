@@ -137,7 +137,12 @@ function band() {
     $id_lookup = $db->query("SELECT COL_BAND FROM $dbnameHRD.$tbHRD GROUP BY `COL_BAND` ");
     $select .='<span id="Band">' . PHP_EOL;
     foreach ($id_lookup as $row): {
-            $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked name="Band">' . $row['COL_BAND'] . PHP_EOL;
+	if ($row['COL_BAND'] == "15m"){
+            $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked name="Band" >' . $row['COL_BAND'] . PHP_EOL;
+	}
+	else{
+		 $select .='<input type="radio" value=' . $row['COL_BAND'] . ' name="Band" >' . $row['COL_BAND'] . PHP_EOL;
+	}
         }
     endforeach;
     $select .='</span>' . PHP_EOL;
@@ -153,13 +158,15 @@ function mode() {
     include (__DIR__ . '/../config.php');
     require_once('lookup.class.php');
     $db = new Db();
-    $id_lookup = $db->query("SELECT CASE When COL_MODE Like '%USB%' or COL_MODE like '%LSB%' then 'SSB' else COL_MODE End as COL_MODE  FROM $dbnameHRD.$tbHRD GROUP BY `COL_MODE` ");
+    $id_lookup = $db->query("SELECT DISTINCT  CASE When COL_MODE Like '%USB%' or COL_MODE like '%LSB%' then 'SSB' else COL_MODE End as COL_MODE  FROM $dbnameHRD.$tbHRD GROUP BY `COL_MODE` ");
     $select .='<span id="Mode">' . PHP_EOL;
     foreach ($id_lookup as $row): {
-            $result = $row['COL_MODE'];
-		{
-                $select .='<input type="radio" value=' . $result . ' checked name="Mode">' . $result . PHP_EOL;
-            }
+		if ($row['COL_MODE'] == "SSB"){
+                	$select .='<input type="radio" value=' . $row['COL_MODE'] . ' checked name="Mode"  >' . $row['COL_MODE'] . PHP_EOL;
+		}
+		else{
+			$select .='<input type="radio" value=' . $row['COL_MODE'] . ' name="Mode"  >' . $row['COL_MODE'] . PHP_EOL;
+	 	}
         }
     endforeach;
     $select .='</span>' . PHP_EOL;
@@ -330,7 +337,7 @@ function OptionState() {
             . "FROM $dbnameHRD.$tbHRD \n"
             . "left outer JOIN $dbnameWEB.tb_States_Countries \n"
             . "on COL_STATE = $dbnameWEB.tb_States_Countries.ST \n"
-            . "Where COL_STATE is not null \n"
+            . "Where COL_STATE is not null and $dbnameWEB.tb_States_Countries.sCountry = 'USA' group by 1 \n"
             . "order by 2,1";
 
     $id_lookup = $db->query($SQL);
