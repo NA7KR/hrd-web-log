@@ -32,8 +32,8 @@ if (isset($_POST['Submit1'])) {
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 };
 $query = "SELECT $dbnameWEB.tb_cq_zones.zones as `CQ Zone to Work` \n"
-    . "FROM $dbnameWEB.tb_cq_zones left outer join $dbnameHRD.$tbHRD on $dbnameWEB.tb_cq_zones.zones = $dbnameHRD.$tbHRD.COL_ITUZ  \n"
-    . "where COL_ITUZ is null __REPLACE__ ";
+    . "FROM $dbnameWEB.tb_cq_zones left outer join $dbnameHRD.$tbHRD on $dbnameWEB.tb_cq_zones.zones = $dbnameHRD.$tbHRD.COL_CQZ  \n"
+    . "where COL_CQZ is null __REPLACE__ ";
 
 if ($SUBMIT == "true") {
     if ($INPUT == "input_band") {

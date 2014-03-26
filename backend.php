@@ -232,11 +232,11 @@ function MakeViews() {
 
    $id_lookup = $db->query("create or replace view $dbnameHRD.cq_zone_to_work as  \n"
             . "SELECT col_mode, col_band, zones \n"
-            . "FROM $dbnameWEB.tb_zones, $dbnameHRD.modes, $dbnameHRD.bands \n"
+            . "FROM $dbnameWEB.tb_cq_zones, $dbnameHRD.modes, $dbnameHRD.bands \n"
             . "WHERE concat( col_mode,'-', col_band,'-', Zones ) NOT IN (\n"
             . "SELECT concat(CASE When COL_MODE Like '%USB%' or COL_MODE like '%LSB%' then 'SSB' else COL_MODE End ,'-', COL_BAND,'-', COL_CQZ )AS the_key \n"
             . "FROM $dbnameHRD.$tbHRD \n"
-            . "where COL_CQZ is not null) \n");
+            . "where COL_CQZ is not null and COL_EQSL_QSL_RCVD = 'Y' ) \n");
 
 }
 
