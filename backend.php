@@ -236,7 +236,7 @@ function MakeViews() {
             . "WHERE concat( col_mode,'-', col_band,'-', Zones ) NOT IN (\n"
             . "SELECT concat(CASE When COL_MODE Like '%USB%' or COL_MODE like '%LSB%' then 'SSB' else COL_MODE End ,'-', COL_BAND,'-', COL_CQZ )AS the_key \n"
             . "FROM $dbnameHRD.$tbHRD \n"
-            . "where COL_CQZ is not null and COL_EQSL_QSL_RCVD = 'Y' ) \n");
+            . "where COL_CQZ is not null  ) \n");
 
 }
 
