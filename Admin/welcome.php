@@ -151,7 +151,7 @@ if ($debug == "true") {
 if (isset($_FILES['file'])) {
     $LOG = $_POST['Log'];
     if ($LOG == 1) {
-        $filePath = "Awards/";
+        $filePath = "/srv/Awards/";
         $FileName = $_FILES["file"]["name"];
         $AwardsDes = $_POST['awardsdes'];
     } elseif ($LOG == 2) {
@@ -220,20 +220,17 @@ if (isset($_FILES['file'])) {
                     closedir($dir);
 
                     if ($LOG == 1) {
-                        $update = $db->query("INSERT INTO `HRD_Web`.`tb_awards` (`COL_PRIMARY_KEY`, `COL_Award`, `COL_File`) VALUES ('NULL', '$AwardsDes', '$FileName'");
+                        $update = $db->query("INSERT INTO `HRD_Web`.`tb_awards` (`COL_PRIMARY_KEY`, `COL_Award`, `COL_File`) VALUES ('NULL', '$AwardsDes', '$FileName')");
                     } elseif (($LOG == 2) || ($LOG == 3)) {
 
                         $query = "SELECT * FROM `HRD_Web`.`tb_Cards` WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key ";
-                       
                         $id_lookup = $db->row($query);
                         if ($id_lookup['COL_PRIMARY_KEY'] <> "") {
                             $query = "UPDATE `HRD_Web`.`tb_Cards` SET  `$tbside` = '$FileName' WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key";
                             echo @query;
                             $update = $db->query($query);
-                                                  
                         } else {
                             $update = $db->query("INSERT INTO `HRD_Web`.`tb_Cards` (`COL_PRIMARY_KEY`, `$tbside`) VALUES ( $Key, $FileName)");
-                            
                         }
                     }
                 }
