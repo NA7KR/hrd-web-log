@@ -47,7 +47,7 @@ if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
         $fileMutiply = 1000;
         $FileNoGroup = (($Key / $fileMutiply) % $fileMutiply * $fileMutiply);
         $fileNoGroupHigh = $FileNoGroup + ($fileMutiply - 1);
-        $base = '/srv/cards/';
+        $base = '/opt/cards/';
         $filePath = $base . $FileNoGroup . "-" . $fileNoGroupHigh;
         $pathToThumbs = $filePath . '/thumbs/';
         $Index = 'index.php';
@@ -83,7 +83,7 @@ if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
             $error1 = 0;
             while (list(, $value) = each($arr)) {
                 if (strpos($str, $value) !== false) {
-                    $file = '/srv/error.txt'; // Open the file to get existing content 
+                    $file = '/opt/error.txt'; // Open the file to get existing content 
                     $errormsg = file_get_contents($file); // Write the contents back to the file
                     $eqslp = str_replace("Password=$EQSL", "Password=PASSWORD", $eqsl);
                     $errormsg .= $FileName . " Error: " . $value . " Connection: " . $eqslp . "\r\n";

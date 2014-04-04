@@ -31,10 +31,10 @@ if (isset($_POST['Submit1'])) {
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 };
-$query = "SELECT * from $dbnameHRD.$tbHRD.COL_EQSL_QSL_RCVD where ='Y' \n"
-	. "SELECT $dbnameWEB.tb_cq_zones.zones as `CQ Zone to Work` \n"
-    . "FROM $dbnameWEB.tb_cq_zones left outer join $dbnameHRD.$tbHRD on $dbnameWEB.tb_cq_zones.zones = $dbnameHRD.$tbHRD.COL_CQZ  \n"
-    . "where COL_CQZ is null __REPLACE__  ";
+//$query = "SELECT * from $dbnameHRD.$tbHRD.COL_EQSL_QSL_RCVD where ='Y' \n"
+//	. "SELECT $dbnameWEB.tb_cq_zones.zones as `CQ Zone to Work` \n"
+//    . "FROM $dbnameWEB.tb_cq_zones left outer join $dbnameHRD.$tbHRD on $dbnameWEB.tb_cq_zones.zones = $dbnameHRD.$tbHRD.COL_CQZ  \n"
+//    . "where COL_CQZ is null __REPLACE__  ";
 
 $query = "SELECT HRD_Web.tb_cq_zones.zones as `CQ Zone to Work` \n"
 	. " FROM HRD_Web.tb_cq_zones  \n"
@@ -42,15 +42,18 @@ $query = "SELECT HRD_Web.tb_cq_zones.zones as `CQ Zone to Work` \n"
 	. " HRD_Web.tb_cq_zones.zones = NA7KR.TABLE_HRD_CONTACTS_V01.COL_CQZ   \n"
 	. " where COL_CQZ is null \n"
 	. " or HRD_Web.tb_cq_zones.zones not in \n"
-	. " (SELECT COL_CQZ from NA7KR.TABLE_HRD_CONTACTS_V01 where COL_EQSL_QSL_RCVD  = 'Y' group by 1) \n"
+	. " (SELECT COL_CQZ from NA7KR.TABLE_HRD_CONTACTS_V01 where COL_EQSL_QSL_RCVD __REPLACE__  = 'Y' group by 1) \n"
 	. " group by 1";
 
 if ($SUBMIT == "true") {
     if ($INPUT == "input_band") {
 		$TEXT = $BAND;
 		$BAND = safe("%" . $BAND . "%");
-		$query ="SELECT $dbnameHRD.cq_zone_to_work.zones as `CQ Zone to Work`, COL_MODE as `Modes`  FROM $dbnameHRD.cq_zone_to_work where COL_BAND like __REPLACE__  order by col_band,col_mode,zones";
-		$query = str_replace("__REPLACE__", "$BAND ", $query);
+		$query ="SELECT $dbnameHRD.cq_zone_to_work.zones as `CQ Zone to Work`, COL_MODE as `Modes`  \n"
+		. " FROM $dbnameHRD.cq_zone_to_work \n"
+		. " where COL_BAND like __REPLACE__  \n"
+		 . " order by col_band,col_mode,zones";
+		$query = str_replace("__REPLACE__", " $BAND ", $query);
 		$id_lookup = $db->query($query);
 		$data = "<table border='0' align='center'><tbody><tr><th>CQ Zone to Work $TEXT</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
 		foreach ($id_lookup as $row):
