@@ -151,7 +151,7 @@ if ($debug == "true") {
 if (isset($_FILES['file'])) {
     $LOG = $_POST['Log'];
     if ($LOG == 1) {
-        $filePath = "/srv/Awards/";
+        $filePath = $base . "Awards/";
         $FileName = $_FILES["file"]["name"];
         $AwardsDes = $_POST['awardsdes'];
     } elseif ($LOG == 2) {
@@ -168,7 +168,7 @@ if (isset($_FILES['file'])) {
             $fileMutiply = 1000;
             $FileNoGroup = (($Key / $fileMutiply) % $fileMutiply * $fileMutiply);
             $fileNoGroupHigh = $FileNoGroup + ($fileMutiply - 1);
-            $filePath = "/srv/cards/" . $FileNoGroup . "-" . $fileNoGroupHigh . "/";
+            $filePath = $base . "cards/" . $FileNoGroup . "-" . $fileNoGroupHigh . "/";
             if (!file_exists('$filePath')) {
                 mkdir($filePath, 0777, true);
             }
