@@ -12,7 +12,7 @@
  * ************************************************************************ */
 $first = "false";
 $first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
-if ($first <> True)
+if ($first == false)
 {
     header( 'Location: index.php' ) ;
 }
@@ -30,6 +30,7 @@ function qrzcom_interface($callsign) {
 #################################################
 
 function qsl_worked() {
+    $QSLWORKED = "";
     include (__DIR__ . '/../config.php');
     require_once('lookup.class.php');
     $db = new Db();
@@ -245,6 +246,7 @@ function MakeViews() {
 #################################################
 
 function OptionList($key1, $key2, $key3, $key4, $key5, $key6) {
+    $data = "";
     if ($key1 == true or $key2 == true or $key3 == true or $key4 == true or $key5 == true) {
         $data = "Query Type:<br>" . PHP_EOL;
     }
