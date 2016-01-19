@@ -1,0 +1,23 @@
+Time : 21:54:28
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'F' in 'field list'
+Raw SQL : INSERT INTO `HRD_Web`.`tb_Cards` (`COL_PRIMARY_KEY`, `COL_File_Path_F`) VALUES ( 424, F-424-JA3CG.jpg)
+
+Time : 21:51:31
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'jpg)' at line 1
+Raw SQL : INSERT INTO `HRD_Web`.`tb_Cards` (`COL_PRIMARY_KEY`, `COL_File_Path_B`) VALUES ( 424, B-424-JA3CG/1.jpg)
+
+Time : 21:50:54
+SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'jpg)' at line 1
+Raw SQL : INSERT INTO `HRD_Web`.`tb_Cards` (`COL_PRIMARY_KEY`, `COL_File_Path_F`) VALUES ( 424, F-424-JA3CG/1.jpg)
+
+Time : 21:35:15
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'F' in 'field list'
+Raw SQL : INSERT INTO `HRD_Web`.`tb_Cards` (`COL_PRIMARY_KEY`, `COL_File_Path_F`) VALUES ( 147, F-147-EA7AH.jpg)
+
+Time : 21:14:40
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'B' in 'field list'
+Raw SQL : INSERT INTO `HRD_Web`.`tb_Cards` (`COL_PRIMARY_KEY`, `COL_File_Path_B`) VALUES ( 663, B-663-RJ3AA.jpg)
+
+Time : 21:14:04
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'F' in 'field list'
+Raw SQL : INSERT INTO `HRD_Web`.`tb_Cards` (`COL_PRIMARY_KEY`, `COL_File_Path_F`) VALUES ( 663, F-663-RJ3AA.jpg)

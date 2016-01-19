@@ -53,5 +53,5 @@ function createThumbs($pathToImages, $pathToThumbs, $thumbWidth) {
 // in which thumbnails will be placed and the thumbnail's width. 
 // We are assuming that the path will be a relative path working 
 // both in the filesystem, and through the web for links
-createThumbs("/srv/cards/0-999/", "/srv/cards/0-999/thumbs/", 100);
+createThumbs("/opt/var/www/cards/1000-1999/", "/opt/var/www/cards/1000-1999/thumbs/", 100);
 ?>

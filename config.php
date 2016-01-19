@@ -9,6 +9,7 @@
 		$tbHRD="TABLE_HRD_CONTACTS_V01";//HRD Table name
 		$tbSelect="tb_Select";
 		$myCall="CALL";
+		$base="PATH"; //musr end with /
 		$CountrysArray = [
 							"USA" => "USA", 	  //to display on page add // to remove
 							"GB" => "GB", 		  //to display on page add // to remove
