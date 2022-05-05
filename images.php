@@ -23,7 +23,7 @@ function createThumbs($pathToImages, $pathToThumbs, $thumbWidth) {
         $info = pathinfo($pathToImages . $fname);
         // continue only if this is a JPEG image
         if (strtolower($info['extension']) == 'jpg') {
-            echo "Creating thumbnail for {$fname} <br />";
+            echo "Creating thumbnail for {$fname} <br />\r\n";
 
             // load image and get image size
             $img = imagecreatefromjpeg("{$pathToImages}{$fname}");
@@ -42,6 +42,8 @@ function createThumbs($pathToImages, $pathToThumbs, $thumbWidth) {
 
             // save thumbnail into a file
             imagejpeg($tmp_img, "{$pathToThumbs}{$fname}");
+	
+
         }
     }
     // close the directory

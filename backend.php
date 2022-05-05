@@ -11,7 +11,10 @@
  *
  * ************************************************************************ */
 $first = "false";
-$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+if (isset($_POST['1st'])) 
+{
+    $first = htmlspecialchars($_POST["1st"]);
+}
 if ($first == false)
 {
     header( 'Location: index.php' ) ;
@@ -63,7 +66,8 @@ function select() {
         }
     endforeach;
     $data .='<br><div><P style="text-align: center">' . PHP_EOL;
-    $data .= '<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div></FORM><BR>' . PHP_EOL;
+    $data .= '<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></p></div><BR>' . PHP_EOL;
+    $data .= '<input type="hidden" name="1st"     value= "true">' . PHP_EOL;
     return $data;
 }
 
@@ -136,7 +140,7 @@ function band() {
     require_once('lookup.class.php');
     $db = new Db();
     $id_lookup = $db->query("SELECT COL_BAND FROM $dbnameHRD.$tbHRD GROUP BY `COL_BAND` ");
-    $select .='<span id="Band">' . PHP_EOL;
+    $select ='<span id="Band">' . PHP_EOL;
     foreach ($id_lookup as $row): {
 	if ($row['COL_BAND'] == "15m"){
             $select .='<input type="radio" value=' . $row['COL_BAND'] . ' checked name="Band" >' . $row['COL_BAND'] . PHP_EOL;
@@ -160,7 +164,7 @@ function mode() {
     require_once('lookup.class.php');
     $db = new Db();
     $id_lookup = $db->query("SELECT DISTINCT  CASE When COL_MODE Like '%USB%' or COL_MODE like '%LSB%' then 'SSB' else COL_MODE End as COL_MODE  FROM $dbnameHRD.$tbHRD GROUP BY `COL_MODE` ");
-    $select .='<span id="Mode">' . PHP_EOL;
+    $select ='<span id="Mode">' . PHP_EOL;
     foreach ($id_lookup as $row): {
 		if ($row['COL_MODE'] == "SSB"){
                 	$select .='<input type="radio" value=' . $row['COL_MODE'] . ' checked name="Mode"  >' . $row['COL_MODE'] . PHP_EOL;
@@ -350,6 +354,9 @@ function OptionState() {
             . "on COL_STATE = $dbnameWEB.tb_States_Countries.ST \n"
             . "Where COL_STATE is not null and $dbnameWEB.tb_States_Countries.sCountry = 'USA' group by 1 \n"
             . "order by 2,1";
+
+$query = "SET sql_mode = \" \"";
+$id_lookup = $db->query($query);
 
     $id_lookup = $db->query($SQL);
     $data = '<span id="State">' . PHP_EOL;

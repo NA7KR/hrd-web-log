@@ -32,8 +32,9 @@ $scriptName = $_SERVER['SCRIPT_NAME'];
 $visitURL = $url.$scriptName;
 //must have browser.ini in php.ini file
 $browser = get_browser(null, true);
+//print_r ($browser['browser']);
 //format the browser info
-$browser_type = str_replace("IE", "Internet Explorer", $browser['browser']);
+$browser_type =  $browser['browser'];
 //format the browser version
 $version = $browser['version'] ;
 //format the OS
@@ -42,5 +43,6 @@ $os = str_replace("Win", "Windows ", $browser['platform']);
 $user_os = str_replace("Win", "Windows ", $browser['platform_version']);
 $SQL = " INSERT INTO `visit` (`visitorIP`  ,`visitURL`, `browser`  ,`version`,`os`, `osversion`) "
 . " VALUES ( '$ipAddress'  , '$visitURL', '$browser_type', '$version', '$os','$user_os' )";
+//echo "SQL " . $SQL ;
  $update = $db->query($SQL);
 ?>

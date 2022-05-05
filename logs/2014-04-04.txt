@@ -1,2 +1,0 @@
-Time : 23:14:50
-SQLSTATE[28000] [1045] Access denied for user 'www-data'@'localhost' (using password: NO)

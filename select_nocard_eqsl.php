@@ -1,5 +1,4 @@
 <?php
-
 /* * ***********************************************************************
  * 			NA7KR Log Program 
  * *************************************************************************
@@ -12,11 +11,11 @@
  *
  * ************************************************************************ */
 $first = "false";
-$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+$first =  htmlspecialchars($_POST["1st"]);
 if ($first <> True)
 {
     header( 'Location: index.php' ) ;
- }
+}
 include_once (__DIR__ . '/../config.php');
 require_once('db.class.php');
 require_once("backend.php");
@@ -24,17 +23,38 @@ $db = new Db();
 $i = 0; //style counter
 $x = 0; //
 $FileNoGroup = 0;
+$data = "";
+$SUBMIT = "false";
 $find = '.jpg';
 $fileMutiply = 1000;
-if (isset($_POST['Submit1'])) {
-    $LOG = \filter_input(\INPUT_POST, 'Log', \FILTER_SANITIZE_STRING);
-    $QTY = \filter_input(\INPUT_POST, 'Qty', \FILTER_SANITIZE_STRING);
-    $SUBMIT = \filter_input(\INPUT_POST, 'Submit', \FILTER_SANITIZE_STRING);
-    $BAND = \filter_input(\INPUT_POST, 'Band', \FILTER_SANITIZE_STRING);
-    $MODE = \filter_input(\INPUT_POST, 'Mode', \FILTER_SANITIZE_STRING);
-    $STATE = \filter_input(\INPUT_POST, 'State', \FILTER_SANITIZE_STRING);
-    $COUNTRY = \filter_input(\INPUT_POST, 'Country', \FILTER_SANITIZE_STRING);
-    $INPUT = \filter_input(\INPUT_POST, 'optionlist', \FILTER_SANITIZE_STRING);
+if (isset($_POST['Submit1'])) 
+{
+    $LOG = htmlspecialchars($_POST["Log"]);
+    if (isset($_POST['Submit'])) {
+        $SUBMIT = htmlspecialchars($_POST["Submit"]);
+    }
+    if (isset($_POST['Band'])) {
+        $BAND = htmlspecialchars($_POST["Band"]);
+    }
+    if (isset($_POST['Mode'])) {
+        $MODE = htmlspecialchars($_POST["Mode"]);
+    }
+    if (isset($_POST['Qty'])) {
+        $QTY = htmlspecialchars($_POST["Qty"]);
+    }
+    if (isset($_POST['Call_Search'])) {
+        $CALL_SEARCH = htmlspecialchars($_POST["Call_Search"]);
+    }
+  
+    if (isset($_POST['State'])) {
+        $STATE = htmlspecialchars($_POST["State"]);
+    }
+    if (isset($_POST['Country'])) {
+        $COUNTRY = htmlspecialchars($_POST["Country"]);
+    }
+    if (isset($_POST['optionlist'])) {
+        $INPUT = htmlspecialchars($_POST["optionlist"]);
+    }
     include_once buildfiles($LOG);
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
@@ -55,7 +75,8 @@ $query = "SELECT $dbnameWEB.$tbStates.State as `StateF`, \n"
         . " __REPLACE__ ) \n"
         . " group by 1,2";
 
-if ($SUBMIT == "true") {
+if ($SUBMIT == "true") 
+{
     if ($INPUT == "input_band") {
         $BAND = safe("%" . $BAND . "%");
         $query = str_replace("__REPLACE__", " and COL_BAND like $BAND ", $query);
@@ -83,7 +104,7 @@ if ($SUBMIT == "true") {
 
     $data = "<table border='0' align='center'><tbody><tr><th>State</th></tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
     foreach ($id_lookup as $row): {
-            $fileName = $row['File'];
+            //$fileName = $row['File'];
             $data .= " <td>" . $row['StateF'] . "</td> <td>" . $row['State'] . "</td>" . grid_style($i) . PHP_EOL;
             $i++;
             unset($row); // break the reference with the last element
@@ -94,7 +115,9 @@ if ($SUBMIT == "true") {
     $data .='<span class="auto-style5">' . PHP_EOL;
     $data .= "Count " .$i;
     $data .=OptionList(false, false, false, false, false, false) . PHP_EOL;
-} else {
+} 
+else
+{
     $data = '<table width=600 class="center2">' . PHP_EOL;
     $data .='<tr><td>' . PHP_EOL;
     $data .=OptionList(true, true, false, false, false, true) . PHP_EOL;

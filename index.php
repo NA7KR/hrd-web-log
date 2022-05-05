@@ -11,8 +11,8 @@
  *
  * ************************************************************************ */
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <link type="text/css" rel="stylesheet" href="Admin/css/style.css" >
         <title>
@@ -27,11 +27,27 @@
             //MakeViews();
             ?>
             <meta name="keywords" content="Ham Radio NA7KR">
-            <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
             <meta name="description" content="<?php echo $myCall ?> Ham Radio LogBook"> 
             <meta http-equiv="content-type" content="text/html;charset=UTF-8"> 
             <meta name="revisit-after" content="1 days">
             <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+            <meta name="viewport" content="width=device-width">
+	<!-- Matomo -->	
+	<script type="text/javascript">
+  		var _paq = window._paq || [];
+  		/* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  		_paq.push(['trackPageView']);
+  		_paq.push(['enableLinkTracking']);
+  		(function() {
+    			var u="//counter.na7kr.us/";
+    			_paq.push(['setTrackerUrl', u+'matomo.php']);
+    			_paq.push(['setSiteId', '3']);
+    			var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    			g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  		})();
+	</script>
+	<!-- End Matomo Code -->
+
             </head>
 
             <body  class="background1">
@@ -43,7 +59,7 @@
                 <?php
                 //echo safe("this%20is\na&nbsb;'test';");
                 if (isset($_POST['Submit1'])) {
-                    $LOG = \filter_input(\INPUT_POST, 'Log', \FILTER_SANITIZE_STRING);
+                    $LOG  = htmlspecialchars($_POST["Log"]);
                     $data = '<form name ="form1" method ="post" action ="index.php">' . PHP_EOL;
                     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
                     $data .= '<input type="hidden" name="Submit" value= "true">' . PHP_EOL;
@@ -54,10 +70,18 @@
                 } else {
                     echo select();
                     ?>
-                    <div><p style="text-align: center"> Only band and modes in your log shows</p>
-                        <p style="text-align: center"> This is a addon and not any way a part of HRD.</p>
-                        <div><P style="text-align: center"><img  alt="HRD" src="HRD_logo.jpg"></p></div>
-                        <p style="text-align: center"> Please contact <a href="mailto:support@na7kr.us"><span class="auto-style2">support@na7kr.us</span></a> and not HRD.</p></div>
+                    <div>
+						<p class="p,center"> Only band and modes in your log shows</p>
+                        <p class="p.center"> This is a addon and not any way a part of HRD.</p>
+                        <div>
+							<P class="p.center"><img  alt="HRD" src="HRD_logo.jpg"></p>
+						</div>
+                        <p class="p.center"> Please contact 
+							<a href="mailto:support@na7kr.us">
+								<span class="auto-style2">support@na7kr.us</span>
+							</a> and not HRD.
+						</p>
+					</div>
 
                     <p>
                     <div class="c1">
@@ -81,20 +105,5 @@
                     $phpfile = __FILE__;
                     footer($phpfile);
                 }
-                ?>   
-				<!-- Piwik -->
-				<script type="text/javascript">
-				  var _paq = _paq || [];
-				  _paq.push(['trackPageView']);
-				  _paq.push(['enableLinkTracking']);
-				  (function() {
-					var u="//counter.na7kr.us/";
-					_paq.push(['setTrackerUrl', u+'piwik.php']);
-					_paq.push(['setSiteId', 6]);
-					var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-					g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-				  })();
-				</script>
-				<noscript><p><img src="//counter.na7kr.us/piwik.php?idsite=6" style="border:0;" alt="" /></p></noscript>
-				<!-- End Piwik Code -->				
+                ?>   				
                 </html>

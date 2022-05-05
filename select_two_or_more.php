@@ -11,7 +11,7 @@
  *
  * ************************************************************************ */
 $first = "false";
-$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+$first = htmlspecialchars($_POST["1st"]);
 if ($first <> True)
 {
     header( 'Location: index.php' ) ;
@@ -24,13 +24,37 @@ $i = 0; //style counter
 $x = 0; //
 $FileNoGroup = 0;
 $find = '.jpg';
+$data = "";
+$counter = 0 ;
+$SUBMIT = "false";
 $fileMutiply = 1000;
 if (isset($_POST['Submit1'])) {
-    $SUBMIT = \filter_input(\INPUT_POST, 'Submit', \FILTER_SANITIZE_STRING);
-    $MODE = \filter_input(\INPUT_POST, 'Mode', \FILTER_SANITIZE_STRING);
-    $STATE = \filter_input(\INPUT_POST, 'State', \FILTER_SANITIZE_STRING);
-    $COUNTRY = \filter_input(\INPUT_POST, 'Country', \FILTER_SANITIZE_STRING);
-    $INPUT = \filter_input(\INPUT_POST, 'optionlist', \FILTER_SANITIZE_STRING);
+    $LOG = htmlspecialchars($_POST["Log"]);
+    if (isset($_POST['Submit'])) {
+        $SUBMIT = htmlspecialchars($_POST["Submit"]);
+    }
+    if (isset($_POST['Band'])) {
+        $BAND = htmlspecialchars($_POST["Band"]);
+    }
+    if (isset($_POST['Mode'])) {
+        $MODE = htmlspecialchars($_POST["Mode"]);
+    }
+    if (isset($_POST['Qty'])) {
+        $QTY = htmlspecialchars($_POST["Qty"]);
+    }
+    if (isset($_POST['Call_Search'])) {
+        $CALL_SEARCH = htmlspecialchars($_POST["Call_Search"]);
+    }
+  
+    if (isset($_POST['State'])) {
+        $STATE = htmlspecialchars($_POST["State"]);
+    }
+    if (isset($_POST['Country'])) {
+        $COUNTRY = htmlspecialchars($_POST["Country"]);
+    }
+    if (isset($_POST['optionlist'])) {
+        $INPUT = htmlspecialchars($_POST["optionlist"]);
+    }
     include_once buildfiles($LOG);
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
@@ -61,7 +85,7 @@ if ($SUBMIT == "true") {
     $id_lookup = $db->query($query);
     $data = "<table border='0' align='center'><tbody><tr><th>Country</th></tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
     foreach ($id_lookup as $row): {
-            $fileName = $row['File'];
+            //$fileName = $row['File'];
             $data .= "<td>" . $row['Count'] . "</td>" . PHP_EOL ;
             $data .= "<td>" . $row['COL_CALL'] . "</td>" . PHP_EOL . grid_style($i) . PHP_EOL;
             $counter++;

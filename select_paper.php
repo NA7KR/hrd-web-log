@@ -11,10 +11,10 @@
  *
  * ************************************************************************ */
 $first = "false";
-$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+$first =  htmlspecialchars($_POST["1st"]);
 if ($first <> True)
 {
-    header( 'Location: index.php' ) ;
+#    header( 'Location: index.php' ) ;
 }
 include_once (__DIR__ . '/../config.php');
 require_once('db.class.php');
@@ -24,6 +24,8 @@ $i = 0; //style counter
 $x = 0; //
 $counter = 0;
 $FileNoGroup = 0;
+$data = "";
+$SUBMIT = "false";
 $find = '.jpg';
 $fileMutiply = 1000;
 $query = "SELECT tb_Cards.COL_PRIMARY_KEY as 'Log ID', \n"

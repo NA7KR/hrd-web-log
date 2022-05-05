@@ -1,8 +1,0 @@
-Time : 20:35:38
-SQLSTATE[42000] [1049] Unknown database 'HRD_Web'
-
-Time : 20:06:25
-SQLSTATE[42000] [1049] Unknown database 'HRD_Web'
-
-Time : 20:05:23
-SQLSTATE[42000] [1049] Unknown database 'HRD_Web'

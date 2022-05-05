@@ -11,7 +11,7 @@
  *
  * ************************************************************************ */
 $first = "false";
-$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+$first = htmlspecialchars($_POST["1st"]);
 if ($first <> True)
 {
     header( 'Location: index.php' ) ;
@@ -37,6 +37,7 @@ include_once (__DIR__ . '/../config.php');
     endforeach;
     $data .= "</table><br><br>" . PHP_EOL;
     echo $data;
+    $data = "";
     $phpfile = __FILE__ ;
     footer($phpfile);
 ?>

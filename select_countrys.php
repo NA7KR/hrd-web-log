@@ -12,7 +12,8 @@
  *
  * ************************************************************************ */
 $first = "false";
-$first = \filter_input(\INPUT_POST, '1st', \FILTER_SANITIZE_STRING);
+$SUBMIT = "false";
+$first =  htmlspecialchars($_POST["1st"]);
 if ($first <> True)
 {
     header( 'Location: index.php' ) ;
@@ -27,18 +28,29 @@ $FileNoGroup = 0;
 $find = '.jpg';
 $fileMutiply = 1000;
 $counter = 0;
+$data = "";
 if (isset($_POST['Submit1'])) {
-    $LOG = \filter_input(\INPUT_POST, 'Log', \FILTER_SANITIZE_STRING);
-    $SUBMIT = \filter_input(\INPUT_POST, 'Submit', \FILTER_SANITIZE_STRING);
-    $BAND = \filter_input(\INPUT_POST, 'Band', \FILTER_SANITIZE_STRING);
-    $MODE = \filter_input(\INPUT_POST, 'Mode', \FILTER_SANITIZE_STRING);
-    $INPUT = \filter_input(\INPUT_POST, 'optionlist', \FILTER_SANITIZE_STRING);
+    $LOG = htmlspecialchars($_POST["Log"]);
+    if (isset($_POST['Submit'])) {
+        $SUBMIT = htmlspecialchars($_POST["Submit"]);
+    }
+    if (isset($_POST['Band'])) {
+        $BAND = htmlspecialchars($_POST["Band"]);
+    }
+ 
+    if (isset($_POST['Mode'])) {
+        $MODE = htmlspecialchars($_POST["Mode"]);
+    }
+    if (isset($_POST['optionlist'])) {
+        $INPUT = htmlspecialchars($_POST["optionlist"]);
+    }
+   
     include_once buildfiles($LOG);
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
 
-$query = "SELECT COL_COUNTRY as 'Countrys Worked' FROM $dbnameHRD.$tbHRD  __REPLACE__ group by 1";
+$query = "SELECT COL_COUNTRY as 'Countrys Worked' FROM $dbnameHRD.$tbHRD  __REPLACE__ group by 1 order by COL_COUNTRY";
 if ($SUBMIT == "true") {
     if ($INPUT == "input_band") {
         $BAND = safe("%" . $BAND . "%");
@@ -51,10 +63,11 @@ if ($SUBMIT == "true") {
     } elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
     }
+    //echo $query;
     $id_lookup = $db->query($query);
     $data = "<table border='0' align='center'><tbody><tr><th>Country</th></tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
     foreach ($id_lookup as $row): {
-            $fileName = $row['File'];
+            //$fileName = $row['File'];
             $data .= "<td>" . $row['Countrys Worked'] . "</td>" . PHP_EOL . grid_style($i) . PHP_EOL;
             $counter++;
             $i++;
