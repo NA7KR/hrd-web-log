@@ -19,7 +19,7 @@ if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?')))
     echo "Usage: ";
     echo $argv[0]; ?> <option>
     <option> Enter the QSL number.
-		Auomatic with SQL.
+		0 for auomatic with SQL.
         With the --help, -help, -h,
         or -? options, you can get this help.
         <?php
@@ -40,26 +40,13 @@ if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?')))
 				echo $iKey;
 				image($iKey);
 				$query = "UPDATE `HRD_Web`.`tb_to_download` SET  `updated` = '1' WHERE `tb_to_download`.`KeyNumber` = $iKey";
-				echo @query;
+				//echo $query;
 					$update = $db->query($query);
 			}
 			endforeach;
 		}
 		else
 		{
-//			echo  $Key;
-//			$e  = substr($Key, -3); 
-//			if ($e == 999)
-//			{
-//				$key1 = $Key+1;
-//        			$key2 = $Key+1000;
-//				$newkey = $key1 . "-" . $key2;
-//				$newkey = "/var/www/cards/" . $newkey;
-//        			makeDir($newkey);
-//				$tkey = $newkey . "/thumbs/";
-//				makeDir($tkey);
-//			}
-
 			image($Key);
 		}
     }
@@ -74,7 +61,6 @@ if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?')))
 		$id_lookup = $db->row("SELECT COL_File_Path_E FROM tb_Cards WHERE COL_PRIMARY_KEY = :f", array("f" => $Key));
 		$qsl_lookup = $db->row("SELECT year(COL_TIME_OFF)as 'Year', month(COL_TIME_OFF)as 'Month', day(COL_TIME_OFF)as 'Day', hour(COL_TIME_OFF)as 'Hour', minute(COL_TIME_OFF) as 'Minute',COL_CALL as 'Call', COL_BAND as 'Band', COL_MODE as 'Mode' FROM NA7KR.TABLE_HRD_CONTACTS_V01  WHERE `COL_PRIMARY_KEY`   = $Key");
 		echo $Key . "<br>";
-		#$Call_O = $qsl_lookup['COL_File_Path_E'];
 		$Year = $qsl_lookup['Year'];
 		$Month = $qsl_lookup['Month'];
 		$Day = $qsl_lookup['Day'];
@@ -129,8 +115,7 @@ if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?')))
 			);
 			reset($arr);
 			$error1 = 0;
-			while (list(, $value) = each($arr))
-			//foreach ($arr as $value)
+	        foreach ($arr as $i => $value) 
 			{
 				if (strpos($str, $value) !== false)
 				{
@@ -168,19 +153,7 @@ if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?')))
 				chmod("{$pathToThumbs}{$FileName}", 0644);
 				// close the directory
 				closedir($dir);
-				//$tbside = "COL_File_Path_f";
-				//$query = "SELECT * FROM `HRD_Web`.`tb_Cards` WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key ";
-				//$id_lookup = $db->row($query);
-				//if ($id_lookup['COL_PRIMARY_KEY'] <> "")
-				//{
-				//	$query = "UPDATE `HRD_Web`.`tb_Cards` SET  `$tbside` = '$FileName' WHERE `tb_Cards`.`COL_PRIMARY_KEY` = $Key";
-				//	echo @query;
-				//	$update = $db->query($query);
-				//	} else {
-				//		  $update = $db->query("INSERT INTO `HRD_Web`.`tb_Cards` (`COL_PRIMARY_KEY`, `$tbside`) VALUES ( $Key, $FileName)");
-				//	}
 				}
-
 		}
 	}
     function getTexts($string, $start, $end)
@@ -195,4 +168,4 @@ if ($argc != 2 || in_array($argv[1], array('--help', '-help', '-h', '-?')))
         }
         return $text;
     }
-    ?>
+?>
