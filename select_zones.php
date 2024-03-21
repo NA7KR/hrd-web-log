@@ -1,19 +1,33 @@
- <?php
-/* * ***********************************************************************
- * 			NA7KR Log Program 
- * *************************************************************************
+<?php
+// select_zones.php
+/*
+Copyright © 2024 NA7KR Kevin Roberts. All rights reserved.
 
- * *************************************************************************
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- * ************************************************************************ */
-include_once (__DIR__ . '/../config.php');
-require_once('db.class.php');
-require_once("backend.php");
-$db = new Db();
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+// Check if the form has been submitted and if the value of "1st" is true
+if (!isset($_POST["1st"]) || $_POST["1st"] !== "true") {
+    // Redirect to received.php if the condition is not met
+    header('Location: received.php');
+    exit; // Stop further execution
+}
+
+// Include necessary files
+include("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
+require_once("backend/querybuilder.php");
+
 $i = 0; //style counter
 $x = 0; //
 $FileNoGroup = 0;
@@ -22,85 +36,86 @@ $fileMutiply = 1000;
 $data = "";
 $counter = 0;
 $SUBMIT = "false";
-if (isset($_POST['Submit1'])) 
-    {
+if (isset($_POST['Submit1'])) {
     $LOG = htmlspecialchars($_POST["Log"]);
-    if (isset($_POST['Submit'])) 
-    {
+    if (isset($_POST['Submit'])) {
         $SUBMIT = htmlspecialchars($_POST["Submit"]);
     }
-    if (isset($_POST['Band'])) 
-    {
+    if (isset($_POST['Band'])) {
         $BAND = htmlspecialchars($_POST["Band"]);
     }
- 
-    if (isset($_POST['Mode'])) 
-    {
+
+    if (isset($_POST['Mode'])) {
         $MODE = htmlspecialchars($_POST["Mode"]);
     }
-    if (isset($_POST['optionlist'])) 
-    {
+    if (isset($_POST['optionlist'])) {
         $INPUT = htmlspecialchars($_POST["optionlist"]);
     }
+
    
-    include_once buildfiles($LOG);
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
-};
-$query = "SELECT $dbnameWEB.tb_zones.zones as `ITU Zone to Work` \n"
-    . "FROM $dbnameWEB.tb_zones left outer join $dbnameHRD.$tbHRD on $dbnameWEB.tb_zones.zones = $dbnameHRD.$tbHRD.COL_ITUZ  \n"
-    . "where COL_ITUZ is null __REPLACE__ ";
+}
 
-if ($SUBMIT == "true") 
-{
-    if ($INPUT == "input_band") 
-    {
-		$TEXT = $BAND;
-		$BAND = safe("%" . $BAND . "%");
-		$query ="SELECT $dbnameHRD.zone_to_work.zones as `ITU Zone to Work`, COL_MODE as `Modes`  FROM $dbnameHRD.zone_to_work where COL_BAND like __REPLACE__  order by col_band,col_mode,zones";
-		$query = str_replace("__REPLACE__", "$BAND ", $query);
-		$id_lookup = $db->query($query);
-		$data = "<table border='0' align='center'><tbody><tr><th>ITU Zone to Work $TEXT</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
-		foreach ($id_lookup as $row):
-			{
-				//$fileName = $row['File'];
-				$data .=  "<td>" . $row['ITU Zone to Work'] . "</td><td>" . $row['Modes'] . "</td>" . grid_style($i) . PHP_EOL;
-				$i++;
-				unset($row); // break the reference with the last element
-			}
-		endforeach;
-	}
-	elseif ($INPUT == "input_mode") 
-    {
-		$TEXT = $MODE;
-        	$MODE = safe("%" . $MODE . "%");
-		$query ="SELECT $dbnameHRD.zone_to_work.zones as `ITU Zone to Work`, COL_BAND as `Band`  FROM $dbnameHRD.zone_to_work where COL_MODE like __REPLACE__  order by col_band,col_mode,zones";
-        	$query = str_replace("__REPLACE__", "$MODE ", $query);
- 		 $id_lookup = $db->query($query);
-                $data = "<table border='0' align='center'><tbody><tr><th>ITU Zone to Work $TEXT</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
-                foreach ($id_lookup as $row):
-                        {
-                                //$fileName = $row['File'];
-                                $data .=  "<td>" . $row['ITU Zone to Work'] . "</td><td>" . $row['Band'] . "</td>" . grid_style($i) . PHP_EOL;
-                                $i++;
-                                unset($row); // break the reference with the last element
-                        }
-                endforeach;
-    }
-	elseif ($INPUT == "input_none") 
-    {
-        $query = str_replace("__REPLACE__", " ", $query);
 
-		$id_lookup = $db->query($query);
-		$data = "<table border='0' align='center'><tbody><tr><th>ITU Zone to Work </th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
-		foreach ($id_lookup as $row):
-			{
-				//$fileName = $row['File'];
-				$data .=  "<td>" . $row['ITU Zone to Work'] . "</td>" . grid_style($i) . PHP_EOL;
-				$i++;
-				unset($row); // break the reference with the last element
-			}
-		endforeach;
+if ($SUBMIT == "true") {
+    if ($INPUT == "input_band") {
+        $TEXT = $BAND;
+        $BAND = safe("%" . $BAND . "%");
+        $query = getSelect_zonesITU_Band();
+        $BSAND = "15m" ;
+        $query = str_replace("__REPLACE__", "$BAND", $query);
+      try {
+             $results = $db->select($query);
+         } catch (Exception $e) {
+             echo "Query: " . $query ."<br>";
+             echo "Error executing query: " . $e->getMessage();
+         }
+        
+        $data .= "<div class='centered-content'>";
+        $data .= "<table class='custom-table' border='0'><tbody><tr>";
+        $data .= "<th>ITU Zone to Work $TEXT</th><th>Mode</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
+        foreach ($results as $row) {
+            $data .=  "<td>" . $row['ITU Zone to Work'] . "</td><td>" . $row['Modes'] . "</td>" . grid_style($i) . PHP_EOL;
+            $i++;
+            unset($row); // break the reference with the last element
+        }
+    } elseif ($INPUT == "input_mode") {
+        $TEXT = $MODE;
+        $MODE = safe("%" . $MODE . "%");
+        $query = getSelect_zonesITU_Mode();
+        $query = str_replace("__REPLACE__", "$MODE", $query);
+         try {
+                $results = $db->select($query);
+            } catch (Exception $e) {
+                echo "Query: " . $query ."<br>";
+                echo "Error executing query: " . $e->getMessage();
+            }
+        // Using the select function here
+        $data .= "<div class='centered-content'>";
+        $data .= "<table class='custom-table' border='0'><tbody><tr>";
+        $data .= "<th>ITU Zone to Work $TEXT</th><th>Band</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
+        foreach ($results as $row) {
+            $data .=  "<td>" . $row['ITU Zone to Work'] . "</td><td>" . $row['Band'] . "</td>" . grid_style($i) . PHP_EOL;
+            $i++;
+            unset($row); // break the reference with the last element
+        }
+    } elseif ($INPUT == "input_none") {
+        $query = getSelect_zonesITU();
+        try {
+                 $results = $db->select($query);
+            } catch (Exception $e) {
+                echo "Query: " . $query ."<br>";
+                echo "Error executing query: " . $e->getMessage();
+            }
+        $data .= "<div class='centered-content'>";
+        $data .= "<table class='custom-table' border='0'><tbody><tr>";
+        $data .= "<th>ITU Zone to Work</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
+        foreach ($results as $row) {
+            $data .=  "<td>" . $row['ITU Zone to Work'] . "</td>" . grid_style($i) . PHP_EOL;
+            $i++;
+            unset($row); // break the reference with the last element
+        }
     }
 
     $data .= "</table><br><br>" . PHP_EOL;
@@ -109,9 +124,7 @@ if ($SUBMIT == "true")
     $data .= "Count " .$i;
     $data .=OptionList(false, false, false, false, false, false) . PHP_EOL;
     $data .=OptionList(false, false, false, false, false, false) . PHP_EOL;
-} 
-else 
-{
+} else {
     $data = '<table width=600 class="center2">' . PHP_EOL;
     $data .='<tr><td>' . PHP_EOL;
     $data .=OptionList(true, true, false, false, false, true) . PHP_EOL;
@@ -124,7 +137,6 @@ else
     $data .='none will return all<br>' . PHP_EOL;
     $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;
 }
-//    $data .= $query. PHP_EOL;
-    echo $data;
-    $phpfile = __FILE__ ;
-    footer($phpfile);
+
+echo $data;
+

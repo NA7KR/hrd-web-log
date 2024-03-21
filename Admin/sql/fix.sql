@@ -1,0 +1,9 @@
+INSERT IGNORE  HRD_Web.tb_to_download (KeyNumber,updated)
+SELECT COL_PRIMARY_KEY   AS KeyNumber,0
+FROM NA7KR.$db_Table 
+	WHERE COL_EQSL_QSL_RCVD = "Y"
+		
+INSERT IGNORE  HRD_Web.tb_Cards (COL_PRIMARY_KEY,COL_File_Path_E)
+SELECT COL_PRIMARY_KEY, CONCAT('E-' , COL_PRIMARY_KEY, '-', REPLACE(Col_Call,'/','-'), '.jpg')  
+ FROM NA7KR.$db_Table 
+	WHERE COL_EQSL_QSL_RCVD = "Y"

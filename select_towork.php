@@ -1,26 +1,33 @@
 <?php
+// select_awards.php
+/*
+Copyright © 2024 NA7KR Kevin Roberts. All rights reserved.
 
-/* * ***********************************************************************
- * 			NA7KR Log Program 
- * *************************************************************************
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
- * *************************************************************************
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- * ************************************************************************ */
-$first = "false";
-$first = htmlspecialchars($_POST["1st"]);
-if ($first <> True)
-{
-    header( 'Location: index.php' ) ;
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+// Check if the form has been submitted and if the value of "1st" is true
+if (!isset($_POST["1st"]) || $_POST["1st"] !== "true") {
+    // Redirect to received.php if the condition is not met
+    header('Location: received.php');
+    exit; // Stop further execution
 }
-include_once (__DIR__ . '/../config.php');
-require_once('db.class.php');
-require_once("backend.php");
-$db = new Db();
+
+// Include necessary files
+include("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
+require_once("backend/querybuilder.php");
+
 $i = 0; //style counter
 $x = 0; //
 $data = "";
@@ -54,47 +61,50 @@ if (isset($_POST['Submit1'])) {
         $INPUT = htmlspecialchars($_POST["optionlist"]);
     }
 
-    include_once buildfiles($LOG);
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
-if ($Country= " ") {  $Country = "USA"; }
+if ($COUNTRY= " ") {  $COUNTRY = "USA"; }
 
 
-$query = "SET sql_mode = \" \"";
-$id_lookup = $db->query($query);
-if ($SUBMIT == "true") {
+if ($SUBMIT == "true") 
+{
     if ($INPUT == "input_band") {
-        $BAND = safe("%" . $BAND . "%");
-		$query = "select * from HRD_Web.tb_States_Countries where st not in "
-		. "( select col_state from NA7KR.TABLE_HRD_CONTACTS_V01 where COL_BAND like $BAND and col_country = HRD_Web.tb_States_Countries.country ) "
-		. " and sCountry = 'USA' group by st ";
-    } elseif ($INPUT == "input_mode") {
+        $BAND = safe("%". $BAND ."%");
+		$query = getSelect_towork_band($BAND);
+    } 
+    elseif ($INPUT == "input_mode") 
+    {
         $MODE = safe("%" . $MODE . "%");
-		$query = "select * from HRD_Web.tb_States_Countries where st not in "
-		. "( select col_state from NA7KR.TABLE_HRD_CONTACTS_V01 where  __REPLACE__ and col_country = HRD_Web.tb_States_Countries.country ) "
-		. " and sCountry = 'USA' group by st ";
-		if ( $MODE == "'%SSB%'" ){
-        $query = str_replace("__REPLACE__", " (COL_MODE like $MODE or COL_MODE like '%USB%' or COL_MODE like '%LSB%') ", $query);
+		
+		if ( $MODE == "'%SSB%'" )
+        {
+            $query = getSelect_towork_modeSSB($MODE); 
 		}
-		else {
-		$query = str_replace("__REPLACE__", " COL_MODE like $MODE", $query);
+		else 
+        {
+            $query = getSelect_towork_mode($MODE); 
 		}
-    } elseif ($INPUT == "input_none") {
-		 $query ="SELECT $dbnameWEB.$tbStates.State as `State` , "
-            . "$dbnameWEB.$tbStates.ST as `State` , "
-            . "$dbnameWEB.$tbStates.Country as `Country`"
-            . " FROM $dbnameWEB.$tbStates left outer join  $dbnameHRD.$tbHRD on $dbnameWEB.$tbStates.Country  = $dbnameHRD.$tbHRD.COL_COUNTRY "
-            . "AND $dbnameWEB.$tbStates.ST = $dbnameHRD.$tbHRD.COL_STATE  "
-            . "where $dbnameWEB.$tbStates.sCountry  like '%$Country%' "
-            . "and col_state is null "
-            . "group by 1,2";
+    } 
+    elseif ($INPUT == "input_none") 
+    {
+		$query =getSelect_towork($COUNTRY);
     }
 
     //echo $query;
-    $id_lookup = $db->query($query);
-    $data = "<table border='0' align='center'><tbody><tr><th>State</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
-    foreach ($id_lookup as $row): 
+    try {
+            $results = $db->select($query);
+        } 
+        catch (Exception $e) 
+        {
+            echo "Query: " . $query ."<br>";
+            echo "Error executing query: " . $e->getMessage();
+        }
+    $data .= "<table class='custom-table' border='0'>"
+          . "<tbody><tr>"
+          . "<th>States</th></tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
+   
+    foreach ($results as $row): 
         {  
             //$fileName = $row['File'];
             $data .=  "<td>" . $row['State'] . "</td>" . grid_style($i) . PHP_EOL;
@@ -102,21 +112,23 @@ if ($SUBMIT == "true") {
             unset($row); // break the reference with the last element
         }
     endforeach;
-    $data .=OptionList(false, false, false, false, false, false) . PHP_EOL; 
-} else {
-    $data = '<table width=600 class="center2">' . PHP_EOL;
-    $data .='<tr><td>' . PHP_EOL;
-    $data .=OptionList(true, true, false, false, false, true) . PHP_EOL;
-    $data .=band() . PHP_EOL;
-    $data .=mode() . PHP_EOL;
-    $data .='</td></tr>' . PHP_EOL;
-    $data .='</table>' . PHP_EOL;
-    $data .='<div class="c1">' . PHP_EOL;
-    $data .='<span class="auto-style5">' . PHP_EOL;
-    $data .='none will return all<br>' . PHP_EOL;
-    $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;
-}
+    $data .= OptionList(false, false, false, false, false, false) . PHP_EOL; 
+    $data .= "</tbody></table>";
+} 
+else 
+    {
+        $data = '<table width=600 class="center2">' . PHP_EOL;
+        $data .='<tr><td>' . PHP_EOL;
+        $data .=OptionList(true, true, false, false, false, true) . PHP_EOL;
+        $data .=band() . PHP_EOL;
+        $data .=mode() . PHP_EOL;
+        $data .='</td></tr>' . PHP_EOL;
+        $data .='</table>' . PHP_EOL;
+        $data .='<div class="c1">' . PHP_EOL;
+        $data .='<span class="auto-style5">' . PHP_EOL;
+        $data .='none will return all<br>' . PHP_EOL;
+        $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;
+    }
 echo $data;
 //echo $query;
-$phpfile = __FILE__;
-footer($phpfile);
+

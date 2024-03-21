@@ -1,0 +1,342 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #007bff; /* Main blue background */
+    line-height: 1.6;
+    padding: 20px;
+    color: #333;
+    font-size: .875rem;
+    height: 100%;
+}
+
+/* Header Styles */
+header {
+    position: fixed; /* Fixed position to stick at the top */
+    top: 0; /* Align to the top */
+    width: 100%; /* Full width */
+    background-color: #333; /* Dark background for the header */
+    color: white;
+    padding: 1rem 0; /* Adjust padding as needed */
+    text-align: center; /* Center align content */
+    z-index: 1000; /* Ensure it's on top of other elements */
+}
+
+/* Navigation Menu Styles */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: white;
+    padding: 15px 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a.active,
+nav ul li a:hover {
+    background-color: #6a94ca; /* Light blue background for hover/active */
+}
+
+/* Main Content Styles */
+.main {
+    background-color: white; /* White background for content area */
+    padding: 60px;
+    margin-top: 0px; /* Adjust margin-top to reduce the space */
+    border-radius: 5px; /* Optional: adds rounded corners */
+}
+
+
+input[type="submit"] {
+    padding: 10px 20px; /* Adjust padding as needed */
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #4CAF50; /* Green background for submit button */
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 20px; /* Space between form fields */
+    border: 1px solid #ddd;
+    border-radius: 5px; /* Optional: adds rounded corners */
+}
+
+
+/* Optionally, adjust hover styles */
+input[type="submit"]:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+
+input[type="submit"]:hover {
+    opacity: 0.8;
+}
+
+/* Error Message Styles */
+.error {
+    color: red;
+    margin-bottom: 20px;
+}
+
+/* Footer Styles */
+footer {
+    background-color: lightgray; /* Changed background color from second file */
+    padding: 10px;
+    line-height: 1em; /* Changed line-height from second file */
+    font-size: 0.8em; /* Changed font-size from second file */
+    text-align: center; /* Center align content */
+    clear: both; /* Ensure it clears any floated elements */
+}
+
+/* Additional Styles from Second File */
+
+.background1 {
+    background-color: red;
+    color: #FFFFFF;
+}
+
+div.c1 {
+    text-align: center;
+}
+
+a:link {
+    color: #FFFFFF;
+}
+
+a:visited {
+    color: #00FF00;
+}
+
+a:hover {
+    color: #F7FE2E;
+}
+
+.qsl-page-note {
+    color: black;
+}
+
+.table-hover > thead > tr > th {
+    background-color: #2E64FE;
+    color: #f3f3f3;
+    font-size: 1.1em;
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: #E6E6E6;
+}
+
+input#submit {
+    cursor: pointer;
+    padding: 5px 25px;
+    background: #2e64fe;
+    border: 1px solid #ffffff;
+    color: #f3f3f3;
+    font-size: 1.1em;
+}
+
+input#submit:hover,
+input#submit:focus {
+    background-color: #0431b4;
+}
+
+.qsl-img {
+    
+    width: 70%; /* Adjust the width of the image */
+    height: auto; /* Maintain the aspect ratio */
+    border: 5px solid #eaeaea; /* Optional: border styling */
+}
+
+/* Styles for the header section */
+.header {
+    overflow: hidden;
+    background-color: black;
+    padding: 0px;
+}
+
+/* Styles for header links */
+.header a {
+    float: left;
+    color: white;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 5px;
+    border-radius: 4px;
+}
+
+/* Styles for the logo link */
+.header a.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+/* Styles for hovered links */
+.header a:hover {
+    background-color: black;
+    color: white;
+}
+
+/* Styles for active/current link */
+.header a.active {
+    background-color: dodgerblue;
+    color: black;
+}
+
+/* Float the link section to the right */
+.header-right {
+    float: right;
+}
+
+.navbar {
+    padding-bottom: 0; /* Set padding-bottom to 0 */
+    margin-bottom: 0; /* Set margin-bottom to 0 */
+}
+
+.container {
+    padding-top: 0; /* Set padding-top to 0 */
+}
+
+.center {
+    margin: 0 auto; /* Set left and right margins to auto */
+}
+
+/* Media queries for responsiveness */
+@media only screen and (max-width: 600px) {
+  /* CSS rules for smaller screens */
+  nav ul li {
+    display: block;
+    text-align: center;
+  }
+}
+
+/* Target the table with a specific class */
+.custom-table {
+    /* Change text color within the table */
+    color: blue;
+    width: 50%; /* Adjust the width as needed */
+    margin: auto; /* Center the table horizontally */
+}
+
+/* Change hyperlink color within the table */
+.custom-table a {
+    color: red;
+}
+
+  
+  /* Style every other row within the container */
+  .container .custom-table tr:nth-child(even) {
+    background-color: lightgray;
+  }
+  
+  /* Optional: Style for table borders */
+  .custom-table {
+    border-collapse: collapse;
+  }
+  
+  .custom-table th, .custom-table td {
+    border: 1px solid black;
+    padding: 8px;
+  }
+
+/* Center the table */
+.table-container {
+    text-align: center;
+    margin: 0 auto; /* Center horizontally */
+}
+
+.centered-content {
+    margin: 0 auto; /* Center the content horizontally */
+    text-align: center; /* Center align text within the container */
+}
+
+.total-count {
+    margin-top: 20px; /* Add some top margin to separate from the table */
+}
+
+.centered-radio-buttons {
+    text-align: center;
+}
+  
+
+.centered-table {
+    width: 100%;
+    margin: 0 auto; /* Center horizontally */
+}
+
+/* New CSS class to center the table container */
+/* CSS to center the table container */
+.table-container {
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* Center the tbody within the table */
+.custom-table tbody {
+    text-align: center;
+}
+
+
+/* Additional Styles */
+.form-container {
+    background-color: white; /* White background for the form container */
+    padding: 20px; /* Adjust padding as needed */
+    border-radius: 5px; /* Optional: adds rounded corners */
+    width: 300px; /* Adjust width as needed */
+    margin: 0 auto; /* Center the container horizontally */
+    margin-top: 100px; /* Adjust margin-top to center vertically */
+}
+
+.form-container h2 {
+    text-align: center; /* Center align the heading */
+    margin-bottom: 20px; /* Add some bottom margin */
+}
+
+.form-container label {
+    display: block; /* Display labels as block elements */
+    margin-bottom: 10px; /* Add some bottom margin */
+}
+
+.form-container input[type="text"],
+.form-container input[type="password"] {
+    width: 100%; /* Full width for input fields */
+    padding: 10px; /* Adjust padding as needed */
+    margin-bottom: 20px; /* Space between form fields */
+    border: 1px solid #ddd;
+    border-radius: 5px; /* Optional: adds rounded corners */
+}
+
+.form-container input[type="submit"] {
+    width: 100%; /* Full width for submit button */
+    padding: 10px; /* Adjust padding as needed */
+    border: none;
+    border-radius: 5px; /* Optional: adds rounded corners */
+    background-color: #4CAF50; /* Green background for submit button */
+    color: white;
+    cursor: pointer;
+}
+
+.form-container input[type="submit"]:hover {
+    opacity: 0.8;
+}

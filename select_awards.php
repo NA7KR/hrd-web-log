@@ -1,43 +1,90 @@
 <?php
-/* * ***********************************************************************
- * 			NA7KR Log Program 
- * *************************************************************************
+// select_awards.php
+/*
+Copyright © 2024 NA7KR Kevin Roberts. All rights reserved.
 
- * *************************************************************************
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- * ************************************************************************ */
-$first = "false";
-$first = htmlspecialchars($_POST["1st"]);
-if ($first <> True)
-{
-    header( 'Location: index.php' ) ;
-}    
-include_once (__DIR__ . '/../config.php');
-    require_once('db.class.php');
-    require_once("backend.php");
-    $db = new Db();
-    $find = '.jpg';
-    $i = 0; //style counter
-    $filePath = "/Awards";
-    $data ="";
-    $id_lookup = $db->query("SELECT COL_Award as Award, COL_File as 'File' FROM $dbnameWEB.tb_awards WHERE 1");
-    $data = "<table border='0' align='center'><tbody><tr><th>Award</th><th>File</th></tr><tr bgcolor='#5e5eff'>". PHP_EOL;
-    foreach ($id_lookup as $row): 
-        {  
-            $fileName = $row['File'];
-            $data .=  "<td>" . $row['Award'] . "</td>" . PHP_EOL;
-            $data .= "<td>" . "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>" . "</td>". grid_style($i) . PHP_EOL;
-            $i++;   
-            unset($row); // break the reference with the last element
-        }
-    endforeach;
-    $data .= "</table><br><br>" . PHP_EOL;
-    echo $data;
-    $data = "";
-    $phpfile = __FILE__ ;
-    footer($phpfile);
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+// Check if the form has been submitted and if the value of "1st" is true
+if (!isset($_POST["1st"]) || $_POST["1st"] !== "true") {
+    // Redirect to received.php if the condition is not met
+    header('Location: received.php');
+    exit; // Stop further execution
+}
+
+// Include necessary files
+include("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
+require_once("backend/querybuilder.php");
+
+// Create a new instance of the Db class
+
+
+// Define the file path for the images
+$filePath = "/Awards";
+
+
+    // Execute the SELECT query using the new select method
+    $query = getSelect_Award();
+
+    try {
+        $results = $db->select($query);
+    } catch (Exception $e) {
+        echo "Query: " . $query ."<br>";
+        echo "Error executing query: " . $e->getMessage();
+    }
+
+    // Start building the table
+    echo "<div class='centered-content'>"; // Add a container div
+    echo "<table class='custom-table' border='0'><tbody><tr><th>Award</th><th>File</th></tr>";
+
+    // Loop through the results and display each row
+    foreach ($results as $i => $row) {
+        // Get the file name from the row
+        $fileName = $row['File'];
+        
+        // Determine the row color based on even or odd index
+        $rowColor = ($i % 2 == 0) ? 'even-row' : 'odd-row';
+        
+        // Start a new table row with alternating color
+        echo "<tr class='$rowColor'>";
+        
+        // Add the award name to the table
+        echo "<td>{$row['Award']}</td>" . PHP_EOL;
+        
+        // Add the image link to the table
+        echo "<td><a href='$filePath/$fileName'><img src='$filePath/thumbs/$fileName' alt='$fileName'></a></td>";
+        
+        // Close the table row
+        echo "</tr>";
+    }
+
+    // Close the table and container div
+    echo "</tbody></table>";
+    
+    // Execute the COUNT query
+    $query = getSelect_AwardsCount();
+    try{
+        $count = $db->executeCount($query);
+    } catch (Exception $e) {
+        echo "Query: " . $query ."<br>";
+        echo "Error executing query: " . $e->getMessage();
+    }
+
+    // Display the count
+    echo "<p class='total-count'>Total records: $count</p>";
+    echo "</div>"; // Close the container div
+
+
 ?>

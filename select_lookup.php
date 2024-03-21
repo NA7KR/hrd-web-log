@@ -1,37 +1,54 @@
 <?php
-error_reporting(E_ALL);
-$i = 0;
-/* * ***********************************************************************
- * 			NA7KR Log Program 
- * *************************************************************************
+// select_lookup.php
+/*
+Copyright © 2024 NA7KR Kevin Roberts. All rights reserved.
 
- * *************************************************************************
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- * ************************************************************************ */
-$first = "false";
-$first =  htmlspecialchars($_POST["1st"]);
-if ($first <> True)
-{
-    header( 'Location: index.php' ) ;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+// Check if the form has been submitted and if the value of "1st" is true
+if (!isset($_POST["1st"]) || $_POST["1st"] !== "true") {
+    // Redirect to received.php if the condition is not met
+    header('Location: received.php');
+    exit; // Stop further execution
 }
-include_once (__DIR__ . '/../config.php');
-require_once('db.class.php');
-require_once("backend.php");
-$db = new Db();
-$i = 0; //style counter
-$x = 0; //
+
+// Include necessary files
+include("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
+require_once("backend/querybuilder.php");
+
+$i = 0;
+$first = "false";
+$first = htmlspecialchars($_POST["1st"]);
+
+if ($first <> True) {
+    header('Location: index.php');
+}
+
+
+
+$i = 0;
+$x = 0;
 $FileNoGroup = 0;
 $find = '.jpg';
 $fileMutiply = 1000;
 $first = "false";
 $SUBMIT = "false";
 
-if (isset($_POST['Submit1'])) 
-{ 
+
+
+if (isset($_POST['Submit1'])) {
     $first = htmlspecialchars($_POST["1st"]);
     $LOG = htmlspecialchars($_POST["Log"]);
     if (isset($_POST['Qty'])) {
@@ -58,203 +75,186 @@ if (isset($_POST['Submit1']))
     if (isset($_POST['optionlist'])) {
         $INPUT = htmlspecialchars($_POST["optionlist"]);
     }
-    //include_once buildfiles($LOG);
-    //$data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
-    //$data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
 
-$query = "SET sql_mode = \" \"";
-$id_lookup = $db->query($query);
-$query = "SELECT COL_CALL AS `Call`, \n"
-        . "COL_BAND AS Band, \n"
-        . "COL_State AS State, \n"
-        . "COL_Country AS Country, \n"
-        . "$dbnameHRD.$tbHRD.COL_PRIMARY_KEY AS ID, \n"
-        . " COL_TIME_OFF AS Date, \n"
-        . "CASE COL_EQSL_QSL_RCVD When 'Y' Then 'Yes' end AS EQSL, \n"
-        . "CASE COL_LOTW_QSL_RCVD  When 'V' Then 'Yes' end AS LOTW, \n"
-        . "CASE COL_QSL_RCVD When 'Y' Then 'Yes' end AS QSL, \n"
-        . "COL_MODE AS `Mode`, $dbnameWEB.tb_Cards.COL_File_Path_E AS 'E QSL', \n"
-        . "$dbnameWEB.tb_Cards.COL_File_Path_F AS File, \n"
-        . "$dbnameWEB.tb_Cards.COL_File_Path_B AS 'File Back' \n"
-        . "FROM $dbnameHRD.$tbHRD LEFT OUTER JOIN HRD_Web.tb_Cards \n"
-        . "ON $dbnameHRD.$tbHRD.COL_PRIMARY_KEY = $dbnameWEB.tb_Cards.COL_PRIMARY_KEY  __REPLACE__ \n"
-        . "ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` \n"
-        . "DESC";
 
-if ($SUBMIT == "true") 
-{
+
+if ($SUBMIT == "true") {
+    // Build query based on form input
+    $query = buildQuery($first, $QTY, $SUBMIT, $CALL_SEARCH, $BAND, $MODE, $STATE, $COUNTRY, $INPUT);
+
     $SUBMIT = "false";
-    if ($INPUT == "input_band") 
-    {
-        $BAND = safe("%" . $BAND . "%");
+    if ($INPUT == "input_band") {
+        $BAND = safe("'%" . $BAND . "%'");
         $query = str_replace("__REPLACE__", "where COL_BAND like $BAND ", $query);
-    } 
-    elseif ($INPUT == "input_mode") 
-    {
-        $MODE = safe("%" . $MODE . "%");
+    } elseif ($INPUT == "input_mode") {
+        $MODE = safe("'%" . $MODE . "%'");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
         $query = str_replace("__REPLACE__", "where COL_MODE like $MODE or COL_MODE like 'USB' or COL_MODE like 'LSB' ", $query);
-    } 
-    elseif ($INPUT == "input_search") 
-    {
-        $CALL_SEARCH = safe("%" . $CALL_SEARCH . "%");
-        $query = str_replace("__REPLACE__", "where COL_CALL like $CALL_SEARCH ", $query);
-    } 
-    elseif ($INPUT == "input_state") 
-    {
-        $STATE = safe("%" . $STATE . "%");
+    } elseif ($INPUT == "input_search") {
+        $CALL_SEARCH = safe("'%" . $CALL_SEARCH . "%'");
+        $query = str_replace("__REPLACE__", "where " . DB_COL_CALL . " like $CALL_SEARCH ", $query);
+    } elseif ($INPUT == "input_state") {
+        $STATE = safe("'%" . $STATE . "%'");
         $query = str_replace("__REPLACE__", "where COL_STATE like $STATE ", $query);
-    } 
-    elseif ($INPUT == "input_country") 
-    {
-        $COUNTRY = safe("%" . $COUNTRY . "%");
+    } elseif ($INPUT == "input_country") {
+        $COUNTRY = safe("'%" . $COUNTRY . "%'");
         $query = str_replace("__REPLACE__", "where COL_COUNTRY like $COUNTRY ", $query);
-    } 
-    elseif ($INPUT == "input_none") 
-    {
+    } elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
-    } 
-    else 
-    {
+    } else {
         $query = str_replace("__REPLACE__", " ", $query);
     }
-//  echo $query;
-    if ($QTY == "All") 
-    {
-//        $id_lookup = $db->query($query );
-    } 
-    else 
-    {
+
+    if ($QTY == "All") {
+    } else {
         $query = str_replace("DESC", "DESC Limit $QTY ", $query);
-        $id_lookup = $db->query($query);
-    }
-    $data .= "<table border='0' align='center'><tbody><tr>"
-            . "<th>Call</th>"
-            . "<th>Band</th>" . "<th>State</th>" . "<th>Country</th>"
-            . "<th>ID</th>" . "<th>Date</th>" . "<th>EQSL</th>"
-            . "<th>LOTW</th>" . "<th>QSL</th>" . "<th>Mode</th>"
-            . "<th>E QSL</th>" . "<th>Paper Front</th>" . "<th>Paper Back</th>"
-            . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
-    
-    foreach ($id_lookup as $row): 
-        {
-	        try
-	            {
-                    $data .= "<td>" . qrzcom_interface($row['Call']) . "</td>" . PHP_EOL;
-                    $data .= "<td>" . $row['Band'] . "</td>" . PHP_EOL;
-                    $data .= "<td>" . $row['State'] . "</td>" . PHP_EOL;
-                    $data .= "<td>" . $row['Country'] . "</td>" . PHP_EOL;
-                    $data .= "<td>" . $row['ID'] . "</td>" . PHP_EOL;
-                    $data .= "<td>" . $row['Date'] . "</td>" . PHP_EOL;
-                    $data .= "<td>" . $row['EQSL'] . "</td>" . PHP_EOL;
-                    $data .= "<td>" . $row['LOTW'] . "</td>" . PHP_EOL;
-                    $data .= "<td>" . $row['QSL'] . "</td>" . PHP_EOL;
-                    $data .= "<td>" . $row['Mode'] . "</td>" . PHP_EOL;
-                    
-                    $FileNoGroup = ((int)($row['ID'] / $fileMutiply) % $fileMutiply * $fileMutiply);
-                    
-                    $fileNoGroupHigh = $FileNoGroup + ($fileMutiply - 1);
-                    
-                    $filePath = "cards/" . $FileNoGroup . "-" . $fileNoGroupHigh;
-                    $pathToThumbs = $filePath . '/thumbs/';
-                    $FileName = null;
-                    $fileName = $row['E QSL'];
-                    if (isset($fileName))
-                    {
-                        $pos = strpos($fileName, $find);
-                        if ($pos !== false) 
-                        {
-                            $data .= "<td>" . "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>" . "</td>" . PHP_EOL;
-                        } 
-                        else 
-                        {
-                            $data .= "<td>" . $row['E QSL'] . "</td>" . PHP_EOL;
-                        }
-                    }
-                    else 
-                        {
-                            $data .= "<td>" . $row['E QSL'] . "</td>" . PHP_EOL;
-                        }
-                    $FileName = null;
-                    $fileName = $row['File'];
-                    if (isset($fileName)) 
-                    {
-                        $pos = strpos($fileName, $find);
-                        if ($pos !== false) 
-                        {
-                            $data .= "<td>" . "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>" . "</td>" . PHP_EOL;
-                        }
-                        else
-                        {
-                            $data .= "<td>" . $row['File'] . "</td>" . PHP_EOL;
-                        }
-                    } 
-                    else 
-                    {
-                        $data .= "<td>" . $row['File'] . "</td>" . PHP_EOL;
-                    }
-                    $FileName = null;
-                    $fileName = $row['File Back'];
-                    if (isset($fileName)) 
-                    {
-                        $pos = strpos($fileName, $find);
-                        if ($pos !== false) 
-                        {
-                            $data .= "<td>" . "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>" . "</td>" . grid_style($i) . PHP_EOL;
-                        }
-                        else 
-                    {
-                        $data .= "<td>" . $row['File Back'] . "</td>" . grid_style($i) . PHP_EOL;
-                    }
-                    } 
-                    else 
-                    {
-                        $data .= "<td>" . $row['File Back'] . "</td>" . grid_style($i) . PHP_EOL;
-                    }
-
-                    $i++; 
-                    unset($row); // break the reference with the last element
-                }
-                catch(Error $e) 
-                {
-                    $trace = $e->getTrace();
-                    echo $e->getMessage().' in '.$e->getFile().' on line '.$e->getLine().' called from '.$trace[0]['file'].' on line '.$trace[0]['line'];
-                }
-            }
-            endforeach;
-            $data = str_replace("USB", "SSB", $data); //do not put .=
-            $data = str_replace("LSB", "SSB", $data);
-
-            $data .= "</table><br><br>" . PHP_EOL;
-            $data .= OptionList(false, false, false, false, false, false) . PHP_EOL;
-        }    
-        else 
-        {
-            $data .= '<table width=600 class="center2">' . PHP_EOL;
-            $data .='<tr><td>' . PHP_EOL;
-            $data .=OptionList(true, true, true, true, true, true) . PHP_EOL;
-            $data .=band() . PHP_EOL;
-            $data .=mode() . PHP_EOL;
-            $data .=OptionState() . PHP_EOL;
-            $data .=OptionCountry() . PHP_EOL;
-            $data .='<span id="Call">' . PHP_EOL;
-            $data .='Enter Callsign in the box' . PHP_EOL;
-            $data .='<input  type="text" name="Call_Search"><br>' . PHP_EOL;
-            $data .='</span>' . PHP_EOL;
-            $data .='</td></tr>' . PHP_EOL;
-            $data .='</table>' . PHP_EOL;
-            $data .='<div class="c1">' . PHP_EOL;
-            $data .='<span class="auto-style5">' . PHP_EOL;
-            $data .='Select from drop down the amount of QLS would like to return<br>' . PHP_EOL;
-            $data .=OptionQty() . PHP_EOL;
-            $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;
+        try {
+            $results = $db->select($query);
+        } catch (Exception $e) {
+            echo "Error executing query: " . $e->getMessage();
         }
-//$data .= "Input 1 " . $QTY;
-//$data .= "Query " . $query;
+    }
 
+    $data .= "<div class='centered-content'>" .PHP_EOL;; // Add a container div
+    $data .= "<table class='custom-table' border='0'>"
+        . "<tbody><tr>"
+        . "<th>Call </th>"
+        . "<th>Band </th>"
+        . "<th>State </th>"
+        . "<th>Country </th>"
+        . "<th>ID </th>"
+        . "<th>Date </th>"
+        . "<th>EQSL </th>"
+        . "<th>LOTW </th>"
+        . "<th>QSL </th>"
+        . "<th>Mode </th>"
+        . "<th>E QSL </th>"
+        . "<th>Paper Front </th>"
+        . "<th>Paper Back </th>"
+        . "<th>Email Front </th>"
+        . "<th>Email Back </th>"
+        . "</tr>";
+
+    if ($results === null) {
+        $results = [];
+    }
+
+    $rowColor = "odd1";
+    
+    foreach ($results as $row) {
+        try {
+            //$data .= "<tr class='custom-table'>"; // Add class for row color
+            $data .= "<td>" . qrzcom_interface($row['Call']) . "</td>" . PHP_EOL;
+            $data .= "<td>" . $row['Band'] . "</td>" . PHP_EOL;
+            $data .= "<td>" . $row['State'] . "</td>" . PHP_EOL;
+            $data .= "<td>" . $row['Country'] . "</td>" . PHP_EOL;
+            $data .= "<td>" . $row['ID'] . "</td>" . PHP_EOL;
+            $data .= "<td>" . $row['Date'] . "</td>" . PHP_EOL;
+            $data .= "<td>" . $row['EQSL'] . "</td>" . PHP_EOL;
+            $data .= "<td>" . $row['LOTW'] . "</td>" . PHP_EOL;
+            $data .= "<td>" . $row['QSL'] . "</td>" . PHP_EOL;
+            $data .= "<td>" . $row['Mode'] . "</td>" . PHP_EOL;
+
+            $FileNoGroup = ((int)($row['ID'] / $fileMutiply) % $fileMutiply * $fileMutiply);
+            $fileNoGroupHigh = $FileNoGroup + ($fileMutiply - 1);
+            $filePath = "cards/" . $FileNoGroup . "-" . $fileNoGroupHigh;
+            $pathToThumbs = $filePath . '/thumbs/';
+            $FileName = null;
+            $fileName = $row['E QSL'];
+            if (isset($fileName)) {
+                $pos = strpos($fileName, $find);
+                if ($pos !== false) {
+                    $data .= "<td><a href='$filePath/$fileName'><img src='$filePath/thumbs/$fileName' alt='$fileName'></a></td>" . PHP_EOL;
+                } else {
+                    $data .= "<td>" . $row['E QSL'] . "</td>" . PHP_EOL;
+                }
+            } else {
+                $data .= "<td>" . $row['E QSL'] . "</td>" . PHP_EOL;
+            }
+            $FileName = null;
+            $fileName = $row['File'];
+            if (isset($fileName)) {
+                $pos = strpos($fileName, $find);
+                if ($pos !== false) {
+                    $data .= "<td><a href='$filePath/$fileName'><img src='$filePath/thumbs/$fileName' alt='$fileName'></a></td>" . PHP_EOL;
+                } else {
+                    $data .= "<td>" . $row['File'] . "</td>" . PHP_EOL;
+                }
+            } else {
+                $data .= "<td>" . $row['File'] . "</td>" . PHP_EOL;
+            }
+            $FileName = null;
+            $fileName = $row['File Back'];
+            if (isset($fileName)) {
+                $pos = strpos($fileName, $find);
+                if ($pos !== false) {
+                    $data .= "<td><a href='$filePath/$fileName'><img src='$filePath/thumbs/$fileName' alt='$fileName'></a></td>"  . PHP_EOL;
+                } else {
+                    $data .= "<td>" . $row['File Back'] . "</td>" . PHP_EOL;
+                }
+            } else {
+                $data .= "<td>" . $row['File Back'] . "</td>" . PHP_EOL;
+            }
+            $FileName = null;
+            $fileName = $row['FEmailCard'];
+            if (isset($fileName)) {
+                $pos = strpos($fileName, $find);
+                if ($pos !== false) {
+                    $data .= "<td><a href='$filePath/$fileName'><img src='$filePath/thumbs/$fileName' alt='$fileName'></a></td>"  . PHP_EOL;
+                } else {
+                    $data .= "<td>" . $row['FEmailCard'] . "</td>" . PHP_EOL;
+                }
+            } else {
+                $data .= "<td>" . $row['FEmailCard'] . "</td>" . PHP_EOL;
+            }
+            $FileName = null;
+            $fileName = $row['BEmailCard'];
+            if (isset($fileName)) {
+                $pos = strpos($fileName, $find);
+                if ($pos !== false) {
+                    $data .= "<td><a href='$filePath/$fileName'><img src='$filePath/thumbs/$fileName' alt='$fileName'></a></td>" . PHP_EOL;
+                } else {
+                    $data .= "<td>" . $row['BEmailCard'] . "</td>" . PHP_EOL;
+                }
+            } else {
+                $data .= "<td>" . $row['BEmailCard'] . "</td>" . PHP_EOL;
+            }
+            $i++; 
+            unset($row); 
+        } catch(Error $e) {
+            $trace = $e->getTrace();
+            echo $e->getMessage().' in '.$e->getFile().' on line '.$e->getLine().' called from '.$trace[0]['file'].' on line '.$trace[0]['line'];
+        }
+        $data .= "</tr>";
+        $rowColor = ($rowColor == "odd1") ? "even1" : "odd1"; // Alternate row colors
+    }
+    $data = str_replace("USB", "SSB", $data); 
+    $data = str_replace("LSB", "SSB", $data);
+    $data .= "</tbody></table><br><br>";
+    $data .= OptionList(false, false, false, false, false, false);
+} else {
+    $data .= '<table width=600 class="center2">';
+    $data .='<tr><td>';
+    $data .='<div class="centered-radio-buttons">';
+    $data .=OptionList(true, true, true, true, true, true);
+    $data .=band();
+    $data .=mode();
+    $data .=OptionState();
+    $data .=OptionCountry();
+    $data .='<span id="Call">';
+    $data .='Enter Callsign in the box';
+    $data .='<input  type="text" name="Call_Search"><br>';
+    $data .='</span>';
+    $data .='</td></tr>';
+    $data .='</table>';
+    $data .='</div">';
+    $data .='<div class="c1">';
+    $data .='<span class="auto-style5">';
+    $data .='Select from drop down the amount of QLS would like to return<br>';
+    $data .=OptionQty();
+    $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><br></div>';
+}
 echo $data;
-$phpfile = __FILE__;
-footer($phpfile);
 ?>

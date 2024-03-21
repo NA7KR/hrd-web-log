@@ -1,25 +1,32 @@
 <?php
-/* * ***********************************************************************
- * 			NA7KR Log Program 
- * *************************************************************************
+// select_two_or_more.php
+/*
+Copyright © 2024 NA7KR Kevin Roberts. All rights reserved.
 
- * *************************************************************************
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- * ************************************************************************ */
-$first = "false";
-$first = htmlspecialchars($_POST["1st"]);
-if ($first <> True)
-{
-    header( 'Location: index.php' ) ;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+// Check if the form has been submitted and if the value of "1st" is true
+if (!isset($_POST["1st"]) || $_POST["1st"] !== "true") {
+    // Redirect to received.php if the condition is not met
+    header('Location: received.php');
+    exit; // Stop further execution
 }
-include_once (__DIR__ . '/../config.php');
-require_once('db.class.php');
-require_once("backend.php");
-$db = new Db();
+
+// Include necessary files
+include("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
+require_once("backend/querybuilder.php");
 $i = 0; //style counter
 $x = 0; //
 $FileNoGroup = 0;
@@ -55,25 +62,16 @@ if (isset($_POST['Submit1'])) {
     if (isset($_POST['optionlist'])) {
         $INPUT = htmlspecialchars($_POST["optionlist"]);
     }
-    include_once buildfiles($LOG);
+
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
-$query = "Select count(*) as `Count`, \n"
-        . " COL_CALL from(SELECT distinct COL_CALL, \n"
-            . " COL_BAND, \n"
-            . " COL_MODE, \n"
-            . " count(*) \n"
-            . " FROM NA7KR.`TABLE_HRD_CONTACTS_V01` \n"
-            . " __REPLACE__ \n"
-            . " group by 1,2,3 ) as CALLSIGN \n"
-        . " group by 2 HAVING Count > 1 \n"
-        . " ORDER BY Count DESC";
+$query = getSelect_two_or_more();
 
 
 if ($SUBMIT == "true") {
     if ($INPUT == "input_mode") {
-        $MODE = safe("%" . $MODE . "%");
+        $MODE = safe("'%" . $MODE . "%'");
 	$MODE = str_replace("SSB", "USB%' or COL_MODE like '%LSB", $MODE);
         $query = str_replace("__REPLACE__", " where COL_MODE like $MODE ", $query);
     } elseif ($INPUT == "input_none") {
@@ -82,12 +80,20 @@ if ($SUBMIT == "true") {
         $query = str_replace("__REPLACE__", " ", $query);
     }
 
-    $id_lookup = $db->query($query);
-    $data = "<table border='0' align='center'><tbody><tr><th>Country</th></tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
-    foreach ($id_lookup as $row): {
+    try {
+        $results = $db->select($query);
+    } catch (Exception $e) {
+        echo "Query: " . $query ."<br>";
+        echo "Error executing query: " . $e->getMessage();
+    }
+    $data .= "<table class='custom-table' border='0'>"
+            . "<tbody><tr>"
+            . "<th>Count</th><th>Call</th></tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
+    //$data = "<tbody><tr><th>Country</th></tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
+    foreach ($results as $row): {
             //$fileName = $row['File'];
             $data .= "<td>" . $row['Count'] . "</td>" . PHP_EOL ;
-            $data .= "<td>" . $row['COL_CALL'] . "</td>" . PHP_EOL . grid_style($i) . PHP_EOL;
+            $data .= "<td>" . $row[$db_COL_CALL] . "</td>" . PHP_EOL . grid_style($i) . PHP_EOL;
             $counter++;
             $i++;
             unset($row); // break the reference with the last element
@@ -109,6 +115,5 @@ if ($SUBMIT == "true") {
 }
 //$data .=$query;
 echo $data;
-$phpfile = __FILE__;
-footer($phpfile);
+
 ?>

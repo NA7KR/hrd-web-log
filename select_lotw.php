@@ -1,26 +1,33 @@
 <?php
+// select_lotw.php
+/*
+Copyright © 2024 NA7KR Kevin Roberts. All rights reserved.
 
-/* * ***********************************************************************
- * 			NA7KR Log Program 
- * *************************************************************************
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
- * *************************************************************************
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- * ************************************************************************ */
-$first = "false";
-$first =  htmlspecialchars($_POST["1st"]);
-if ($first <> True)
-{
-    header( 'Location: index.php' ) ;
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+// Check if the form has been submitted and if the value of "1st" is true
+if (!isset($_POST["1st"]) || $_POST["1st"] !== "true") {
+    // Redirect to received.php if the condition is not met
+    header('Location: received.php');
+    exit; // Stop further execution
 }
-include_once (__DIR__ . '/../config.php');
-require_once('db.class.php');
-require_once("backend.php");
-$db = new Db();
+
+// Include necessary files
+include("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
+require_once("backend/querybuilder.php");
+
 $i = 0; //style counter
 $x = 0; //
 $data = "";
@@ -54,35 +61,43 @@ if (isset($_POST['Submit1'])) {
     if (isset($_POST['optionlist'])) {
         $INPUT = htmlspecialchars($_POST["optionlist"]);
     }
-    include_once buildfiles($LOG);
+    
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
-$query = "SELECT `COL_CALL` as 'Call', `COL_LOTW_QSL_RCVD` as 'Confirmed' FROM $dbnameHRD.$tbHRD Where `COL_LOTW_QSL_RCVD` = 'V' __REPLACE__";
+$query = getSelect_lotw();
 if ($SUBMIT == "true") {
     if ($INPUT == "input_band") {
         $BAND = safe("%" . $BAND . "%");
-        $query = str_replace("__REPLACE__", "and COL_BAND like $BAND ", $query);
+        $query = str_replace("__REPLACE__", "and COL_BAND like '$BAND' ", $query);
     } elseif ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
 	$MODE = str_replace("SSB", "USB%' or COL_MODE like '%LSB", $MODE);
-        $query = str_replace("__REPLACE__", "and COL_MODE like $MODE ", $query);
+        $query = str_replace("__REPLACE__", "and COL_MODE like '$MODE' ", $query);
     } elseif ($INPUT == "input_state") {
         $STATE = safe("%" . $STATE . "%");
-        $query = str_replace("__REPLACE__", "and COL_STATE like $STATE ", $query);
+        $query = str_replace("__REPLACE__", "and COL_STATE like '$STATE' ", $query);
     } elseif ($INPUT == "input_country") {
         $COUNTRY = safe("%" . $COUNTRY . "%");
-        $query = str_replace("__REPLACE__", "and COL_COUNTRY like $COUNTRY ", $query);
+        $query = str_replace("__REPLACE__", "and COL_COUNTRY like '$COUNTRY' ", $query);
     } elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
     } else {
         $query = str_replace("__REPLACE__", " ", $query);
     }
-    $id_lookup = $db->query("$query");
-    $data = "<table border='0' align='center'><tbody><tr>"
-            . "<th>Call</th>" . "<th>Confirmed</th>" 
-            . "<th>Back</th>" . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
-    foreach ($id_lookup as $row): {
+   
+     try {
+            $results = $db->select($query);
+            } catch (Exception $e) {
+                echo "Query: " . $query ."<br>";
+                echo "Error executing query: " . $e->getMessage();
+            }
+    $data .= "<div class='centered-content'>";
+    $data .= "<div class='table-container'>";
+    $data .= "<table border='0' class='custom-table small-left-table'><tbody><tr>"
+        . "<th>Call</th>" . "<th>Comfirmed</th>"
+        . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
+    foreach ($results as $row): {
             //
             $data .= "<td>" . $row['Call'] . "</td>" . PHP_EOL;
             $data .= "<td>" . $row['Confirmed'] . "</td>" . grid_style($i) . PHP_EOL; 
@@ -109,5 +124,4 @@ if ($SUBMIT == "true") {
 }
 //$data .=$query;
 echo $data;
-$phpfile = __FILE__;
-footer($phpfile);
+

@@ -1,22 +1,245 @@
 <?php
-		$dbhost="localhost" ; 	//server 
-		$dbuname="CALL";		//DB user
-		$dbpass="PASSWORD"; 	// Database Password
-		$dbnameHRD="CALL";		// Callsign
-		$EQSL="PASSWORD"; 	//EQSL logon
-		$dbnameWEB="HRD_Web";	//database name
-		$tbStates="tb_States_Countries";//web Table name
-		$tbHRD="TABLE_HRD_CONTACTS_V01";//HRD Table name
-		$tbSelect="tb_Select";
-		$myCall="CALL";
-		$base="PATH"; //musr end with /
-		$CountrysArray = [
-							"USA" => "USA", 	  //to display on page add // to remove
-							"GB" => "GB", 		  //to display on page add // to remove
-							"CA" => "CA", //to display on page add // to remove
-						];
-		$debug="false"; 
-		$google = "Google Analytics or BLANK";
+//../config.php
+/*
+Copyright © 2024 NA7KR Kevin Roberts. All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+ini_set('error_reporting', E_ALL);
+
+// Enable displaying errors
+ini_set('display_errors', '1');
+
+// Current page detection for navigation highlighting
+$current_page = basename($_SERVER['PHP_SELF']);
+$footertext = "NA7KR. All rights reserved.";
+// Navigation items array for site-wide menu links
+
+
+
+$navigation_links = array(
+    "home.php" => "Mailed Cards",
+    "received.php" => "Received Cards",
+    "startstop.php" => "Opt In or Out",
+    "about.php" => "About",
+    "contact.php" => "Contact",
+    "dashboard.php" => "Dashboard",
+    "logout.php" => "Logout"
+);
+$base="/var/www/";
+
+$Site_Name= " NA7KR QSL Card System";
+// Error reporting settings
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
+// Club call and personal information
+$callsign = "NA7KR";
+$name = "Kevin";
+$qrzpassword = "Password";
+$qsltxt = "Thanks for the QSL ";
+$EQSL="password"; 	//EQSL logon
+// File path and URL settings
+$path = "/var/www/qsl";
+$site_url = "https://qsl.na7kr.us";
+
+// Email configuration
+$senderemail = "email@email.com";
+$emailpassword = "password";
+$emailserver = "mail.email.com";
+$emailpost = 587;
+$testing = 'True'; // Debug mode False
+$debugging = "false";
+$html = 'True';
+
+// Club information
+$station_name = "Kevin NA7KR Salem Oregon";
+$db_server = "server";
+$db_username = "user";
+$db_password = "password";
+$db_name = "NA7KR";
+$db_Table_email = "TABLE_EMAIL";
+$db_Table_optout = "TABLE_OPTOUT";
+$dbnameWEB="HRD_Web";   //database name
+$tbStates="tb_States_Countries";//web Table name
+$tbHRD="TABLE_HRD_CONTACTS_V01";//HRD Table name
+$tbSelect="tb_Select";
+$db_logging = True ; // Set to false to disable logging globally
+
+// QSL card settings
+$qsl_template = "na7kr.jpg";
+$qsl_template_multi = $qsl_template;
+$qsl_c_font = "Times-Bold";
+$qsl_c_font_size = 50;
+$qsl_c_font_color = "#000000";
+$qsl_font = "Times-Roman";
+$qsl_font_size = 24;
+$qsl_font_color = "#000000";
+$qsl_font_aa = true;
+$qsl_c_font_aa = $qsl_font_aa;
+
+// QSL card callsign offsets
+$qsl_callsign_center_gravity = true;
+$qsl_callsign_center_gravity_multi = true;
+$qsl_callsign_vert_offset = 160;
+$qsl_callsign_horiz_offset = 0;
+$qsl_callsign_vert_offset_multi = 160;
+$qsl_callsign_horiz_offset_multi = 0;
+
+// QSL card QSO list settings
+$qsl_num_qso_rows = 5;
+$qsl_qso_center_gravity = true;
+$qsl_qso_center_gravity_multi = true;
+$qsl_qso_print_operator = false;
+$qsl_qso_print_operator_multi = $qsl_qso_print_operator;
+$qsl_qso_print_opercounty = false;
+$qsl_qso_print_opercounty_multi = $qsl_qso_print_opercounty;
+$qsl_qso_verbose_rec = true;
+$qsl_qso_verbose_rec_multi = true;
+$qsl_vert_offset = 220;
+$qsl_horiz_offset = 0;
+$qsl_vert_offset_multi = 220;
+$qsl_horiz_offset_multi = 0;
+
+// QSL card details offsets
+$qsl_horiz_timeon_offset = $qsl_horiz_offset + 100;
+$qsl_horiz_band_offset = $qsl_horiz_timeon_offset + 100;
+$qsl_horiz_rst_offset = $qsl_horiz_band_offset + 200;
+$qsl_horiz_mode_offset = $qsl_horiz_rst_offset + 50;
+$qsl_horiz_operator_offset = $qsl_horiz_mode_offset + 50;
+$qsl_horiz_county_offset = $qsl_horiz_operator_offset + 50;
+
+$qsl_multiline_multiplier = $qsl_font_size + 3;
+
+$qsl_horiz_timeon_offset_multi = $qsl_horiz_offset_multi + 100;
+$qsl_horiz_band_offset_multi = $qsl_horiz_timeon_offset_multi + 100;
+$qsl_horiz_rst_offset_multi = $qsl_horiz_band_offset_multi + 200;
+$qsl_horiz_mode_offset_multi = $qsl_horiz_rst_offset_multi + 50;
+$qsl_horiz_operator_offset_multi = $qsl_horiz_mode_offset_multi + 50;
+$qsl_horiz_county_offset_multi = $qsl_horiz_operator_offset_multi + 50;
+
+// QSL page notes
+$qslNotes = '<p><strong>Notes on QSLs:</strong></p>
+                <p>For paper QSL, please QSL direct or with EQSL.cc. SASE is appreciated but not required.</p>
+                <p>Electronic QSL Cards also available on EQSL.CC.</p>
+                <p>Electronic logs available from LoTW.</p>
+                <p>Also on Clublog and QRZ</p>';
+
+
+//HRD
+$db_COL_PRIMARY_KEY = "COL_PRIMARY_KEY" ;// index number
+$db_COL_CALL = "COL_CALL"; //users callsign
+$db_COL_TIME_ON = "COL_TIME_ON";
+$db_COL_FREQ = "COL_FREQ";
+$db_COL_MODE = "COL_MODE";
+$db_COL_RST_RCVD = "COL_RST_RCVD";
+$db_COL_BAND = "COL_BAND";
+$db_COL_EMAIL ="COL_EMAIL";
+$db_COL_RST_SENT = "COL_RST_SENT";
+$db_COL_MY_RIG = "COL_MY_RIG";
+$db_COL_Antenna = "COL_USER_DEFINED_8";
+
+// do not change below
+require_once('backend/db.class.php');
+// Check if constants are not defined before defining them
+if (!defined('DB_SERVER')) {
+    define('DB_SERVER', $db_server);
+}
+
+if (!defined('DB_USERNAME')) {
+    define('DB_USERNAME', $db_username);
+}
+
+if (!defined('DB_PASSWORD')) {
+    define('DB_PASSWORD', $db_password);
+}
+
+if (!defined('DB_NAME')) {
+    define('DB_NAME', $db_name);
+}
+
+if (!defined('DB_LOGGING')) {
+    define('DB_LOGGING', $db_logging);
+}
+
+if (!defined('DB_TABLE_HRD')) {
+    define('DB_TABLE_HRD', $tbHRD);
+}
+
+if (!defined('DB_TBSelect')) {
+    define('DB_TBSelect', $tbSelect);
+}
+
+if (!defined('DB_COL_BAND')) {
+    define('DB_COL_BAND', $db_COL_BAND);
+}
+
+if (!defined('DB_COL_MODE')) {
+    define('DB_COL_MODE', $db_COL_MODE);
+}
+
+if (!defined('DB_COL_TIME_ON')) {
+    define('DB_COL_TIME_ON', $db_COL_TIME_ON);
+}
+
+if (!defined('DB_COL_PRIMARY_KEY')) {
+    define('DB_COL_PRIMARY_KEY', $db_COL_PRIMARY_KEY);
+}
+
+if (!defined('DB_COL_FREQ')) {
+    define('DB_COL_FREQ', $db_COL_FREQ);
+}
+
+if (!defined('DB_COL_BAND')) {
+    define('DB_COL_BAND', $db_COL_BAND);
+}
+
+if (!defined('DB_COL_CALL')) {
+    define('DB_COL_CALL', $db_COL_CALL);
+}
+
+if (!defined('DB_tbStates')) {
+    define('DB_tbStates', $tbStates);
+}
+
+
+if (!defined('DB_COL_EMAIL')) {
+    define('DB_COL_EMAIL', $db_COL_EMAIL);
+}
+
+if (!defined('emailserver')) {
+    define('emailserver', $emailserver);
+}
+
+if (!defined('emailpost')) {
+    define('emailpost', $emailpost);
+}
+
+if (!defined('senderemail')) {
+    define('senderemail', $senderemail);
+}
+
+if (!defined('emailpassword')) {
+    define('emailpassword', $emailpassword);
+}
+
+if (!defined('DB_Table_optout')) {
+    define('DB_Table_optout', $db_Table_optout);
+}
+
+
+
+$db = new Db();
+
+
 ?>
-
-

@@ -1,25 +1,33 @@
 <?php
-/* * ***********************************************************************
- * 			NA7KR Log Program 
- * *************************************************************************
+// select_full.php
+/*
+Copyright © 2024 NA7KR Kevin Roberts. All rights reserved.
 
- * *************************************************************************
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- * ************************************************************************ */
-$first = "false";
-$first =  htmlspecialchars($_POST["1st"]);
-if ($first <> True)
-{
-    header( 'Location: index.php' ) ;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+// Check if the form has been submitted and if the value of "1st" is true
+if (!isset($_POST["1st"]) || $_POST["1st"] !== "true") {
+    // Redirect to received.php if the condition is not met
+    header('Location: received.php');
+    exit; // Stop further execution
 }
-include_once (__DIR__ . '/../config.php');
-require_once('db.class.php');
-require_once("backend.php");
-$db = new Db();
+
+// Include necessary files
+include("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
+require_once("backend/querybuilder.php");
+
 $i = 0; //style counter
 $x = 0; //
 $FileNoGroup = 0;
@@ -57,51 +65,57 @@ if (isset($_POST['Submit1']))
         $INPUT = htmlspecialchars($_POST["optionlist"]);
     }
  
-    include_once buildfiles($LOG);
+    //include_once buildfiles($LOG);
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
-$query = "SELECT date(`COL_TIME_OFF`)AS`Date` , \n"
-        . " `COL_CALL`AS`CallSign`, \n"
-        . " `COL_MODE`AS`Mode` , \n"
-        . " `COL_BAND`AS`Band` , \n"
-        . " `COL_GRIDSQUARE`AS`Grid` , \n"
-        . "`COL_COUNTRY`AS`Country` , \n"
-        . "`COL_STATE`AS`State` ,"
-        . "`COL_QTH`AS`QTH` FROM $dbnameHRD.$tbHRD \n"
-        . " __REPLACE__ \n"
-        . "ORDER BY $dbnameHRD.$tbHRD.`COL_PRIMARY_KEY` \n"
-        . "DESC ";
+$query = getSelect_full();
+
 if ($SUBMIT == "true") 
 {
     if ($INPUT == "input_band") {
         $BAND = safe("%" . $BAND . "%");
-        $query = str_replace("__REPLACE__", "where COL_BAND like $BAND ", $query);
+        $query = str_replace("__REPLACE__", "where COL_BAND like '$BAND' ", $query);
     } elseif ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
         $MODE = str_replace("USB", "SSB", $MODE);
         $MODE = str_replace("LSB", "SSB", $MODE);
-        $query = str_replace("__REPLACE__", "where COL_MODE like $MODE or COL_MODE like 'USB' or COL_MODE like 'LSB' ", $query);
+        $query = str_replace("__REPLACE__", "where COL_MODE like '$MODE' or COL_MODE like 'USB' or COL_MODE like 'LSB' ", $query);
     } elseif ($INPUT == "input_state") {
         $STATE = safe("%" . $STATE . "%");
-        $query = str_replace("__REPLACE__", "where COL_STATE like $STATE ", $query);
+        $query = str_replace("__REPLACE__", "where COL_STATE like '$STATE' ", $query);
     } elseif ($INPUT == "input_country") {
         $COUNTRY = safe("%" . $COUNTRY . "%");
-        $query = str_replace("__REPLACE__", "where COL_COUNTRY like $COUNTRY ", $query);
+        $query = str_replace("__REPLACE__", "where COL_COUNTRY like '$COUNTRY' ", $query);
     } elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
     } else {
         $query = str_replace("__REPLACE__", " ", $query);
     }
     if ($QTY == "All") {
-        $id_lookup = $db->query("$query ");
+        try {
+            $results = $db->select($query); // Execute select query
+        } catch (Exception $e) {
+            echo "<br>Query: " . $query ."<br><br>";
+            echo "Error executing query: " . $e->getMessage();
+        }
     } else {
         $query = str_replace("DESC", "DESC Limit $QTY ", $query);
-        $id_lookup = $db->query("$query");
+        try {
+            $results = $db->select($query); // Execute select query
+        } catch (Exception $e) {
+            echo "<br>Query: " . $query ."<br><br>";
+            echo "Error executing query: " . $e->getMessage();
+        }
     }
-    $id_lookup = $db->query($query);
-
-    $data = "<table border='0' align='center'><tbody><tr>"
+    try {
+        $results = $db->select($query); // Execute select query
+    } catch (Exception $e) {
+        echo "<br>Query: " . $query ."<br><br>";
+        echo "Error executing query: " . $e->getMessage();
+    }
+    $data .= "<div class='centered-content'>";
+    $data .= "<table class='custom-table' border='0'><tbody><tr>"
             . "<th>Date</th>"
             . "<th>CallSign</th>"
             . "<th>Mode</th>"
@@ -110,7 +124,7 @@ if ($SUBMIT == "true")
             . "<th>Contury</th>"
             . "<th>State</th>"
             . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
-    foreach ($id_lookup as $row): {
+    foreach ($results as $row): {
             //$fileName = $row['File'];
             $data .= "<td>" . $row['Date'] . "</td>";
             $data .= "<td>" . qrzcom_interface($row['CallSign']) . "</td>";
@@ -146,5 +160,3 @@ else
     $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;
 }
 echo $data;
-$phpfile = __FILE__;
-footer($phpfile);

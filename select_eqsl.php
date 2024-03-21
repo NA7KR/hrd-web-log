@@ -1,33 +1,45 @@
 <?php
-/* * ***********************************************************************
- * 			NA7KR Log Program 
- * *************************************************************************
+// select_eqsl.php
+/*
+Copyright © 2024 NA7KR Kevin Roberts. All rights reserved.
 
- * *************************************************************************
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- * ************************************************************************ */
-$first = "false";
-$first =  htmlspecialchars($_POST["1st"]);
-if ($first <> True)
-{
-    header( 'Location: index.php' ) ;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+// Check if the form has been submitted and if the value of "1st" is true
+if (!isset($_POST["1st"]) || $_POST["1st"] !== "true") {
+    // Redirect to received.php if the condition is not met
+    header('Location: received.php');
+    exit; // Stop further execution
 }
-include_once (__DIR__ . '/../config.php');
-require_once('db.class.php');
-require_once("backend.php");
-$db = new Db();
+
+// Include necessary files
+include("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
+require_once("backend/querybuilder.php");
+require_once("backend/filecheck.php");
+require_once('backend/email.php');
+
+
 $i = 0; //style counter
-$x = 0; //
+
+$counter = 0;
+$FileNoGroup = 0;
 $data = "";
 $SUBMIT = "false";
-$FileNoGroup = 0;
-$counter = 0;
 $find = '.jpg';
-$fileMutiply = 1000;
+$fileMultiply = 1000;
+
 if (isset($_POST['Submit1'])) {
     $LOG = htmlspecialchars($_POST["Log"]);
     if (isset($_POST['Submit'])) {
@@ -55,62 +67,93 @@ if (isset($_POST['Submit1'])) {
     if (isset($_POST['optionlist'])) {
         $INPUT = htmlspecialchars($_POST["optionlist"]);
     }
-    include_once buildfiles($LOG);
+    
     $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
-$query = "SELECT tb_Cards.COL_PRIMARY_KEY as 'Log ID', \n"
-        . "$tbHRD.COL_CALL as 'Call', \n"
-        . "tb_Cards.COL_File_Path_E as 'Card' \n"
-        . "FROM HRD_Web.tb_Cards INNER JOIN $dbnameHRD.$tbHRD ON  tb_Cards.COL_PRIMARY_KEY = $tbHRD.COL_PRIMARY_KEY \n"
-        . "WHERE tb_Cards.COL_File_Path_E <> '' __REPLACE__";
+$query = getSelect_eqsl();
   
 if ($SUBMIT == "true") {
     if ($INPUT == "input_band") {
         $BAND = safe("%" . $BAND . "%");
-        $query = str_replace("__REPLACE__", "and COL_BAND like $BAND ", $query);
+        $query = str_replace("__REPLACE__", "and COL_BAND like '$BAND' ", $query);
     } elseif ($INPUT == "input_mode") {
         $MODE = safe("%" . $MODE . "%");
-        $MODE = str_replace("SSB", "USB%' or COL_MODE like '%LSB", $MODE);
-        $query = str_replace("__REPLACE__", "and COL_MODE like $MODE ", $query);
+        $MODE = str_replace("SSB", "%USB%' or COL_MODE like '%LSB%", $MODE);
+        $query = str_replace("__REPLACE__", "and COL_MODE like '" . $MODE ."' ", $query);
     } elseif ($INPUT == "input_state") {
         $STATE = safe("%" . $STATE . "%");
-        $query = str_replace("__REPLACE__", "and COL_STATE like $STATE ", $query);
+        $query = str_replace("__REPLACE__", "and COL_STATE like '$STATE' ", $query);
     } elseif ($INPUT == "input_country") {
         $COUNTRY = safe("%" . $COUNTRY . "%");
-        $query = str_replace("__REPLACE__", "and COL_COUNTRY like $COUNTRY ", $query);
+        $query = str_replace("__REPLACE__", "and COL_COUNTRY like '$COUNTRY' ", $query);
     } elseif ($INPUT == "input_none") {
         $query = str_replace("__REPLACE__", " ", $query);
     } else {
         $query = str_replace("__REPLACE__", " ", $query);
     }
-
-$id_lookup = $db->query("$query");
-    $data = "<table border='0' align='center'><tbody><tr>"
-            . "<th>Log ID</th>" . "<th>Call</th>" . "<th>Card</th>" 
-            . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
-    foreach ($id_lookup as $row): {
-            //
-            $data .= "<td>" . $row['Log ID'] . "</td>" . PHP_EOL;
-            $data .= "<td>" . $row['Call'] . "</td>" . PHP_EOL;
-            $FileNoGroup = (($row['Log ID'] / $fileMutiply) % $fileMutiply * $fileMutiply);
-            $fileNoGroupHigh = $FileNoGroup + ($fileMutiply - 1);
-            $filePath = "cards/" . $FileNoGroup . "-" . $fileNoGroupHigh;
-            $pathToThumbs = $filePath . '/thumbs/';
-            $fileName = $row['Card'];
-            $pos = strpos($fileName, $find);
-            if ($pos !== false) {
-                $data .= "<td>" . "<A HREF='$filePath/$fileName'><IMG SRC='$filePath/thumbs/$fileName' alt='$fileName'></A>" . "</td>" . grid_style($i) . PHP_EOL;
-            } else {
-                $data .= "<td>" . $row['Card'] . "</td>" . grid_style($i) . PHP_EOL;
-            }
-
-
-            $counter++;
-            $i++;
-            unset($row); // break the reference with the last element
+    
+ try {
+            $results = $db->select($query);
+        } catch (Exception $e) {
+            echo "Query: " . $query ."<br>";
+            echo "Error executing query: " . $e->getMessage();
         }
-    endforeach;
+
+        $data .= "<div class='centered-content'>";
+        $data .= "<div class='table-container'>";
+        $data .= "<table border='0' class='custom-table small-left-table'><tbody><tr>"
+            . "<th>Log ID</th>" . "<th>Call</th>" . "<th>Card</th>"
+            . "</tr><tr bgcolor='#5e5eff'>" . PHP_EOL;
+  // Initialize an empty array to store missing files
+  // Initialize an empty array to store missing files
+$missingFiles = array();
+
+foreach ($results as $row) {
+    $data .= "<td>" . $row['Log ID'] . "</td>" . PHP_EOL;
+    $data .= "<td>" . $row['Call'] . "</td>" . PHP_EOL;
+
+    // Calculate the file group range
+    $groupNumber = floor($row['Log ID'] / $fileMultiply);
+    $FileNoGroup = $groupNumber * $fileMultiply;
+    $fileNoGroupHigh = ($groupNumber + 1) * $fileMultiply - 1;
+
+    // Adjust filePath based on the calculated group range
+    $filePath = "cards/" . $FileNoGroup . "-" . $fileNoGroupHigh;
+
+    // Process Card and Back files
+    $debug = false;
+    $fileNameF = $row['Card'];
+
+    $filepathF = check_file($filePath, $fileNameF, false, $debug);
+
+    $filepathFT = check_file($filePath . "/thumbs/", $fileNameF, true, $debug);
+
+    // If file is missing, add it to the $missingFiles array
+    if ($filepathF === "../images/Default.jpg" || $filepathFT === "../images/DefaultSmall.jpg") {
+        $missingFiles[] = array(
+            'folderPath' => $filePath,
+            'fileName' => $fileNameF,
+            'missingFilePath' => $filepathF,
+            'thumbFilePath' => $filepathFT
+        );
+    }
+
+    $data .= "<td style='text-align: center;'><a href='$filepathF'><img src='$filepathFT' alt='$fileNameF' ></a></td>" . grid_style($i) . PHP_EOL;
+    $counter++;
+    $i++;
+}
+
+// Send email notification only if there are missing files
+if (!empty($missingFiles)) {
+    send_email_notification($missingFiles);
+}
+
+
+
+
+
+
     $data .= "</table>" . PHP_EOL;
     $data .= "<p style='text-align: center'><BR> Counter " . $counter . "</p><BR>". PHP_EOL;
     $data .=OptionList(false, false, false, false, false, false) . PHP_EOL; 
@@ -128,5 +171,4 @@ $id_lookup = $db->query("$query");
     $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><BR>' . PHP_EOL;
 }
 echo $data;
-$phpfile = __FILE__;
-footer($phpfile);
+
