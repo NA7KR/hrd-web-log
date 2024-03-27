@@ -1,5 +1,5 @@
 <?php
-// back.php
+// backend/email.php
 /*
 Copyright © 2024 NA7KR Kevin Roberts. All rights reserved.
 
@@ -14,23 +14,8 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ */
+// Redirect to the root folder
+header("Location: /");
+exit; // Ensure no further code execution after redirection
 ?>
-
-<script>
-// Function to redirect to the index page
-function redirectToIndex() {
-    window.location.href = 'home.php'; // Replace 'index.php' with the actual URL of your index page
-}
-
-// Check if the page is being loaded due to a resubmit prompt and redirect to index
-window.onload = function() {
-    if (performance.navigation.type === 1) {
-        redirectToIndex();
-    } else {
-        // Clear the form data
-        document.getElementById('myForm').reset();
-    }
-};
-</script>
-<?php

@@ -20,6 +20,14 @@ ini_set('display_errors', '1');
 
 
 // Include configuration files and pre-processing script
+$title = "Mailed Cards";
+
+include_once("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
+require_once("backend/querybuilder.php");
+include('backend/header.php');
+
 include_once "qslprintpre.php";
 
 try {

@@ -15,18 +15,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-// Check if the form has been submitted and if the value of "1st" is true
-if (!isset($_POST["1st"]) || $_POST["1st"] !== "true") {
-    // Redirect to received.php if the condition is not met
-    header('Location: received.php');
-    exit; // Stop further execution
-}
-
-// Include necessary files
-include("../config.php");
+$title = "Works mutable times";
+$java= true;
+include_once("../config.php");
 require_once('backend/db.class.php');
 require_once("backend/backend.php");
 require_once("backend/querybuilder.php");
+include('backend/header.php');
+
+// Create a new instance of the Db class
+
+
+$data =  "<form method='post' action='" . $_SERVER["PHP_SELF"] . "'>\n";
+//$data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
+$data .= '<input type="hidden" name="Submit" value= "true">' . PHP_EOL;
+$data .= '<input type="hidden" name="1st" value= "true">' . PHP_EOL;
+echo $data;
+
+
 $i = 0; //style counter
 $x = 0; //
 $FileNoGroup = 0;
@@ -36,7 +42,7 @@ $counter = 0 ;
 $SUBMIT = "false";
 $fileMutiply = 1000;
 if (isset($_POST['Submit1'])) {
-    $LOG = htmlspecialchars($_POST["Log"]);
+   // $LOG = htmlspecialchars($_POST["Log"]);
     if (isset($_POST['Submit'])) {
         $SUBMIT = htmlspecialchars($_POST["Submit"]);
     }
@@ -63,7 +69,7 @@ if (isset($_POST['Submit1'])) {
         $INPUT = htmlspecialchars($_POST["optionlist"]);
     }
 
-    $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
+    //$data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
 $query = getSelect_two_or_more();
@@ -103,7 +109,7 @@ if ($SUBMIT == "true") {
     $data .= "<p style='text-align: center'><BR> Counter " . $counter . "</p><BR>" . PHP_EOL;
     $data .=OptionList(false, false, false, false, false, false) . PHP_EOL;
 } else {
-    $data = '<table width=600 class="center2">' . PHP_EOL;
+    $data = '<table width=800 class="center2">' . PHP_EOL;
     $data .='<tr><td>' . PHP_EOL;
     $data .=OptionList(false, true, false, false, false, true) . PHP_EOL;
     $data .=mode() . PHP_EOL;

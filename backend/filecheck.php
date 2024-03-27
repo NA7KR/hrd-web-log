@@ -1,52 +1,17 @@
 <?php
 
-// Function to check if a file exists in the main folder or its thumbs subfolder.
-function check_file($folderPath, $fileName, $thumbs, $debug = false) {
-    // Construct path to the main file
-    $mainFilePath = $folderPath . DIRECTORY_SEPARATOR . $fileName;
-    
-    // Check if the file exists in the main folder
-    if (file_exists($mainFilePath)) {
-        return $mainFilePath;
-    } else {
-        // Determine the missing file path
-        if (!$thumbs)
-        {
-            $missingFilePath =  "../images/Default.jpg";
-        }
-        else
-        {
-            $missingFilePath =  "../images/DefaultSmall.jpg";
-        }
-        
-        // Send email notification
-        send_email_notification($folderPath, $fileName, $missingFilePath);
-        
-        // Display debug message if enabled
-        if ($debug) {
-            echo "File $fileName is missing in $folderPath.<br>\n";
-        } 
-        return $missingFilePath;
-    }
-}
-
-
-function showSymlinkSourceAndDest($path) {
-    $source = '';
-    $destination = '';
-    
-    // Check if the path exists and is a symbolic link
-    if (file_exists($path) && is_link($path)) {
-        $source = realpath($path); // Get the real path of the symbolic link
-        $destination = readlink($path); // Get the destination of the symbolic link
-    }
-    
-    return array('source' => $source, 'destination' => $destination);
-}
-
 function writeAndDeleteFile($Path, $fileName) {
     // Define the file path relative to the symbolic link
     $fullPath = $Path . $fileName;
+
+    // Check if subfolders are accessible
+    $subfolderAccessible = checkSubfolderAccess($Path);
+
+    // If subfolders are not accessible, return an error message
+    if (!$subfolderAccessible) {
+        echo "<span style=\"color: red;\">Subfolders are not accessible for path: $Path</span><br>\n";
+        return;
+    }
 
     // Write data to the file
     $data = "Data to write to the file<br>\n";
@@ -55,7 +20,6 @@ function writeAndDeleteFile($Path, $fileName) {
     if ($result !== false) {
         echo "Data written successfully to $fullPath<br>\n";
 
-     
         // After testing, delete the file
         if (unlink($fullPath)) {
             echo "File deleted successfully.<br>\n";
@@ -90,6 +54,37 @@ function writeAndDeleteFile($Path, $fileName) {
 
         echo "<span style=\"color: red;\">Error writing data to $fullPath<br></span>\n";
         echo "<span style=\"color: red;\">sudo chmod -R o+w  $Path<br></span>\n";
-        
     }
+}
+
+function showSymlinkSourceAndDest($path) {
+    $source = '';
+    $destination = '';
+    
+    // Check if the path exists and is a symbolic link
+    if (file_exists($path) && is_link($path)) {
+        $source = realpath($path); // Get the real path of the symbolic link
+        $destination = readlink($path); // Get the destination of the symbolic link
+    }
+    
+    return array('source' => $source, 'destination' => $destination);
+}
+
+function checkSubfolderAccess($path) {
+    // Check if subfolders are accessible
+    $subfolders = glob($path . '/*', GLOB_ONLYDIR);
+    $subfoldersNotAccessible = [];
+    foreach ($subfolders as $subfolder) {
+        if (!is_readable($subfolder) || !is_writable($subfolder)) {
+            $subfoldersNotAccessible[] = $subfolder;
+        }
+    }
+    if (!empty($subfoldersNotAccessible)) {
+        echo "<span style=\"color: red;\">Subfolder not accessible:</span><br>\n";
+        foreach ($subfoldersNotAccessible as $subfolder) {
+            echo "<span style=\"color: red;\">$subfolder</span><br>\n";
+        }
+        return false;
+    }
+    return true;
 }

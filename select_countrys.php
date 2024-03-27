@@ -18,13 +18,27 @@ limitations under the License.
 // Initialize variables
 $first = "false";
 $SUBMIT = "false";
+$java= true;
 $first = htmlspecialchars($_POST["1st"]); // Sanitize input
-if ($first <> True) {
-    header('Location: received.php'); // Redirect if condition is met
-}
-include("../config.php"); // Include configuration file
-require_once('backend/db.class.php'); // Require database class file
-require_once("backend/backend.php"); // Require backend file
+
+$title = "Countries Worked";
+
+
+include_once("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
+require_once("backend/querybuilder.php");
+include('backend/header.php');
+
+// Create a new instance of the Db class
+
+
+
+$data =  "<form method='post' action='" . $_SERVER["PHP_SELF"] . "'>\n";
+//$data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
+$data .= '<input type="hidden" name="Submit" value= "true">' . PHP_EOL;
+$data .= '<input type="hidden" name="1st" value= "true">' . PHP_EOL;
+echo $data;
 
 $i = 0; // Style counter
 $x = 0; //
@@ -36,7 +50,7 @@ $data = "";
 
 // Check if form is submitted
 if (isset($_POST['Submit1'])) {
-    $LOG = htmlspecialchars($_POST["Log"]); // Sanitize input
+    //$LOG = htmlspecialchars($_POST["Log"]); // Sanitize input
     if (isset($_POST['Submit'])) {
         $SUBMIT = htmlspecialchars($_POST["Submit"]); // Sanitize input
     }
@@ -52,7 +66,7 @@ if (isset($_POST['Submit1'])) {
     }
 
     // Build hidden input fields for form submission
-    $data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
+    //$data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
     $data .= '<input type="hidden" name="Submit" value="true">' . PHP_EOL;
 }
 
@@ -92,7 +106,7 @@ if ($SUBMIT == "true") {
     $data .= OptionList(false, false, false, false, false, false) . PHP_EOL; // Append option list
   
 } else {
-    $data = '<table width=600 class="center2">' . PHP_EOL; // Start table
+    $data = '<table width=800 class="center2">' . PHP_EOL; // Start table
     $data .= '<tr><td>' . PHP_EOL; // Start table row
     $data .= OptionList(true, true, false, false, false, true) . PHP_EOL; // Append option list
     $data .= band() . PHP_EOL; // Append band input field

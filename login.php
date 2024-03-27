@@ -16,31 +16,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 session_start();
+$title = "Admin Login";
 
 // Set error reporting to display all errors
 ini_set('error_reporting', E_ALL);
 ini_set('display_errors', '1');
 
 // Include necessary files
+include_once("../config.php");
+require_once('backend/db.class.php');
 require_once("backend/backend.php");
-require_once('../config.php');
 require_once("backend/querybuilder.php");
-require_once("backend/db.class.php");
+include('backend/header.php');
+
+// Create a new instance of the Db class
+
+
 $db = new Db();
 
 
-function generateSalt() {
-    return substr(md5(uniqid(rand(), true)), 0, 50);
-}
 
-function hashPassword($password, $salt) {
-    return hash('sha256', $password . $salt);
-}
 
-function getUserByUsername($username) {
-    $query = "SELECT * FROM users WHERE username = :username";
-    return $query;
-}
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
@@ -61,6 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $hashed_password = hashPassword($password, $user['salt']);
             if ($hashed_password === $user['password']) {
                 $_SESSION['username'] = $username;
+                $_SESSION['user_role'] = $user['role']; // Assuming 'role' is stored in the database
+            
                 header("Location: dashboard.php");
                 exit;
             } else {
@@ -76,11 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Include the header
-include ('backend/header.php');
+
 ?>
 
-<body>
+
 <div class="form-container">
     <h2>Login</h2>
     <?php if(isset($error)) { ?>
@@ -93,6 +91,11 @@ include ('backend/header.php');
         <input type="password" id="password" name="password"><br>
         <input type="submit" value="Login">
     </form>
-</div>
-</body>
-</html>
+    <?php
+    // Display admin features if the user is an admin
+    if(isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin') {
+        echo "<p>Welcome, Admin! You have access to admin features.</p>";
+        // Add your admin-specific content here
+    }
+    ?>
+

@@ -1,66 +1,111 @@
 <?php
-// genrare_sitemap.php
-/*
-Copyright © 2024 NA7KR Kevin Roberts. All rights reserved.
+// Define the base URL of the website to be scanned
+$baseURL = "https://test.na7kr.us";
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+// Directories containing your images (exclude thumbnails)
+$imageDirectories = ['cards/', 'Awards/'];
 
-    http://www.apache.org/licenses/LICENSE-2.0
+// Function to fetch all links from a given URL
+function fetchLinks($url) {
+    global $baseURL; // Access the $baseURL variable within the function
+    $html = @file_get_contents($url); // Get the HTML content of the page
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-include '../config.php'; // Assuming this contains base configurations
-
-header('Content-Type: application/xml');
-echo '<?xml version="1.0" encoding="UTF-8"?>';
-echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"';
-echo ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
-
-$domain = 'http://test.na7kr.us/'; // Replace with your actual domain
-
-// Function to get the current date in the format required for lastmod tag
-function getCurrentDate() {
-    return date("Y-m-d");
-}
-
-// Loop through menu items for pages
-foreach ($menuItems as $name => $url) {
-    echo "<url>";
-    echo "<loc>" . htmlspecialchars($domain . $url) . "</loc>";
-    echo "<lastmod>" . getCurrentDate() . "</lastmod>";
-    echo "<changefreq>weekly</changefreq>";
-    echo "<priority>0.8</priority>";
-    echo "</url>";
-}
-
-// Directory containing your images
-$directory = '../qsl/cards/';
-
-// PHP version greater than 5.2.4 can use RecursiveDirectoryIterator
-// If not, replace with another method to fetch image list
-$images = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory));
-
-foreach ($images as $image) {
-    // Ensure the file is an actual image
-    if ($image->isFile() && preg_match('/\.(jpg|jpeg|png|gif)$/i', $image->getFilename())) {
-        $imageUrl = $domain . 'images/' . $image->getFilename();
-        echo "<url>";
-        echo "<loc>" . htmlspecialchars($imageUrl) . "</loc>";
-        echo "<lastmod>" . getCurrentDate() . "</lastmod>";
-        echo "<changefreq>monthly</changefreq>";
-        echo "<priority>0.6</priority>";
-        echo "<image:image>";
-        echo "<image:loc>" . htmlspecialchars($imageUrl) . "</image:loc>";
-        echo "</image:image>";
-        echo "</url>";
+    if ($html === false) {
+        // Handle the case where fetching content fails
+        error_log("Failed to fetch content from URL: $url");
+        return array();
     }
+
+    $links = array();
+
+    // Use regular expression to find all <a> tags and extract the href attribute
+    preg_match_all('/<a[^>]+href=([\'"])(?<href>.+?)\1[^>]*>/i', $html, $matches);
+
+    // Iterate over the matched URLs and add them to the links array
+    foreach ($matches['href'] as $link) {
+        $links[] = $link;
+    }
+
+    return $links;
 }
 
-echo '</urlset>';
+// Function to fetch all images from given directories (excluding thumbnails)
+function fetchImages($directories) {
+    global $baseURL; // Access the $baseURL variable within the function
+    $images = array();
+
+    foreach ($directories as $directory) {
+        // Check if the directory exists
+        if (is_dir($directory)) {
+            // Open the directory
+            if ($dh = opendir($directory)) {
+                // Iterate over each file in the directory
+                while (($file = readdir($dh)) !== false) {
+                    // Ensure the file is a regular file and has a valid image extension
+                    if (is_file($directory . $file) && preg_match('/\.(jpg|jpeg|png|gif)$/i', $file)) {
+                        // Exclude thumbnails (assuming thumbnails contain "thumb" in their name)
+                        if (strpos($file, 'thumb') === false) {
+                            // Construct the image URL and add it to the images array
+                            $images[] = $baseURL . '/' . $directory . $file;
+                        }
+                    }
+                }
+                // Close the directory handle
+                closedir($dh);
+            } else {
+                error_log("Failed to open directory: $directory");
+            }
+        } else {
+            error_log("Directory does not exist: $directory");
+        }
+    }
+
+    return $images;
+}
+
+// Function to generate sitemap XML
+function generateSitemapXML($links, $images) {
+    global $baseURL; // Access the $baseURL variable within the function
+
+    // Start building the XML string
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
+
+    // Add URLs from links
+    foreach ($links as $link) {
+        $xml .= '<url>';
+        $xml .= '<loc>' . htmlspecialchars($baseURL . $link) . '</loc>';
+        $xml .= '<lastmod>' . date("Y-m-d") . '</lastmod>';
+        $xml .= '<changefreq>weekly</changefreq>';
+        $xml .= '<priority>0.8</priority>';
+        $xml .= '</url>';
+    }
+
+    // Add image URLs
+    foreach ($images as $image) {
+        $xml .= '<url>';
+        $xml .= '<loc>' . htmlspecialchars($image) . '</loc>';
+        $xml .= '<lastmod>' . date("Y-m-d") . '</lastmod>';
+        $xml .= '<changefreq>monthly</changefreq>';
+        $xml .= '<priority>0.6</priority>';
+        $xml .= '<image:image>';
+        $xml .= '<image:loc>' . htmlspecialchars($image) . '</image:loc>';
+        $xml .= '</image:image>';
+        $xml .= '</url>';
+    }
+
+    // End the XML string
+    $xml .= '</urlset>';
+
+    return $xml;
+}
+
+// Start crawling the website from the base URL
+$links = fetchLinks($baseURL);
+$images = fetchImages($imageDirectories);
+$sitemapXML = generateSitemapXML($links, $images);
+
+// Output the sitemap XML
+header('Content-Type: application/xml');
+echo $sitemapXML;
 ?>

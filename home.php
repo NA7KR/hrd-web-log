@@ -21,13 +21,14 @@ limitations under the License.
 
 
 // Initialize all required PHP files and settings
-require_once '../config.php'; // Consolidate all initial settings and class inclusions here
-require_once 'backend/db.class.php'; // Database class for handling database operations
+$title = "Mailed Cards";
+
+include_once("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
 require_once("backend/querybuilder.php");
+include('backend/header.php');
 
-
-// Set appropriate content-type for HTML and define character set for security
-header('Content-Type: text/html; charset=utf-8');
 
 // Securely fetch and sanitize the database table name from a configuration or constant
 $db_Table = htmlspecialchars(DB_TABLE_HRD); // Assume DB_TABLE is defined in 'init.php' or '../config.php'

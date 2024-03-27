@@ -17,18 +17,19 @@ limitations under the License.
 */
 
 
-// Set error reporting to display all errors
-ini_set('error_reporting', E_ALL);
-ini_set('display_errors', '1');
+/// Include necessary files
 
-// Include necessary files
+$title = "Start Stop Email";
+
+require_once("../config.php");
+require_once('backend/db.class.php');
 require_once("backend/backend.php");
-require_once('../config.php');
 require_once("backend/querybuilder.php");
+include('backend/header.php');
 
-// Set page title and current page
-$page_title = "Start or Stop Email of Cards";
-$current_page = basename(__FILE__);
+// Create a new instance of the Db class
+
+
 $current = "";
 
 // Include header
@@ -111,7 +112,7 @@ if (!empty($_POST)) {
 } else {
     // Display form for opting in/out
 ?>
-    <main>
+   
         <div class="container" style="display: flex; justify-content: center; align-items: center;">
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <table>
@@ -129,7 +130,9 @@ if (!empty($_POST)) {
                 <input type="submit" class="btn btn-secondary"><br>
             </form>
         </div>
-    </main>
+
+
+<
 <?php
     // Include footer
     include ('backend/footer.php'); 

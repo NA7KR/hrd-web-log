@@ -15,26 +15,23 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-// Check if the form has been submitted and if the value of "1st" is true
-if (!isset($_POST["1st"]) || $_POST["1st"] !== "true") {
-    // Redirect to received.php if the condition is not met
-    header('Location: received.php');
-    exit; // Stop further execution
-}
-
+  
 // Include necessary files
-include("../config.php");
+
+$title = "Callsign Lookup";
+$java= true;
+
+include_once("../config.php");
 require_once('backend/db.class.php');
 require_once("backend/backend.php");
 require_once("backend/querybuilder.php");
+include('backend/header.php');
+
+// Create a new instance of the Db class
+
+
 
 $i = 0;
-$first = "false";
-$first = htmlspecialchars($_POST["1st"]);
-
-if ($first <> True) {
-    header('Location: index.php');
-}
 
 
 
@@ -45,12 +42,19 @@ $find = '.jpg';
 $fileMutiply = 1000;
 $first = "false";
 $SUBMIT = "false";
+$data =  "<form method='post' action='" . $_SERVER["PHP_SELF"] . "'>\n";
+//$data .= '<input type="hidden" name="Log" value=' . $LOG . '>' . PHP_EOL;
+$data .= '<input type="hidden" name="Submit" value= "true">' . PHP_EOL;
+$data .= '<input type="hidden" name="1st" value= "true">' . PHP_EOL;
+echo $data;
 
-
+//echo "<pre>";
+//print_r($_POST);
+//echo "</pre>";
 
 if (isset($_POST['Submit1'])) {
     $first = htmlspecialchars($_POST["1st"]);
-    $LOG = htmlspecialchars($_POST["Log"]);
+   //$LOG = htmlspecialchars($_POST["Log"]); 
     if (isset($_POST['Qty'])) {
         $QTY = htmlspecialchars($_POST["Qty"]);
     }
@@ -235,7 +239,7 @@ if ($SUBMIT == "true") {
     $data .= "</tbody></table><br><br>";
     $data .= OptionList(false, false, false, false, false, false);
 } else {
-    $data .= '<table width=600 class="center2">';
+    $data .= '<table width=800 class="center2">';
     $data .='<tr><td>';
     $data .='<div class="centered-radio-buttons">';
     $data .=OptionList(true, true, true, true, true, true);
@@ -257,4 +261,5 @@ if ($SUBMIT == "true") {
     $data .='<Input type = "Submit" Name = "Submit1" VALUE = "Submit"></span></div></FORM><br></div>';
 }
 echo $data;
+include('backend/footer.php');
 ?>

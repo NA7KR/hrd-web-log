@@ -16,6 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 ?>
+</div>
 <div style="text-align: center;">
     <footer>
         <!-- Display the copyright and last modified information -->
@@ -23,3 +24,15 @@ limitations under the License.
         <p>Last updated: <?= date("F d Y H:i:s.", getlastmod()); ?></p>
     </footer>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const menuToggle = document.querySelector('.menuToggle');
+        const header = document.querySelector('header');
+
+        menuToggle.addEventListener('click', function() {
+            header.classList.toggle('active');
+        });
+    });
+</script>
+</body>
+</html>

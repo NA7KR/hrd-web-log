@@ -18,6 +18,14 @@ limitations under the License.
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
+$title = "Mailed Cards";
+
+include_once("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
+require_once("backend/querybuilder.php");
+include('backend/header.php');
+
 require("qslprintpre.php");
 
 //echo "<pre>";

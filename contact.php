@@ -19,12 +19,17 @@ limitations under the License.
 // Include database connection
 
 // Set page title and current page
-$page_title = "Contact";
-$current_page = basename(__FILE__);
+$title = "Contact";
 
-// Include header
-require_once("../config.php");
-include_once("backend/header.php");
+include_once("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
+require_once("backend/querybuilder.php");
+include('backend/header.php');
+
+// Create a new instance of the Db class
+
+
 ?>
 
 <main>	

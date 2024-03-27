@@ -1,5 +1,5 @@
 <?php
-// about.php
+// select_countrys.php
 /*
 Copyright © 2024 NA7KR Kevin Roberts. All rights reserved.
 
@@ -15,16 +15,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+// Initialize variables
 
-// Set page title and current page
-$page_title = "About";
-$current_page = basename(__FILE__);
 
-// Include header
-include_once("backend/header.php");
-?>
+$title = "About";
 
-<main>	
+include_once("../config.php");
+require_once('backend/db.class.php');
+x_once("backend/backend.php");
+require_once("backend/querybuilder.php");
+include('backend/header.php');
+
+// Create a new instance of the Db class
+
+
+?>	
     <div class="container">
         <div class="row">
             <div class="col-12 my-2">

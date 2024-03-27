@@ -8,7 +8,7 @@ ini_set('display_errors', '1');
 
 // Include necessary files
 require_once("backend/backend.php");
-require_once('../config.php');
+include_once("../config.php");;
 require_once("backend/querybuilder.php");
 require_once("backend/db.class.php");
 $db = new Db();

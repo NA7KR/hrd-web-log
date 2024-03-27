@@ -15,17 +15,20 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-$first = "false";
-$first = htmlspecialchars($_POST["1st"]);
-if ($first != true) {
-    // header( 'Location: received.php' ) ;
-}
-include("../config.php");
+$title = "Email QSL Cards";
+
+include_once("../config.php");
 require_once('backend/db.class.php');
 require_once("backend/backend.php");
 require_once("backend/querybuilder.php");
+include('backend/header.php');
 require_once("backend/filecheck.php");
 require_once('backend/email.php');
+
+// Create a new instance of the Db class
+
+
+
 
 
 $i = 0; //style counter

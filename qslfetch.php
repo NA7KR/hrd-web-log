@@ -16,14 +16,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-?>
 
-<?php
 session_start();
 
-include_once '../config.php';
-include_once 'backend/db.class.php';
-include_once ("backend/querybuilder.php");
+$title = "Mailed Cards";
+
+include_once("../config.php");
+require_once('backend/db.class.php');
+require_once("backend/backend.php");
+require_once("backend/querybuilder.php");
+include('backend/header.php');
+
 
 // Check if form has been submitted
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['call'])) {
@@ -73,7 +76,7 @@ include_once 'backend/header.php';
                     }
                 } else {
                     echo "No records found.";
-                    echo "<br>" . $sql . "<br>" . $call . "<br>";
+                    //echo "<br>" . $sql . "<br>" . $call . "<br>";
                 }
             } else {
                 echo "<p class=\"lead\">No callsign provided, please enter a callsign.</p>";

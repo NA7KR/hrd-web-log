@@ -410,7 +410,7 @@ function setSelect_QSL(){
     return $query;
 }
 
-function setSelect_tosend(){
+function getSelect_tosend(){
 $query = "SELECT " . DB_COL_CALL . ", `COL_COUNTRY`
     FROM " . DB_NAME . "." . DB_TABLE_HRD . "
     RIGHT JOIN `NA7KR`.`vw_country` ON `COL_COUNTRY` = " . DB_NAME . ".`vw_country`.`COUNTRYS`
@@ -419,4 +419,29 @@ $query = "SELECT " . DB_COL_CALL . ", `COL_COUNTRY`
     NOT IN (SELECT COL_COUNTRY FROM " . DB_NAME . "." . DB_TABLE_HRD . " WHERE COL_LOTW_QSL_RCVD = 'V')
     ORDER BY col_country ASC";
     return $query;
-}			
+}	
+
+function getHeader(){
+    $query = "SELECT * FROM menu_items ";
+    return $query;
+}
+
+function getHeader_submenu(){
+    //$query = "SELECT * FROM menu_items WHERE parent_id = :parent_id";
+    $query = "SELECT * FROM menu_items WHERE parent_id = :parent_id AND isadmin = :isadmin ORDER BY `item_text` ASC;";
+
+    return $query;
+    
+}
+
+
+function setHeader_browser($ipAddress, $visitURL, $browser_type, $version, $os, $user_os) {
+    $query = "INSERT INTO `visit` (`visitorID`, `visitorIP`, `visitDate`, `visitURL`, `browser`, `bversion`, `os`, `osversion`) 
+              VALUES (NULL, :visitorIP, NOW(), :visitURL, :browser, :bversion, :os, :osversion)";
+    return $query;
+}
+
+function getUserByUsername($username) {
+    $query = "SELECT * FROM users WHERE username = :username";
+    return $query;
+}

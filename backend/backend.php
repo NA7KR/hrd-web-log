@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 // Including necessary files
-require_once('../config.php'); // Include configuration file (assuming it sets constants like $dbnameWEB and $tbSelect)
+include_once("../config.php");; // Include configuration file (assuming it sets constants like $dbnameWEB and $tbSelect)
 $db = new Db();
 // Function to generate option list HTML
 function OptionList($key1, $key2, $key3, $key4, $key5, $key6) {
@@ -195,7 +195,7 @@ function mode() {
  * @return string HTML code for state options
  */
 function OptionState() {
-    require_once('../config.php');
+    include_once("../config.php");;
     $db = new Db();
         // SQL query to retrieve distinct states from the database
         
@@ -413,7 +413,7 @@ function image($iKey)
     $FileNoGroup = $groupNumber * $fileMultiply;
     $fileNoGroupHigh = ($groupNumber + 1) * $fileMultiply - 1;
 
-    include("../config.php");
+    include_once("../config.php");
     $base = $base . 'cards/';
     $filePath = $base . $FileNoGroup . "-" . $fileNoGroupHigh;
     $pathToThumbs = $filePath . '/thumbs/';
@@ -520,6 +520,14 @@ function getTexts($string, $start, $end)
     }
 
     return $text;
+}
+
+function generateSalt() {
+    return substr(md5(uniqid(rand(), true)), 0, 50);
+}
+
+function hashPassword($password, $salt) {
+    return hash('sha256', $password . $salt);
 }
 
 ?>

@@ -15,22 +15,24 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-// Check if the form has been submitted and if the value of "1st" is true
-if (!isset($_POST["1st"]) || $_POST["1st"] !== "true") {
-    // Redirect to received.php if the condition is not met
-    header('Location: received.php');
-    exit; // Stop further execution
-}
 
-// Include necessary files
-include("../config.php");
+  
+$title = "Cards to Send";
+
+include_once("../config.php");
 require_once('backend/db.class.php');
 require_once("backend/backend.php");
 require_once("backend/querybuilder.php");
+include('backend/header.php');
+
+// Create a new instance of the Db class
+
+
+
 
 
 try {
-    $query = setSelect_tosend();
+    $query = getSelect_tosend();
     try 
     {
         $results = $db->select($query);
@@ -57,3 +59,5 @@ try {
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
 }
+
+include('backend/footer.php');

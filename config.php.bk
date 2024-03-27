@@ -26,16 +26,6 @@ $footertext = "NA7KR. All rights reserved.";
 // Navigation items array for site-wide menu links
 
 
-
-$navigation_links = array(
-    "home.php" => "Mailed Cards",
-    "received.php" => "Received Cards",
-    "startstop.php" => "Opt In or Out",
-    "about.php" => "About",
-    "contact.php" => "Contact",
-    "dashboard.php" => "Dashboard",
-    "logout.php" => "Logout"
-);
 $base="/var/www/";
 
 $Site_Name= " NA7KR QSL Card System";
@@ -69,6 +59,7 @@ $db_username = "user";
 $db_password = "password";
 $db_name = "NA7KR";
 $db_Table_email = "TABLE_EMAIL";
+$db_Table_visit = "visit";
 $db_Table_optout = "TABLE_OPTOUT";
 $dbnameWEB="HRD_Web";   //database name
 $tbStates="tb_States_Countries";//web Table name
@@ -237,7 +228,9 @@ if (!defined('DB_Table_optout')) {
     define('DB_Table_optout', $db_Table_optout);
 }
 
-
+if (!defined('DB_Table_visit')) {
+    define('DB_Table_visit', $db_Table_visit);
+}
 
 $db = new Db();
 
